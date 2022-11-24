@@ -76,6 +76,7 @@ export function CriarAula() {
       await app.post("/conteudos", {
         name: text,
         id_disciplina: idDisc,
+        id_serie: idSerie,
         created_by: user,
         array_conteudos: addItemArray,
         id_bimestre: bimestreId,
@@ -153,7 +154,7 @@ export function CriarAula() {
                           className={`
                           ${
                             board.name == "aulas"
-                              ? "bg-dark-purple w-[300px] h-screen select-none scrollbar-thin"
+                              ? "bg-dark-purple w-[300px] h-screen select-none scrollbar-thin "
                               : "0"
                           }
                           ${

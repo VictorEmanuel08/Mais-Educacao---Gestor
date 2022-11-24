@@ -39,47 +39,6 @@ function ContentDados() {
 
   console.log(newDados);
 
-  const [countries, setCountries] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [course, setCourse] = useState([]);
-
-  function handleSubmit(event) {
-    alert("Your favorite flavor is: " + event);
-  }
-
-  function handleSubmitCourse(event) {
-    alert("Your selected value is: " + event);
-  }
-
-  function handleChange(event) {
-    setCourses({ value: event.target.value });
-  }
-
-  function handleChangeCourse(event) {
-    setCourse({ course: event.target.value });
-  }
-
-  const getUnique = (arr, comp) => {
-    const unique = arr
-      //store the comparison values in array
-      .map((e) => e[comp])
-
-      // store the keys of the unique objects
-      .map((e, i, final) => final.indexOf(e) === i && i)
-
-      // eliminate the dead keys & store unique objects
-      .filter((e) => arr[e])
-
-      .map((e) => arr[e]);
-
-    return unique;
-  };
-
-  // function componentDidMount() {
-  //   const courses = require("./courses.json");
-  //   this.setState({ courses: courses });
-  // }
-
   const [idItemSerie, setIdItemSerie] = useState(-1);
   const [idItemTurma, setIdItemTurma] = useState(-1);
   const [idItemAluno, setIdItemAluno] = useState(-1);
@@ -244,6 +203,8 @@ function ContentDados() {
     //   },
     // ];
   }
+
+
 
   return (
     <div className="flex flex-col ml-12 w-4/5">

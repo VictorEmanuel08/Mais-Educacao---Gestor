@@ -87,6 +87,7 @@ export function EditAula() {
       await app.post("/conteudos", {
         name: text,
         id_disciplina: idDisc,
+        id_serie: idSerie,
         created_by: user,
         array_conteudos: addItemArray,
         id_bimestre: bimestreId,

@@ -12,6 +12,7 @@ import { EditAula } from "./pages/drag n drops/EditAula";
 import { ModalComponent } from "./components/Modalcomponent";
 
 import { initializeApp } from "firebase/app";
+import { DropDownTeste } from "./components/dados/newDropdrownTeste";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC_lP-XRuonKQ2bSnTEAw_RD6kUDnNO6hg",
@@ -30,6 +31,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route path="/dropdown" element={<DropDownTeste />} />
           <Route path="/" element={<Login />} />
           <Route
             path="/home"

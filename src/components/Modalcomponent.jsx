@@ -9,14 +9,14 @@ import Modal from "react-modal";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Checkbox } from "@mui/material";
+import { ModalCancelar } from "./ModalCancelar";
 
 export function ModalComponent() {
   const { idSerie, idDisc } = useParams();
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [cancelarIsOpen, setCancelarIsOpen] = useState(false);
-  const [salvarIsOpen, setSalvarIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
   const [title, setTitle] = useState("");
+  let subtitle;
 
   const optionTipo = [
     { id: 1, nome: "Múltipla escolha", value: "objetiva" },
@@ -58,22 +58,6 @@ export function ModalComponent() {
     setModalIsOpen(false);
   }
 
-  function openCancelar() {
-    setCancelarIsOpen(true);
-  }
-
-  function closeCancelar() {
-    setCancelarIsOpen(false);
-  }
-
-  function openSalvar() {
-    setSalvarIsOpen(true);
-  }
-
-  function closeSalvar() {
-    setSalvarIsOpen(false);
-  }
-
   function changeQuestion(text, i) {
     var newQuestion = [...questions];
     newQuestion[i].title_question = text;
@@ -96,7 +80,6 @@ export function ModalComponent() {
     var optionQuestionCorrect = [...questions];
     optionQuestionCorrect[i].options[j].is_correct = !checked;
     setQuestions(optionQuestionCorrect);
-    // console.log(optionQuestionCorrect);
   }
 
   function removeOption(i, j) {
@@ -107,14 +90,11 @@ export function ModalComponent() {
     }
   }
 
-  // console.log(questions);
-
   function addOption(i) {
     var optionsOfQuestion = [...questions];
     if (optionsOfQuestion[i].options.length < 5) {
       optionsOfQuestion[i].options.push({ description: "", is_correct: false });
     } else {
-      // console.log("Máximo de 5 alternativas");
     }
 
     setQuestions(optionsOfQuestion);
@@ -143,7 +123,6 @@ export function ModalComponent() {
   function clearQuestion() {
     questions.pop();
     closeModal();
-    // console.log(questions);
   }
 
   function onDragEnd(result) {
@@ -165,6 +144,11 @@ export function ModalComponent() {
     result.splice(endIndex, 0, removed);
     return result;
   };
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    subtitle.style.color = "#f00";
+  }
 
   function questionsUI() {
     return questions.map((ques, i) => (
@@ -326,15 +310,14 @@ export function ModalComponent() {
             </button>
           </div>
           <div className="flex flex-row items-center justify-end my-8 px-4 w-full">
-            <button
-              onClick={clearQuestion}
-              className="bg-[#EDF2FF] rounded-lg text-black w-1/6 h-[40px] mr-4"
-            >
-              Cancelar
-            </button>
+            <ModalCancelar
+              data={questions}
+              descartar={clearQuestion}
+              salvar={AddAtiv}
+            />
             <button
               onClick={AddAtiv}
-              className="bg-dark-purple rounded-lg text-white w-1/6 h-[40px]"
+              className="bg-dark-purple rounded-lg text-white w-1/6 h-[40px] ml-4"
             >
               Salvar
             </button>
