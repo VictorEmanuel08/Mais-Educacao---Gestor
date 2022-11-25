@@ -44,6 +44,8 @@ export function CriarAula() {
     getData();
   }, [idDisc]);
 
+  console.log(user);
+
   useEffect(() => {
     const getData = async () => {
       const response = await app.get(`/disciplinas/${idDisc}`);

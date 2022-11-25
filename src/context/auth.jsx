@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     setUserInfo(response.data.user);
   };
 
-  console.log(userInfo);
+  // // console.log(userInfo);
 
   const logout = () => {
     console.log("logout");

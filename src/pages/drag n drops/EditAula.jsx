@@ -6,6 +6,7 @@ import { app } from "../../api/app";
 import { ItemAulaEdit } from "./items/ItemAulaEdit";
 import { ItemAtivEdit } from "./items/ItemAtivEdit";
 import { ItemContEdit } from "./items/ItemContEdit";
+import { ItemContSav } from "./items/ItemContSav";
 
 import EyesCloked from "../../assets/hidden.png";
 import EyesOpen from "../../assets/view.png";
@@ -26,6 +27,7 @@ export function EditAula() {
   const [disc, setDisc] = useState();
   const [addItemArray, setAddItemArray] = useState([]);
   const [conteudoArray, setConteudoArray] = useState([]);
+  // const [itemConteudo, setItemConteudo] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -61,7 +63,19 @@ export function EditAula() {
     getConteudos();
   }, []);
 
-  console.log(conteudoArray);
+  // console.log(conteudoArray);
+
+  // useEffect(() => {
+  //   const getConteudos = async () => {
+  //     const response = await app.get(
+  //       `/escolas/users/professores/aulas/series/${idSerie}/${idDisc}`
+  //     );
+  //     setItemConteudo(response.data);
+  //   };
+  //   getConteudos();
+  // }, []);
+
+  // console.log(itemConteudo);
 
   function switchEyes() {
     setClicked(!clicked);
@@ -85,13 +99,13 @@ export function EditAula() {
   async function AddAula() {
     try {
       await app.post("/conteudos", {
+        array_conteudos: addItemArray,
         name: text,
+        status: true,
         id_disciplina: idDisc,
         id_serie: idSerie,
-        created_by: user,
-        array_conteudos: addItemArray,
         id_bimestre: bimestreId,
-        status: true,
+        created_by: user,
       });
       document.location.reload(true);
       alert("Conteudo cadastrado!");
@@ -279,15 +293,14 @@ export function EditAula() {
                                       </p>
                                     </div>
                                   )}
-
                                   {board.name == "conteudos"
                                     ? board.items.length > 0 &&
-                                      board.items.map((item, iIndex) => {
+                                      board.items[0].Conteudo_has_itens.map((item, iIndex) => {
                                         return (
                                           <div className="bg-[#EDF2FF] rounded-lg p-4">
                                             <div className="flex flex-row items-center">
                                               <div className="w-1/3 flex items-center">
-                                                <ItemContEdit
+                                                <ItemContSav
                                                   key={item.id}
                                                   data={item}
                                                   index={iIndex}

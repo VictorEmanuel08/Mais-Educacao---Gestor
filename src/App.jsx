@@ -10,6 +10,7 @@ import { Private } from "./components/Private";
 import { CriarAula } from "./pages/drag n drops/CriarAula";
 import { EditAula } from "./pages/drag n drops/EditAula";
 import { ModalComponent } from "./components/Modalcomponent";
+import { TesteDados } from "./components/dados/TesteDados";
 
 import { initializeApp } from "firebase/app";
 import { DropDownTeste } from "./components/dados/newDropdrownTeste";
@@ -32,6 +33,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/dropdown" element={<DropDownTeste />} />
+          <Route path="/teste" element={<TesteDados />} />
           <Route path="/" element={<Login />} />
           <Route
             path="/home"
