@@ -27,7 +27,7 @@ export function EditAula() {
   const [disc, setDisc] = useState();
   const [addItemArray, setAddItemArray] = useState([]);
   const [conteudoArray, setConteudoArray] = useState([]);
-  // const [itemConteudo, setItemConteudo] = useState([]);
+  const [itemConteudo, setItemConteudo] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -55,15 +55,13 @@ export function EditAula() {
     getData();
   }, [idDisc]);
 
-  useEffect(() => {
-    const getConteudos = async () => {
-      const response = await app.get(`/conteudos/${idConteudo}`);
-      setConteudoArray(response.data["conteudo"]);
-    };
-    getConteudos();
-  }, []);
-
-  // console.log(conteudoArray);
+  // useEffect(() => {
+  //   const getConteudos = async () => {
+  //     const response = await app.get(`/conteudos/${idConteudo}`);
+  //     setConteudoArray(response.data["conteudo"]);
+  //   };
+  //   getConteudos();
+  // }, []);
 
   // useEffect(() => {
   //   const getConteudos = async () => {
@@ -295,50 +293,65 @@ export function EditAula() {
                                   )}
                                   {board.name == "conteudos"
                                     ? board.items.length > 0 &&
-                                      board.items[0].Conteudo_has_itens.map((item, iIndex) => {
+                                      board.items.map((item, iIndex) => {
+                                        item.id == idConteudo &&
+                                          console.log("");
+                                        // console.log(item.array_conteudos);
+
                                         return (
-                                          <div className="bg-[#EDF2FF] rounded-lg p-4">
-                                            <div className="flex flex-row items-center">
-                                              <div className="w-1/3 flex items-center">
-                                                <ItemContSav
-                                                  key={item.id}
-                                                  data={item}
-                                                  index={iIndex}
-                                                />
-                                              </div>
-                                              <div>
-                                                <p className="text-[#343434] text-[16px] font-semibold">
-                                                  {item.title}
-                                                </p>
-                                              </div>
-                                              <div>
-                                                {clicked ? (
-                                                  <button
-                                                    className="w-[25px] h-[25px] ml-4"
-                                                    onClick={() => switchEyes()}
-                                                  >
-                                                    <img
-                                                      src={EyesOpen}
-                                                      alt=""
-                                                      className="w-[25px] h-[25px]"
-                                                    />
-                                                  </button>
-                                                ) : (
-                                                  <button
-                                                    className="w-[25px] h-[25px] ml-4"
-                                                    onClick={() => switchEyes()}
-                                                  >
-                                                    <img
-                                                      className="w-[25px] h-[25px]"
-                                                      src={EyesCloked}
-                                                      alt=""
-                                                    />
-                                                  </button>
-                                                )}
-                                              </div>
-                                            </div>
+                                          <div>
+                                            {item.array_conteudos.map(
+                                              (teste) => {
+                                                console.log(teste.aula || teste.atividade);
+                                                // console.log(teste.aula.title || teste.atividade.title);
+                                              }
+                                            )}
                                           </div>
                                         );
+
+                                        // return (
+                                        //   <div className="bg-[#EDF2FF] rounded-lg p-4">
+                                        //     <div className="flex flex-row items-center">
+                                        //       <div className="w-1/3 flex items-center">
+                                        //         <ItemContSav
+                                        //           key={item.id}
+                                        //           data={item}
+                                        //           index={iIndex}
+                                        //         />
+                                        //       </div>
+                                        //       <div>
+                                        //         <p className="text-[#343434] text-[16px] font-semibold">
+                                        //           {item.title}
+                                        //         </p>
+                                        //       </div>
+                                        //       <div>
+                                        //         {clicked ? (
+                                        //           <button
+                                        //             className="w-[25px] h-[25px] ml-4"
+                                        //             onClick={() => switchEyes()}
+                                        //           >
+                                        //             <img
+                                        //               src={EyesOpen}
+                                        //               alt=""
+                                        //               className="w-[25px] h-[25px]"
+                                        //             />
+                                        //           </button>
+                                        //         ) : (
+                                        //           <button
+                                        //             className="w-[25px] h-[25px] ml-4"
+                                        //             onClick={() => switchEyes()}
+                                        //           >
+                                        //             <img
+                                        //               className="w-[25px] h-[25px]"
+                                        //               src={EyesCloked}
+                                        //               alt=""
+                                        //             />
+                                        //           </button>
+                                        //         )}
+                                        //       </div>
+                                        //     </div>
+                                        //   </div>
+                                        // );
                                       })
                                     : ""}
                                 </div>
