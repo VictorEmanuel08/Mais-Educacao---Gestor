@@ -14,7 +14,7 @@ import { ModalComponent } from "../../components/Modalcomponent";
 
 export function CriarAula() {
   const { user } = useContext(AuthContext);
-  const { idSerie, idDisc } = useParams();
+  const { idSerie, idDisc, idConteudo } = useParams();
   const [aula, setAula] = useState([]);
   const [bimestre, setBimestre] = useState([]);
   const [bimestreId, setBimestreId] = useState(null);
@@ -25,6 +25,7 @@ export function CriarAula() {
 
   const [disc, setDisc] = useState();
   const [addItemArray, setAddItemArray] = useState([]);
+  const [conteudosEdit, setConteudosEdit] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -36,15 +37,22 @@ export function CriarAula() {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await app.get(
-        `/escolas/users/professores/aulas/series/${idSerie}/${idDisc}`
-      );
+      const response = await app.get(`/conteudo/${idSerie}/${idDisc}`);
       setAula(response.data);
     };
     getData();
   }, [idDisc]);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const response = await app.get(
+  //       `/escolas/users/professores/aulas/series/${idSerie}/${idDisc}`
+  //     );
+  //     setAula(response.data);
+  //   };
+  //   getData();
+  // }, [idDisc]);
 
-  console.log(user);
+  console.log(aula);
 
   useEffect(() => {
     const getData = async () => {
@@ -219,7 +227,6 @@ export function CriarAula() {
                                       type="texte"
                                       onChange={(e) => setText(e.target.value)}
                                     />
-
                                     <div className=" rounded-lg w-[200px] mb-5 flex justify-center text-zinc-700">
                                       <select
                                         name=""
@@ -275,6 +282,7 @@ export function CriarAula() {
                                   {board.name == "conteudos"
                                     ? board.items.length > 0 &&
                                       board.items.map((item, iIndex) => {
+                                        // console.log(item)
                                         return (
                                           <div className="bg-[#EDF2FF] rounded-lg p-4">
                                             <div className="flex flex-row items-center">

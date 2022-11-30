@@ -6,7 +6,6 @@ import { app } from "../../api/app";
 import { ItemAulaEdit } from "./items/ItemAulaEdit";
 import { ItemAtivEdit } from "./items/ItemAtivEdit";
 import { ItemContEdit } from "./items/ItemContEdit";
-import { ItemContSav } from "./items/ItemContSav";
 
 import EyesCloked from "../../assets/hidden.png";
 import EyesOpen from "../../assets/view.png";
@@ -27,7 +26,8 @@ export function EditAula() {
   const [disc, setDisc] = useState();
   const [addItemArray, setAddItemArray] = useState([]);
   const [conteudoArray, setConteudoArray] = useState([]);
-  const [itemConteudo, setItemConteudo] = useState([]);
+  const [valorBimestre, setValorBimestre] = useState("");
+  const [nameConteudo, setNameConteudo] = useState("");
 
   useEffect(() => {
     const getData = async () => {
@@ -37,15 +37,15 @@ export function EditAula() {
     getData();
   }, []);
 
-  useEffect(() => {
-    const getData = async () => {
-      const response = await app.get(
-        `/escolas/users/professores/aulas/series/${idSerie}/${idDisc}`
-      );
-      setAula(response.data);
-    };
-    getData();
-  }, [idDisc]);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const response = await app.get(
+  //       `/escolas/users/professores/aulas/series/${idSerie}/${idDisc}`
+  //     );
+  //     setAula(response.data);
+  //   };
+  //   getData();
+  // }, [idDisc]);
 
   useEffect(() => {
     const getData = async () => {
@@ -55,25 +55,19 @@ export function EditAula() {
     getData();
   }, [idDisc]);
 
-  // useEffect(() => {
-  //   const getConteudos = async () => {
-  //     const response = await app.get(`/conteudos/${idConteudo}`);
-  //     setConteudoArray(response.data["conteudo"]);
-  //   };
-  //   getConteudos();
-  // }, []);
+  useEffect(() => {
+    const getConteudos = async () => {
+      const response = await app.get(
+        `/conteudos/${idConteudo}/${idSerie}/${idDisc}`
+      );
 
-  // useEffect(() => {
-  //   const getConteudos = async () => {
-  //     const response = await app.get(
-  //       `/escolas/users/professores/aulas/series/${idSerie}/${idDisc}`
-  //     );
-  //     setItemConteudo(response.data);
-  //   };
-  //   getConteudos();
-  // }, []);
-
-  // console.log(itemConteudo);
+      setAula(response.data["conteudo"]);
+      setNameConteudo(response.data["conteudo"][1]["items"].name)
+      console.log(response.data["conteudo"][1]["items"].name)
+      //setConteudoArray(response.data["conteudo"]);
+    };
+    getConteudos();
+  }, []);
 
   function switchEyes() {
     setClicked(!clicked);
@@ -97,13 +91,13 @@ export function EditAula() {
   async function AddAula() {
     try {
       await app.post("/conteudos", {
-        array_conteudos: addItemArray,
         name: text,
-        status: true,
         id_disciplina: idDisc,
         id_serie: idSerie,
-        id_bimestre: bimestreId,
         created_by: user,
+        array_conteudos: addItemArray,
+        id_bimestre: bimestreId,
+        status: true,
       });
       document.location.reload(true);
       alert("Conteudo cadastrado!");
@@ -185,7 +179,6 @@ export function EditAula() {
                               ? `h-[40rem] w-[60rem] mt-6 flex flex-col bg-white rounded-lg shadow-md shaow-[#333] ml-20 scrollbar-thin `
                               : "0"
                           }
-
                           ${
                             board.name == "atividades"
                               ? `absolute top-0 right-0 w-[350px] h-1/2 bg-dark-purple select-none scrollbar-thin`
@@ -196,7 +189,6 @@ export function EditAula() {
                               ? `absolute bottom-0 right-0 w-[350px] h-1/2 bg-dark-purple select-none scrollbar-thin`
                               : "0"
                           }
-
                           `}
                         >
                           <div className="flex justify-center">
@@ -208,9 +200,12 @@ export function EditAula() {
                               </p>
                             </div>
 
+                            {/* console.log(aula[1].items); */}
+
                             {board.name === "conteudos" ? (
                               <div className="w-full relative">
                                 <div>
+                                  {/* <ComponentMiniHeader /> */}
                                   <div className="w-full bg-gradient-to-r from-[#3B5BDB] to-[#BAC8FD] rounded-t-lg">
                                     <div className="flex justify-between py-4 px-5 items-center ">
                                       <p className="text-[#FFFFFF] text-[20px] font-rubik">
@@ -232,12 +227,22 @@ export function EditAula() {
                                   </div>
                                 </div>
                                 <div className="flex flex-col p-8 w-full ">
+                                  {bimestre.map((num) => {
+                                    aula[1].items.id_bimestre == num.id
+                                      ? setValorBimestre(num.number)
+                                      : console.log("teste");
+                                  })}
+
+                                  {/* {console.log(valorBimestre)} */}
+                                  {/* {console.log(board.items.name)} */}
+
                                   <div className="flex flex-row justify-between">
                                     <input
-                                      placeholder="Título do conteúdo"
+                                      placeholder={`${nameConteudo}`}
                                       className="bg-[#EDF2FF] rounded-lg border-none text-[16px] text-[#131313] font-roboto mb-4 p-1 pl-4 w-1/3 outline-none placeholder:text-[14px] font-light"
-                                      type="texte"
-                                      onChange={(e) => setText(e.target.value)}
+                                      type="text"
+                                      onChange={(e) => setNameConteudo(e.target.value)}
+                                      // onChange={(e) => setText(e.target.value)}
                                     />
 
                                     <div className=" rounded-lg w-[200px] mb-5 flex justify-center text-zinc-700">
@@ -248,7 +253,7 @@ export function EditAula() {
                                         onClick={handleBimestre}
                                       >
                                         <option className="text-[12px]">
-                                          Selecione o Bimestre
+                                          {valorBimestre}
                                         </option>
                                         {bimestre.map((bim) => {
                                           return (
@@ -291,69 +296,104 @@ export function EditAula() {
                                       </p>
                                     </div>
                                   )}
-                                  {board.name == "conteudos"
-                                    ? board.items.length > 0 &&
-                                      board.items.map((item, iIndex) => {
-                                        item.id == idConteudo &&
-                                          console.log("");
-                                        // console.log(item.array_conteudos);
 
+                                  {board.items.array_conteudos.map(
+                                    (item, iIndex) => {
+                                      if (typeof item.aula != "undefined") {
                                         return (
-                                          <div>
-                                            {item.array_conteudos.map(
-                                              (teste) => {
-                                                console.log(teste.aula || teste.atividade);
-                                                // console.log(teste.aula.title || teste.atividade.title);
-                                              }
-                                            )}
+                                          <div className="bg-[#EDF2FF] rounded-lg p-4">
+                                            <div className="flex flex-row items-center">
+                                              <div className="w-1/3 flex items-center">
+                                                <ItemContEdit
+                                                  key={item.aula.id}
+                                                  data={item.aula}
+                                                  index={iIndex}
+                                                />
+                                              </div>
+                                              <div>
+                                                <p className="text-[#343434] text-[16px] font-semibold">
+                                                  {item.aula.title}
+                                                </p>
+                                              </div>
+                                              <div>
+                                                {clicked ? (
+                                                  <button
+                                                    className="w-[25px] h-[25px] ml-4"
+                                                    onClick={() => switchEyes()}
+                                                  >
+                                                    <img
+                                                      src={EyesOpen}
+                                                      alt=""
+                                                      className="w-[25px] h-[25px]"
+                                                    />
+                                                  </button>
+                                                ) : (
+                                                  <button
+                                                    className="w-[25px] h-[25px] ml-4"
+                                                    onClick={() => switchEyes()}
+                                                  >
+                                                    <img
+                                                      className="w-[25px] h-[25px]"
+                                                      src={EyesCloked}
+                                                      alt=""
+                                                    />
+                                                  </button>
+                                                )}
+                                              </div>
+                                            </div>
                                           </div>
                                         );
+                                      }
 
-                                        // return (
-                                        //   <div className="bg-[#EDF2FF] rounded-lg p-4">
-                                        //     <div className="flex flex-row items-center">
-                                        //       <div className="w-1/3 flex items-center">
-                                        //         <ItemContSav
-                                        //           key={item.id}
-                                        //           data={item}
-                                        //           index={iIndex}
-                                        //         />
-                                        //       </div>
-                                        //       <div>
-                                        //         <p className="text-[#343434] text-[16px] font-semibold">
-                                        //           {item.title}
-                                        //         </p>
-                                        //       </div>
-                                        //       <div>
-                                        //         {clicked ? (
-                                        //           <button
-                                        //             className="w-[25px] h-[25px] ml-4"
-                                        //             onClick={() => switchEyes()}
-                                        //           >
-                                        //             <img
-                                        //               src={EyesOpen}
-                                        //               alt=""
-                                        //               className="w-[25px] h-[25px]"
-                                        //             />
-                                        //           </button>
-                                        //         ) : (
-                                        //           <button
-                                        //             className="w-[25px] h-[25px] ml-4"
-                                        //             onClick={() => switchEyes()}
-                                        //           >
-                                        //             <img
-                                        //               className="w-[25px] h-[25px]"
-                                        //               src={EyesCloked}
-                                        //               alt=""
-                                        //             />
-                                        //           </button>
-                                        //         )}
-                                        //       </div>
-                                        //     </div>
-                                        //   </div>
-                                        // );
-                                      })
-                                    : ""}
+                                      if (
+                                        typeof item.atividade != "undefined"
+                                      ) {
+                                        return (
+                                          <div className="bg-[#EDF2FF] rounded-lg p-4">
+                                            <div className="flex flex-row items-center">
+                                              <div className="w-1/3 flex items-center">
+                                                <ItemContEdit
+                                                  key={item.atividade.id}
+                                                  data={item.atividade}
+                                                  index={iIndex}
+                                                />
+                                              </div>
+                                              <div>
+                                                <p className="text-[#343434] text-[16px] font-semibold">
+                                                  {item.atividade.title}
+                                                </p>
+                                              </div>
+                                              <div>
+                                                {clicked ? (
+                                                  <button
+                                                    className="w-[25px] h-[25px] ml-4"
+                                                    onClick={() => switchEyes()}
+                                                  >
+                                                    <img
+                                                      src={EyesOpen}
+                                                      alt=""
+                                                      className="w-[25px] h-[25px]"
+                                                    />
+                                                  </button>
+                                                ) : (
+                                                  <button
+                                                    className="w-[25px] h-[25px] ml-4"
+                                                    onClick={() => switchEyes()}
+                                                  >
+                                                    <img
+                                                      className="w-[25px] h-[25px]"
+                                                      src={EyesCloked}
+                                                      alt=""
+                                                    />
+                                                  </button>
+                                                )}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        );
+                                      }
+                                    }
+                                  )}
                                 </div>
                               </div>
                             ) : (
