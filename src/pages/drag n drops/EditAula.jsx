@@ -238,9 +238,10 @@ export function EditAula() {
 
                                   <div className="flex flex-row justify-between">
                                     <input
-                                      placeholder={`${nameConteudo}`}
+                                      placeholder="Título do conteudo"
                                       className="bg-[#EDF2FF] rounded-lg border-none text-[16px] text-[#131313] font-roboto mb-4 p-1 pl-4 w-1/3 outline-none placeholder:text-[14px] font-light"
                                       type="text"
+                                      value={nameConteudo}
                                       onChange={(e) => setNameConteudo(e.target.value)}
                                       // onChange={(e) => setText(e.target.value)}
                                     />
