@@ -145,11 +145,6 @@ export function ModalComponent() {
     return result;
   };
 
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = "#f00";
-  }
-
   function questionsUI() {
     return questions.map((ques, i) => (
       <Draggable key={i} draggableId={i + "id"} index={i}>

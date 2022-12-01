@@ -11,6 +11,7 @@ import EyesCloked from "../../assets/hidden.png";
 import EyesOpen from "../../assets/view.png";
 import { Header } from "../../components/header";
 import { ModalComponent } from "../../components/Modalcomponent";
+import { ModalCancelarConteudo } from "./ModalCancelarConteudo";
 
 export function EditAula() {
   const { user } = useContext(AuthContext);
@@ -25,7 +26,6 @@ export function EditAula() {
 
   const [disc, setDisc] = useState();
   const [addItemArray, setAddItemArray] = useState([]);
-  const [conteudoArray, setConteudoArray] = useState([]);
   const [valorBimestre, setValorBimestre] = useState("");
   const [nameConteudo, setNameConteudo] = useState("");
 
@@ -36,16 +36,6 @@ export function EditAula() {
     };
     getData();
   }, []);
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const response = await app.get(
-  //       `/escolas/users/professores/aulas/series/${idSerie}/${idDisc}`
-  //     );
-  //     setAula(response.data);
-  //   };
-  //   getData();
-  // }, [idDisc]);
 
   useEffect(() => {
     const getData = async () => {
@@ -62,12 +52,14 @@ export function EditAula() {
       );
 
       setAula(response.data["conteudo"]);
-      setNameConteudo(response.data["conteudo"][1]["items"].name)
-      console.log(response.data["conteudo"][1]["items"].name)
-      //setConteudoArray(response.data["conteudo"]);
+      setNameConteudo(response.data["conteudo"][1]["items"].name);
+      setValorBimestre(response.data["conteudo"][1]["items"].id_bimestre);
+      setBimestreId(response.data["conteudo"][1]["items"].id_bimestre);
     };
     getConteudos();
   }, []);
+
+  console.log(aula);
 
   function switchEyes() {
     setClicked(!clicked);
@@ -83,26 +75,21 @@ export function EditAula() {
     }
   }, []);
 
-  const handleBimestre = function (e) {
-    const getCondensaId = e.target.value;
-    setBimestreId(getCondensaId);
-  };
-
-  async function AddAula() {
+  async function AttAula() {
     try {
-      await app.post("/conteudos", {
-        name: text,
+      await app.put(`/conteudos/${idConteudo}`, {
+        name: nameConteudo,
         id_disciplina: idDisc,
+        id_bimestre: bimestreId,
+        array_conteudos: addItemArray,
+        status: true,
         id_serie: idSerie,
         created_by: user,
-        array_conteudos: addItemArray,
-        id_bimestre: bimestreId,
-        status: true,
       });
-      document.location.reload(true);
-      alert("Conteudo cadastrado!");
+      alert("Conteudo atualizado!");
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
+      document.location.reload(true);
     }
   }
 
@@ -135,6 +122,7 @@ export function EditAula() {
     // Coluna 1: Conteudo = junção de tudo
     // Coluna 2: Atividades
     // Coluna 3: Materiais
+    // console.log(re.destination)
 
     if (re.source.droppableId == 0 && re.destination.droppableId == 1) {
       AulasToConteudo(dragItem.id, "aula");
@@ -200,27 +188,28 @@ export function EditAula() {
                               </p>
                             </div>
 
-                            {/* console.log(aula[1].items); */}
-
                             {board.name === "conteudos" ? (
                               <div className="w-full relative">
                                 <div>
-                                  {/* <ComponentMiniHeader /> */}
                                   <div className="w-full bg-gradient-to-r from-[#3B5BDB] to-[#BAC8FD] rounded-t-lg">
                                     <div className="flex justify-between py-4 px-5 items-center ">
                                       <p className="text-[#FFFFFF] text-[20px] font-rubik">
                                         {disc.name}
                                       </p>
                                       <div className="w-[180px] flex justify-between items-center flex-row ">
-                                        <button className="py-[2px] px-[15px] text-[14px] bg-[#FFFFFF] rounded-md">
-                                          Cancelar
-                                        </button>
+                                        <ModalCancelarConteudo
+                                          salvar={AttAula}
+                                        />
                                         <button
-                                          className="text-white text-[14px] py-[2px] px-[15px] bg-[#3B5BDB] rounded-md"
+                                          className="py-[2px] px-[15px] bg-[#3B5BDB] rounded-md text-white text-[14px]"
                                           type="submit"
-                                          onClick={() => AddAula()}
+                                          onClick={() => AttAula()}
                                         >
-                                          Salvar
+                                          <a
+                                            href={`/editar-disciplinas/${idSerie}/${idDisc}`}
+                                          >
+                                            Salvar
+                                          </a>
                                         </button>
                                       </div>
                                     </div>
@@ -228,13 +217,9 @@ export function EditAula() {
                                 </div>
                                 <div className="flex flex-col p-8 w-full ">
                                   {bimestre.map((num) => {
-                                    aula[1].items.id_bimestre == num.id
-                                      ? setValorBimestre(num.number)
-                                      : console.log("teste");
+                                    aula[1].items.id_bimestre == num.id ??
+                                      setValorBimestre(num.id);
                                   })}
-
-                                  {/* {console.log(valorBimestre)} */}
-                                  {/* {console.log(board.items.name)} */}
 
                                   <div className="flex flex-row justify-between">
                                     <input
@@ -242,22 +227,31 @@ export function EditAula() {
                                       className="bg-[#EDF2FF] rounded-lg border-none text-[16px] text-[#131313] font-roboto mb-4 p-1 pl-4 w-1/3 outline-none placeholder:text-[14px] font-light"
                                       type="text"
                                       value={nameConteudo}
-                                      onChange={(e) => setNameConteudo(e.target.value)}
-                                      // onChange={(e) => setText(e.target.value)}
+                                      onChange={(e) =>
+                                        setNameConteudo(e.target.value)
+                                      }
                                     />
 
                                     <div className=" rounded-lg w-[200px] mb-5 flex justify-center text-zinc-700">
                                       <select
-                                        name=""
-                                        id=""
                                         className="text-[14px] w-[200px] border-none outline-none"
-                                        onClick={handleBimestre}
+                                        onChange={(e) =>
+                                          setBimestreId(e.target.value)
+                                        }
+                                        defaultValue={valorBimestre}
                                       >
-                                        <option className="text-[12px]">
-                                          {valorBimestre}
+                                        <option
+                                          value="none"
+                                          className="text-[12px]"
+                                        >
+                                          Selecione o bimestre
                                         </option>
                                         {bimestre.map((bim) => {
-                                          return (
+                                          return valorBimestre == bim.id ? (
+                                            <option key={bim.id} value={bim.id}>
+                                              {bim.number}
+                                            </option>
+                                          ) : (
                                             <option key={bim.id} value={bim.id}>
                                               {bim.number}
                                             </option>
@@ -298,103 +292,114 @@ export function EditAula() {
                                     </div>
                                   )}
 
-                                  {board.items.array_conteudos.map(
-                                    (item, iIndex) => {
-                                      if (typeof item.aula != "undefined") {
-                                        return (
-                                          <div className="bg-[#EDF2FF] rounded-lg p-4">
-                                            <div className="flex flex-row items-center">
-                                              <div className="w-1/3 flex items-center">
-                                                <ItemContEdit
-                                                  key={item.aula.id}
-                                                  data={item.aula}
-                                                  index={iIndex}
-                                                />
-                                              </div>
-                                              <div>
-                                                <p className="text-[#343434] text-[16px] font-semibold">
-                                                  {item.aula.title}
-                                                </p>
-                                              </div>
-                                              <div>
-                                                {clicked ? (
-                                                  <button
-                                                    className="w-[25px] h-[25px] ml-4"
-                                                    onClick={() => switchEyes()}
-                                                  >
-                                                    <img
-                                                      src={EyesOpen}
-                                                      alt=""
-                                                      className="w-[25px] h-[25px]"
+                                  {board.name == "conteudos"
+                                    ? board.items.array_conteudos.length > 0 &&
+                                      board.items.array_conteudos.map(
+                                        (item, iIndex) => {
+                                          if (typeof item.aula != "undefined") {
+                                            return (
+                                              <div className="bg-[#EDF2FF] rounded-lg p-4">
+                                                <div className="flex flex-row items-center">
+                                                  <div className="w-1/3 flex items-center">
+                                                    <ItemContEdit
+                                                      key={item.aula.id}
+                                                      data={item.aula}
+                                                      index={iIndex}
                                                     />
-                                                  </button>
-                                                ) : (
-                                                  <button
-                                                    className="w-[25px] h-[25px] ml-4"
-                                                    onClick={() => switchEyes()}
-                                                  >
-                                                    <img
-                                                      className="w-[25px] h-[25px]"
-                                                      src={EyesCloked}
-                                                      alt=""
-                                                    />
-                                                  </button>
-                                                )}
+                                                  </div>
+                                                  <div>
+                                                    <p className="text-[#343434] text-[16px] font-semibold">
+                                                      {item.aula.title}
+                                                    </p>
+                                                  </div>
+                                                  <div>
+                                                    {clicked ? (
+                                                      <button
+                                                        className="w-[25px] h-[25px] ml-4"
+                                                        onClick={() =>
+                                                          switchEyes()
+                                                        }
+                                                      >
+                                                        <img
+                                                          src={EyesOpen}
+                                                          alt=""
+                                                          className="w-[25px] h-[25px]"
+                                                        />
+                                                      </button>
+                                                    ) : (
+                                                      <button
+                                                        className="w-[25px] h-[25px] ml-4"
+                                                        onClick={() =>
+                                                          switchEyes()
+                                                        }
+                                                      >
+                                                        <img
+                                                          className="w-[25px] h-[25px]"
+                                                          src={EyesCloked}
+                                                          alt=""
+                                                        />
+                                                      </button>
+                                                    )}
+                                                  </div>
+                                                </div>
                                               </div>
-                                            </div>
-                                          </div>
-                                        );
-                                      }
+                                            );
+                                          }
 
-                                      if (
-                                        typeof item.atividade != "undefined"
-                                      ) {
-                                        return (
-                                          <div className="bg-[#EDF2FF] rounded-lg p-4">
-                                            <div className="flex flex-row items-center">
-                                              <div className="w-1/3 flex items-center">
-                                                <ItemContEdit
-                                                  key={item.atividade.id}
-                                                  data={item.atividade}
-                                                  index={iIndex}
-                                                />
-                                              </div>
-                                              <div>
-                                                <p className="text-[#343434] text-[16px] font-semibold">
-                                                  {item.atividade.title}
-                                                </p>
-                                              </div>
-                                              <div>
-                                                {clicked ? (
-                                                  <button
-                                                    className="w-[25px] h-[25px] ml-4"
-                                                    onClick={() => switchEyes()}
-                                                  >
-                                                    <img
-                                                      src={EyesOpen}
-                                                      alt=""
-                                                      className="w-[25px] h-[25px]"
+                                          if (
+                                            typeof item.atividade != "undefined"
+                                          ) {
+                                            return (
+                                              <div className="bg-[#EDF2FF] rounded-lg p-4">
+                                                <div className="flex flex-row items-center">
+                                                  <div className="w-1/3 flex items-center">
+                                                    <ItemContEdit
+                                                      key={item.atividade.id}
+                                                      data={item.atividade}
+                                                      index={iIndex}
                                                     />
-                                                  </button>
-                                                ) : (
-                                                  <button
-                                                    className="w-[25px] h-[25px] ml-4"
-                                                    onClick={() => switchEyes()}
-                                                  >
-                                                    <img
-                                                      className="w-[25px] h-[25px]"
-                                                      src={EyesCloked}
-                                                      alt=""
-                                                    />
-                                                  </button>
-                                                )}
+                                                  </div>
+                                                  <div>
+                                                    <p className="text-[#343434] text-[16px] font-semibold">
+                                                      {item.atividade.title}
+                                                    </p>
+                                                  </div>
+                                                  <div>
+                                                    {clicked ? (
+                                                      <button
+                                                        className="w-[25px] h-[25px] ml-4"
+                                                        onClick={() =>
+                                                          switchEyes()
+                                                        }
+                                                      >
+                                                        <img
+                                                          src={EyesOpen}
+                                                          alt=""
+                                                          className="w-[25px] h-[25px]"
+                                                        />
+                                                      </button>
+                                                    ) : (
+                                                      <button
+                                                        className="w-[25px] h-[25px] ml-4"
+                                                        onClick={() =>
+                                                          switchEyes()
+                                                        }
+                                                      >
+                                                        <img
+                                                          className="w-[25px] h-[25px]"
+                                                          src={EyesCloked}
+                                                          alt=""
+                                                        />
+                                                      </button>
+                                                    )}
+                                                  </div>
+                                                </div>
                                               </div>
-                                            </div>
-                                          </div>
-                                        );
-                                      }
-                                    }
-                                  )}
+                                            );
+                                          }
+                                        }
+                                      )
+                                    : ""}
                                 </div>
                               </div>
                             ) : (
