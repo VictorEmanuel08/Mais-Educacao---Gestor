@@ -13,6 +13,9 @@ import { Header } from "../../components/header";
 import { ModalComponent } from "../../components/Modalcomponent";
 import { ModalCancelarConteudo } from "./ModalCancelarConteudo";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export function EditAula() {
   const { user } = useContext(AuthContext);
   const { idSerie, idDisc, idConteudo } = useParams();
@@ -28,6 +31,8 @@ export function EditAula() {
   const [addItemArray, setAddItemArray] = useState([]);
   const [valorBimestre, setValorBimestre] = useState("");
   const [nameConteudo, setNameConteudo] = useState("");
+
+  const notify = () => toast("Wow so easy!");
 
   useEffect(() => {
     const getData = async () => {
@@ -86,7 +91,6 @@ export function EditAula() {
         id_serie: idSerie,
         created_by: user,
       });
-      alert("Conteudo atualizado!");
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
       document.location.reload(true);
@@ -107,17 +111,17 @@ export function EditAula() {
     if (!re.destination) return;
     let newBoardData = aula;
     var dragItem =
-      newBoardData[parseInt(re.source.droppableId)].items[re.source.index];
-    newBoardData[parseInt(re.source.droppableId)].items.splice(
+      newBoardData[parseInt(re.source.droppableId)].items.array_conteudos[
+        re.source.index
+      ];
+    newBoardData[parseInt(re.source.droppableId)].items.array_conteudos.splice(
       re.source.index,
       1
     );
-    newBoardData[parseInt(re.destination.droppableId)].items.splice(
-      re.destination.index,
-      0,
-      dragItem
-    );
-
+    newBoardData[
+      parseInt(re.destination.droppableId)
+    ].items.array_conteudos.splice(re.destination.index, 0, dragItem);
+    console.log(newBoardData);
     // Coluna 0: Aulas
     // Coluna 1: Conteudo = junção de tudo
     // Coluna 2: Atividades
@@ -203,7 +207,7 @@ export function EditAula() {
                                         <button
                                           className="py-[2px] px-[15px] bg-[#3B5BDB] rounded-md text-white text-[14px]"
                                           type="submit"
-                                          onClick={() => AttAula()}
+                                          onClick={(notify, AttAula())}
                                         >
                                           <a
                                             href={`/editar-disciplinas/${idSerie}/${idDisc}`}
@@ -211,6 +215,30 @@ export function EditAula() {
                                             Salvar
                                           </a>
                                         </button>
+                                        <ToastContainer
+                                          position="top-right"
+                                          autoClose={5000}
+                                          hideProgressBar={false}
+                                          newestOnTop={false}
+                                          closeOnClick
+                                          rtl={false}
+                                          pauseOnFocusLoss
+                                          draggable
+                                          pauseOnHover
+                                          theme="light"
+                                        />
+
+                                        {/* <button
+                                          className="py-[2px] px-[15px] bg-[#3B5BDB] rounded-md text-white text-[14px]"
+                                          type="submit"
+                                          onClick={() => (AttAula(), notify)}
+                                        >
+                                          <a
+                                            href={`/editar-disciplinas/${idSerie}/${idDisc}`}
+                                          >
+                                            Salvar
+                                          </a>
+                                        </button> */}
                                       </div>
                                     </div>
                                   </div>
@@ -296,107 +324,57 @@ export function EditAula() {
                                     ? board.items.array_conteudos.length > 0 &&
                                       board.items.array_conteudos.map(
                                         (item, iIndex) => {
-                                          if (typeof item.aula != "undefined") {
-                                            return (
-                                              <div className="bg-[#EDF2FF] rounded-lg p-4">
-                                                <div className="flex flex-row items-center">
-                                                  <div className="w-1/3 flex items-center">
-                                                    <ItemContEdit
-                                                      key={item.aula.id}
-                                                      data={item.aula}
-                                                      index={iIndex}
-                                                    />
-                                                  </div>
-                                                  <div>
-                                                    <p className="text-[#343434] text-[16px] font-semibold">
-                                                      {item.aula.title}
-                                                    </p>
-                                                  </div>
-                                                  <div>
-                                                    {clicked ? (
-                                                      <button
-                                                        className="w-[25px] h-[25px] ml-4"
-                                                        onClick={() =>
-                                                          switchEyes()
-                                                        }
-                                                      >
-                                                        <img
-                                                          src={EyesOpen}
-                                                          alt=""
-                                                          className="w-[25px] h-[25px]"
-                                                        />
-                                                      </button>
-                                                    ) : (
-                                                      <button
-                                                        className="w-[25px] h-[25px] ml-4"
-                                                        onClick={() =>
-                                                          switchEyes()
-                                                        }
-                                                      >
-                                                        <img
-                                                          className="w-[25px] h-[25px]"
-                                                          src={EyesCloked}
-                                                          alt=""
-                                                        />
-                                                      </button>
-                                                    )}
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            );
-                                          }
+                                          console.log(item);
+                                          // console.log('atividade:', item.atividade);
 
-                                          if (
-                                            typeof item.atividade != "undefined"
-                                          ) {
-                                            return (
-                                              <div className="bg-[#EDF2FF] rounded-lg p-4">
-                                                <div className="flex flex-row items-center">
-                                                  <div className="w-1/3 flex items-center">
-                                                    <ItemContEdit
-                                                      key={item.atividade.id}
-                                                      data={item.atividade}
-                                                      index={iIndex}
-                                                    />
-                                                  </div>
-                                                  <div>
-                                                    <p className="text-[#343434] text-[16px] font-semibold">
-                                                      {item.atividade.title}
-                                                    </p>
-                                                  </div>
-                                                  <div>
-                                                    {clicked ? (
-                                                      <button
-                                                        className="w-[25px] h-[25px] ml-4"
-                                                        onClick={() =>
-                                                          switchEyes()
-                                                        }
-                                                      >
-                                                        <img
-                                                          src={EyesOpen}
-                                                          alt=""
-                                                          className="w-[25px] h-[25px]"
-                                                        />
-                                                      </button>
-                                                    ) : (
-                                                      <button
-                                                        className="w-[25px] h-[25px] ml-4"
-                                                        onClick={() =>
-                                                          switchEyes()
-                                                        }
-                                                      >
-                                                        <img
-                                                          className="w-[25px] h-[25px]"
-                                                          src={EyesCloked}
-                                                          alt=""
-                                                        />
-                                                      </button>
-                                                    )}
-                                                  </div>
+                                          // if (typeof item.aula != "undefined") {
+                                          return (
+                                            <div className="bg-[#EDF2FF] rounded-lg p-4">
+                                              <div className="flex flex-row items-center">
+                                                <div className="w-1/3 flex items-center">
+                                                  <ItemContEdit
+                                                    key={item.id}
+                                                    data={item}
+                                                    index={iIndex}
+                                                  />
+                                                </div>
+                                                <div>
+                                                  <p className="text-[#343434] text-[16px] font-semibold">
+                                                    {item.title}
+                                                  </p>
+                                                </div>
+                                                <div>
+                                                  {clicked ? (
+                                                    <button
+                                                      className="w-[25px] h-[25px] ml-4"
+                                                      onClick={() =>
+                                                        switchEyes()
+                                                      }
+                                                    >
+                                                      <img
+                                                        src={EyesOpen}
+                                                        alt=""
+                                                        className="w-[25px] h-[25px]"
+                                                      />
+                                                    </button>
+                                                  ) : (
+                                                    <button
+                                                      className="w-[25px] h-[25px] ml-4"
+                                                      onClick={() =>
+                                                        switchEyes()
+                                                      }
+                                                    >
+                                                      <img
+                                                        className="w-[25px] h-[25px]"
+                                                        src={EyesCloked}
+                                                        alt=""
+                                                      />
+                                                    </button>
+                                                  )}
                                                 </div>
                                               </div>
-                                            );
-                                          }
+                                            </div>
+                                          );
                                         }
                                       )
                                     : ""}
@@ -416,34 +394,38 @@ export function EditAula() {
                           )}
 
                           {board.name == "aulas"
-                            ? board.items.length > 0 &&
-                              board.items.map((item, iIndex) => {
-                                return (
-                                  <div className="flex items-center justify-center">
-                                    {/* <MenuIcon className="text-[#FFFFFF] active:text-[#263B4A] opacity-1 mb-8" /> */}
-                                    <ItemAulaEdit
-                                      key={item.id}
-                                      data={item}
-                                      index={iIndex}
-                                    />
-                                  </div>
-                                );
-                              })
+                            ? board.items.array_conteudos.length > 0 &&
+                              board.items.array_conteudos.map(
+                                (item, iIndex) => {
+                                  return (
+                                    <div className="flex items-center justify-center">
+                                      {/* <MenuIcon className="text-[#FFFFFF] active:text-[#263B4A] opacity-1 mb-8" /> */}
+                                      <ItemAulaEdit
+                                        key={item.id}
+                                        data={item}
+                                        index={iIndex}
+                                      />
+                                    </div>
+                                  );
+                                }
+                              )
                             : ""}
 
                           {board.name == "atividades"
-                            ? board.items.length > 0 &&
-                              board.items.map((item, iIndex) => {
-                                return (
-                                  <div className="flex items-center justify-center">
-                                    <ItemAtivEdit
-                                      key={item.id}
-                                      data={item}
-                                      index={iIndex}
-                                    />
-                                  </div>
-                                );
-                              })
+                            ? board.items.array_conteudos.length > 0 &&
+                              board.items.array_conteudos.map(
+                                (item, iIndex) => {
+                                  return (
+                                    <div className="flex items-center justify-center">
+                                      <ItemAtivEdit
+                                        key={item.id}
+                                        data={item}
+                                        index={iIndex}
+                                      />
+                                    </div>
+                                  );
+                                }
+                              )
                             : ""}
 
                           {provided.placeholder}

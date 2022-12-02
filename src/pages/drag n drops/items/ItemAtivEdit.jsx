@@ -10,7 +10,7 @@ export function ItemAtivEdit({ data, index }) {
           {...provided.dragHandleProps}
           className="flex flex-col justify-center items-center w-[200px] h-[100px] rounded-lg bg-white mb-4"
         >
-          <p className="flex flex-col items-center active:opacity-50">
+          <p className="flex flex-col items-center justify-center active:opacity-50">
             {/* <MenuIcon className="text-[#4263EB] active:text-[#263B4A] opacity-1 mr-1" /> */}
             {data.title}
           </p>
