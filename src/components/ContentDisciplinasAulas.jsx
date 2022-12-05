@@ -38,14 +38,17 @@ export function ContentDisciplinasAulas() {
     }
   }, [user]);
 
+  console.log(conteudoArray);
+
   function EditarConteudo(idConteudo) {
     navigate(
-      `/editar-disciplinas-conteudo/${idSerie}/${disc.id}/${idConteudo}`
+      `/editar-disciplinas-conteudo/f8316c5a-5d55-4ba3-8390-4f4460b5e1e4/f076177d-ea29-4695-87bb-14a0a8a29c7b/0edbbd06-e902-4714-a18e-ddd4dc82ddeb`
     );
+    // navigate(`/editar-disciplinas-conteudo/f8316c5a-5d55-4ba3-8390-4f4460b5e1e4/${idSerie}/${idDisc}`);
   }
 
   function CriarConteudo() {
-    navigate(`/criar-disciplinas-conteudo/${idSerie}/${disc.id}`);
+    navigate(`/criar-disciplinas-conteudo/${idSerie}/${idDisc}`);
   }
 
   function HandleVerificar() {

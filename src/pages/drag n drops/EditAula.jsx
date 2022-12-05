@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../context/auth";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { app } from "../../api/app";
 import { ItemAulaEdit } from "./items/ItemAulaEdit";
@@ -23,7 +23,6 @@ export function EditAula() {
   const [bimestre, setBimestre] = useState([]);
   const [bimestreId, setBimestreId] = useState(null);
   const [ready, setReady] = useState(true);
-  const [text, setText] = useState();
   const [clicked, setClicked] = useState(true);
   const [clicked2, setClicked2] = useState(true);
 
@@ -31,8 +30,7 @@ export function EditAula() {
   const [addItemArray, setAddItemArray] = useState([]);
   const [valorBimestre, setValorBimestre] = useState("");
   const [nameConteudo, setNameConteudo] = useState("");
-
-  const notify = () => toast("Wow so easy!");
+  const [newConteudo, setNewConteudo] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -53,13 +51,15 @@ export function EditAula() {
   useEffect(() => {
     const getConteudos = async () => {
       const response = await app.get(
-        `/conteudos/${idConteudo}/${idSerie}/${idDisc}`
+        `/conteudo/f8316c5a-5d55-4ba3-8390-4f4460b5e1e4/${idSerie}/${idDisc}`
       );
 
       setAula(response.data["conteudo"]);
+      // setNewConteudo()
       setNameConteudo(response.data["conteudo"][1]["items"].name);
       setValorBimestre(response.data["conteudo"][1]["items"].id_bimestre);
       setBimestreId(response.data["conteudo"][1]["items"].id_bimestre);
+      setNewConteudo(response.data["conteudo"][1]["items"].array_conteudos);
     };
     getConteudos();
   }, []);
@@ -80,17 +80,20 @@ export function EditAula() {
     }
   }, []);
 
+  const notify = () => toast("Wow so easy!");
+
   async function AttAula() {
     try {
       await app.put(`/conteudos/${idConteudo}`, {
         name: nameConteudo,
         id_disciplina: idDisc,
-        id_bimestre: bimestreId,
-        array_conteudos: addItemArray,
-        status: true,
         id_serie: idSerie,
         created_by: user,
+        array_conteudos: newConteudo,
+        id_bimestre: bimestreId,
+        status: true,
       });
+      notify();
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
       document.location.reload(true);
@@ -99,12 +102,12 @@ export function EditAula() {
 
   const AulasToConteudo = (id, type) => {
     const Valores = { id, type };
-    setAddItemArray([...addItemArray, Valores]);
+    setNewConteudo([...newConteudo, Valores]);
   };
 
   const ConteudoToAulas = (id) => {
     const Valores = { id };
-    setAddItemArray(addItemArray.filter((index) => index.id !== Valores.id));
+    setNewConteudo(newConteudo.filter((index) => index.id !== Valores.id));
   };
 
   const onDragEnd = (re) => {
@@ -121,12 +124,12 @@ export function EditAula() {
     newBoardData[
       parseInt(re.destination.droppableId)
     ].items.array_conteudos.splice(re.destination.index, 0, dragItem);
-    console.log(newBoardData);
+
     // Coluna 0: Aulas
     // Coluna 1: Conteudo = junção de tudo
     // Coluna 2: Atividades
     // Coluna 3: Materiais
-    // console.log(re.destination)
+    console.log(dragItem);
 
     if (re.source.droppableId == 0 && re.destination.droppableId == 1) {
       AulasToConteudo(dragItem.id, "aula");
@@ -207,7 +210,7 @@ export function EditAula() {
                                         <button
                                           className="py-[2px] px-[15px] bg-[#3B5BDB] rounded-md text-white text-[14px]"
                                           type="submit"
-                                          onClick={(notify, AttAula())}
+                                          onClick={AttAula}
                                         >
                                           <a
                                             href={`/editar-disciplinas/${idSerie}/${idDisc}`}
@@ -227,18 +230,6 @@ export function EditAula() {
                                           pauseOnHover
                                           theme="light"
                                         />
-
-                                        {/* <button
-                                          className="py-[2px] px-[15px] bg-[#3B5BDB] rounded-md text-white text-[14px]"
-                                          type="submit"
-                                          onClick={() => (AttAula(), notify)}
-                                        >
-                                          <a
-                                            href={`/editar-disciplinas/${idSerie}/${idDisc}`}
-                                          >
-                                            Salvar
-                                          </a>
-                                        </button> */}
                                       </div>
                                     </div>
                                   </div>
@@ -324,10 +315,6 @@ export function EditAula() {
                                     ? board.items.array_conteudos.length > 0 &&
                                       board.items.array_conteudos.map(
                                         (item, iIndex) => {
-                                          console.log(item);
-                                          // console.log('atividade:', item.atividade);
-
-                                          // if (typeof item.aula != "undefined") {
                                           return (
                                             <div className="bg-[#EDF2FF] rounded-lg p-4">
                                               <div className="flex flex-row items-center">

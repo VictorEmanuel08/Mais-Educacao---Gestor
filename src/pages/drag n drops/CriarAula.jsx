@@ -37,7 +37,8 @@ export function CriarAula() {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await app.get(`/conteudo/${idSerie}/${idDisc}`);
+      const response = await app.get(`/conteudo/f076177d-ea29-4695-87bb-14a0a8a29c7b/0edbbd06-e902-4714-a18e-ddd4dc82ddeb`);
+      // const response = await app.get(`/conteudo/${idSerie}/${idDisc}`);
       setAula(response.data);
     };
     getData();
