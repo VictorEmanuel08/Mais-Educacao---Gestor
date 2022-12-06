@@ -11,8 +11,6 @@ export function ContentDisciplinasAulas() {
   const [disc, setDisc] = useState("");
   const [conteudoArray, setConteudoArray] = useState([]);
 
-  // const [nameHook, setNameHook] = useState("Aulas");
-
   useEffect(() => {
     const getData = async () => {
       const response = await app.get(`/disciplinas/${idDisc}`);
@@ -20,7 +18,6 @@ export function ContentDisciplinasAulas() {
     };
     getData();
   }, []);
-  // console.log(disc);
 
   useEffect(() => {
     try {
@@ -38,13 +35,8 @@ export function ContentDisciplinasAulas() {
     }
   }, [user]);
 
-  console.log(conteudoArray);
-
   function EditarConteudo(idConteudo) {
-    navigate(
-      `/editar-disciplinas-conteudo/f8316c5a-5d55-4ba3-8390-4f4460b5e1e4/f076177d-ea29-4695-87bb-14a0a8a29c7b/0edbbd06-e902-4714-a18e-ddd4dc82ddeb`
-    );
-    // navigate(`/editar-disciplinas-conteudo/f8316c5a-5d55-4ba3-8390-4f4460b5e1e4/${idSerie}/${idDisc}`);
+    navigate(`/editar-disciplinas-conteudo/${idConteudo}/${idSerie}/${idDisc}`);
   }
 
   function CriarConteudo() {
@@ -52,11 +44,9 @@ export function ContentDisciplinasAulas() {
   }
 
   function HandleVerificar() {
-    if (!conteudoArray) {
+    if (conteudoArray.length == 0) {
       return (
-        <p className="text-[#707070] font-rubik mr-4 ">
-          Nenhuma aula cadastrada
-        </p>
+        <p className="text-[#707070] font-rubik">Nenhuma aula cadastrada</p>
       );
     } else {
       return conteudoArray?.map((conteudo) => {

@@ -27,10 +27,11 @@ export function EditAula() {
   const [clicked2, setClicked2] = useState(true);
 
   const [disc, setDisc] = useState();
-  const [addItemArray, setAddItemArray] = useState([]);
   const [valorBimestre, setValorBimestre] = useState("");
   const [nameConteudo, setNameConteudo] = useState("");
   const [newConteudo, setNewConteudo] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
@@ -51,7 +52,7 @@ export function EditAula() {
   useEffect(() => {
     const getConteudos = async () => {
       const response = await app.get(
-        `/conteudo/f8316c5a-5d55-4ba3-8390-4f4460b5e1e4/${idSerie}/${idDisc}`
+        `/conteudos/${idConteudo}/${idSerie}/${idDisc}`
       );
 
       setAula(response.data["conteudo"]);
@@ -93,7 +94,9 @@ export function EditAula() {
         id_bimestre: bimestreId,
         status: true,
       });
-      notify();
+      // notify();
+      alert("Conteudo editado!");
+      navigate(-1);
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
       document.location.reload(true);
@@ -212,11 +215,7 @@ export function EditAula() {
                                           type="submit"
                                           onClick={AttAula}
                                         >
-                                          <a
-                                            href={`/editar-disciplinas/${idSerie}/${idDisc}`}
-                                          >
-                                            Salvar
-                                          </a>
+                                          Salvar
                                         </button>
                                         <ToastContainer
                                           position="top-right"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../context/auth";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { app } from "../../api/app";
 import { ItemAulaEdit } from "./items/ItemAulaEdit";
@@ -12,9 +12,12 @@ import EyesOpen from "../../assets/view.png";
 import { Header } from "../../components/header";
 import { ModalComponent } from "../../components/Modalcomponent";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export function CriarAula() {
   const { user } = useContext(AuthContext);
-  const { idSerie, idDisc, idConteudo } = useParams();
+  const { idSerie, idDisc } = useParams();
   const [aula, setAula] = useState([]);
   const [bimestre, setBimestre] = useState([]);
   const [bimestreId, setBimestreId] = useState(null);
@@ -25,7 +28,8 @@ export function CriarAula() {
 
   const [disc, setDisc] = useState();
   const [addItemArray, setAddItemArray] = useState([]);
-  const [conteudosEdit, setConteudosEdit] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
@@ -37,21 +41,11 @@ export function CriarAula() {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await app.get(`/conteudo/f076177d-ea29-4695-87bb-14a0a8a29c7b/0edbbd06-e902-4714-a18e-ddd4dc82ddeb`);
-      // const response = await app.get(`/conteudo/${idSerie}/${idDisc}`);
+      const response = await app.get(`/conteudo/${idSerie}/${idDisc}`);
       setAula(response.data);
     };
     getData();
   }, [idDisc]);
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const response = await app.get(
-  //       `/escolas/users/professores/aulas/series/${idSerie}/${idDisc}`
-  //     );
-  //     setAula(response.data);
-  //   };
-  //   getData();
-  // }, [idDisc]);
 
   console.log(aula);
 
@@ -82,6 +76,8 @@ export function CriarAula() {
     setBimestreId(getCondensaId);
   };
 
+  const notify = () => toast("Wow so easy!");
+
   async function AddAula() {
     try {
       await app.post("/conteudos", {
@@ -93,7 +89,9 @@ export function CriarAula() {
         id_bimestre: bimestreId,
         status: true,
       });
-      document.location.reload(true);
+      // notify();
+      navigate(-1);
+      // document.location.reload(true);
       alert("Conteudo cadastrado!");
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
@@ -199,7 +197,6 @@ export function CriarAula() {
                             {board.name === "conteudos" ? (
                               <div className="w-full relative">
                                 <div>
-                                  {/* <ComponentMiniHeader /> */}
                                   <div className="w-full bg-gradient-to-r from-[#3B5BDB] to-[#BAC8FD] rounded-t-lg">
                                     <div className="flex justify-between py-4 px-5 items-center ">
                                       <p className="text-[#FFFFFF] text-[20px] font-rubik">
@@ -212,7 +209,7 @@ export function CriarAula() {
                                         <button
                                           className="text-white text-[14px] py-[2px] px-[15px] bg-[#3B5BDB] rounded-md"
                                           type="submit"
-                                          onClick={() => AddAula()}
+                                          onClick={AddAula}
                                         >
                                           Salvar
                                         </button>
@@ -283,7 +280,6 @@ export function CriarAula() {
                                   {board.name == "conteudos"
                                     ? board.items.length > 0 &&
                                       board.items.map((item, iIndex) => {
-                                        // console.log(item)
                                         return (
                                           <div className="bg-[#EDF2FF] rounded-lg p-4">
                                             <div className="flex flex-row items-center">

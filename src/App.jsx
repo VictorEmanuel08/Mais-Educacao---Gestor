@@ -69,7 +69,7 @@ function App() {
             }
           />
           <Route
-            path="/editar-disciplinas-conteudo/f8316c5a-5d55-4ba3-8390-4f4460b5e1e4/:idSerie/:idDisc/"
+            path="/editar-disciplinas-conteudo/:idConteudo/:idSerie/:idDisc/"
             element={
               <Private>
                 <EditAula />

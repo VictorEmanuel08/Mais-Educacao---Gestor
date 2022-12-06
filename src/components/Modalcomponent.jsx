@@ -43,6 +43,7 @@ export function ModalComponent() {
       });
       document.location.reload(true);
       alert("Conteudo cadastrado!");
+      console.log("criado");
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
     }

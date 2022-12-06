@@ -19,9 +19,7 @@ function ContentDados() {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await app.get(
-        "/dados/a8b56ba5-8dbb-4d51-ba74-e0c4f717081f"
-      );
+      const response = await app.get(`/dados/${user}`);
 
       setDados(response.data);
     };
@@ -37,23 +35,40 @@ function ContentDados() {
     getData();
   }, []);
 
-  console.log(newDados);
+  // console.log(newDados);
+  // console.log(user);
 
-  const [idItemSerie, setIdItemSerie] = useState(-1);
-  const [idItemTurma, setIdItemTurma] = useState(-1);
+  const [nameDisc, setNameDisc] = useState("");
+  const [nameSerie, setNameSerie] = useState("");
   const [idItemAluno, setIdItemAluno] = useState(-1);
-  const [idItemNota, setIdItemNota] = useState(-1);
-  const [idItemMedia, setIdItemMedia] = useState(-1);
+  const [nameTurma, setNameTurma] = useState("");
+  const [nameAluno, setNameAluno] = useState("");
+
+  const handleCarregarDisc = function (e) {
+    const opDisc = e.target.value;
+    setNameDisc(opDisc);
+  };
+  console.log(nameDisc);
+
+  const handleCarregarSerie = function (e) {
+    const opSerie = e.target.value;
+    setNameSerie(opSerie);
+  };
+  console.log(nameSerie);
+
+  const handleCarregarTurma = function (e) {
+    const opTurma = e.target.value;
+    setNameTurma(opTurma);
+  };
+  console.log(nameTurma);
+
+  const handleCarregarAluno = function (e) {
+    const opAluno = e.target.value;
+    setNameAluno(opAluno);
+  };
+  console.log(nameAluno);
 
   {
-    // const handleCarregarDisc = function (e) {
-    //   const opDisc = e.target.value;
-    //   setIdItemSerie(opDisc);
-    // };
-    // const handleCarregarSerie = function (e) {
-    //   const opSerie = e.target.value;
-    //   setIdItemTurma(opSerie);
-    // };
     // const handleCarregarTurma = function (e) {
     //   const opTurma = e.target.value;
     //   setIdItemAluno(opTurma);
@@ -104,19 +119,19 @@ function ContentDados() {
     //     name: "Notas",
     //     data: [
     //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[idItemTurma].turmas[idItemAluno].alunos[
+    //         dados[idItemSerie].series[nameSerie].turmas[idItemAluno].alunos[
     //           idItemNota
     //         ].bimestre1,
     //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[idItemTurma].turmas[idItemAluno].alunos[
+    //         dados[idItemSerie].series[nameSerie].turmas[idItemAluno].alunos[
     //           idItemNota
     //         ].bimestre2,
     //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[idItemTurma].turmas[idItemAluno].alunos[
+    //         dados[idItemSerie].series[nameSerie].turmas[idItemAluno].alunos[
     //           idItemNota
     //         ].bimestre3,
     //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[idItemTurma].turmas[idItemAluno].alunos[
+    //         dados[idItemSerie].series[nameSerie].turmas[idItemAluno].alunos[
     //           idItemNota
     //         ].bimestre4,
     //     ],
@@ -142,19 +157,19 @@ function ContentDados() {
     //     name: "Notas",
     //     data: [
     //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[idItemTurma].turmas[idItemAluno].alunos[
+    //         dados[idItemSerie].series[nameSerie].turmas[idItemAluno].alunos[
     //           idItemNota
     //         ].bimestre1,
     //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[idItemTurma].turmas[idItemAluno].alunos[
+    //         dados[idItemSerie].series[nameSerie].turmas[idItemAluno].alunos[
     //           idItemNota
     //         ].bimestre2,
     //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[idItemTurma].turmas[idItemAluno].alunos[
+    //         dados[idItemSerie].series[nameSerie].turmas[idItemAluno].alunos[
     //           idItemNota
     //         ].bimestre3,
     //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[idItemTurma].turmas[idItemAluno].alunos[
+    //         dados[idItemSerie].series[nameSerie].turmas[idItemAluno].alunos[
     //           idItemNota
     //         ].bimestre4,
     //     ],
@@ -204,8 +219,6 @@ function ContentDados() {
     // ];
   }
 
-
-
   return (
     <div className="flex flex-col ml-12 w-4/5">
       <div>
@@ -215,14 +228,14 @@ function ContentDados() {
               <p className="text-[20px] font-semibold">Disciplina</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                // onClick={handleCarregarDisc}
+                onClick={handleCarregarDisc}
                 name="disciplina"
               >
-                <option value={-1}> Selecione uma disciplina:</option>
+                <option> Selecione uma disciplina:</option>
 
                 {Object.entries(newDados).map((item, i) => {
                   return (
-                    <option key={"disciplina" + i} value={i}>
+                    <option key={i} value={item[1].disciplina}>
                       {item[1].disciplina}
                     </option>
                   );
@@ -230,24 +243,59 @@ function ContentDados() {
               </select>
             </div>
 
-            {/* <div className="flex flex-col text-[#4263EB]">
+            <div className="flex flex-col text-[#4263EB]">
               <p className="text-[20px] font-semibold">Série</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                // onClick={handleCarregarSerie}
+                onClick={handleCarregarSerie}
                 name="serie"
               >
-                <option value={-1}> Selecione uma série:</option>
+                <option> Selecione uma série:</option>
                 {Object.entries(newDados).map((item, i) => {
-                  // console.log(item[1].serie);
                   return (
-                    <option key={"serie" + i} value={i}>
+                    <option key={i} value={item[1].serie}>
                       {item[1].serie}
                     </option>
                   );
                 })}
               </select>
-            </div> */}
+            </div>
+
+            <div className="flex flex-col text-[#4263EB]">
+              <p className="text-[20px] font-semibold">Turma</p>
+              <select
+                className="bg-[#FFFFFF] text-[16px]"
+                onClick={handleCarregarTurma}
+                name="turma"
+              >
+                <option> Selecione uma turma:</option>
+                {Object.entries(newDados).map((item, i) => {
+                  return (
+                    <option key={i} value={item[1].turma}>
+                      {item[1].turma}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            <div className="flex flex-col text-[#4263EB]">
+              <p className="text-[20px] font-semibold">Aluno(s)</p>
+              <select
+                className="bg-[#FFFFFF] text-[16px]"
+                onClick={handleCarregarAluno}
+                name="aluno"
+              >
+                <option> Selecione uma turma:</option>
+                {Object.entries(newDados).map((item, i) => {
+                  return (
+                    <option key={i} value={item[1].aluno}>
+                      {item[1].aluno}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
 
             {/*
             <div className="flex flex-col text-[#4263EB]">
@@ -257,9 +305,9 @@ function ContentDados() {
                 onClick={handleCarregarTurma}
                 name="turma"
               >
-                <option value={-1}> Selecione uma turma:</option>
-                {idItemTurma > -1 &&
-                  dados[idItemSerie].disciplinas.series[idItemTurma].turmas.map(
+                <option> Selecione uma turma:</option>
+                {nameSerie > -1 &&
+                  dados[idItemSerie].disciplinas.series[nameSerie].turmas.map(
                     (item, i) => {
                       return (
                         <option key={"turma" + i} value={i}>
@@ -278,10 +326,10 @@ function ContentDados() {
                 onClick={handleCarregarAluno}
                 name="aluno"
               >
-                <option value={-1}> Selecione um aluno:</option>
+                <option> Selecione um aluno:</option>
 
                 {idItemAluno > -1 &&
-                  dados[idItemSerie].disciplinas.series[idItemTurma].turmas[
+                  dados[idItemSerie].disciplinas.series[nameSerie].turmas[
                     idItemAluno
                   ].alunos.map((item, i) => {
                     return (
@@ -356,13 +404,13 @@ function ContentDados() {
               <p className="text-[#02C4B2] text-[20px] font-bold">Média</p>
 
               {/* {idItemNota > -1 &&
-              dados[idItemSerie].series[idItemTurma].turmas[idItemAluno].alunos[
+              dados[idItemSerie].series[nameSerie].turmas[idItemAluno].alunos[
                 idItemNota
               ].media_geral > 0 ? (
                 <div>
                   <p className="text-[#748FFC] mt-8 text-[75px] font-bold">
                     {
-                      dados[idItemSerie].series[idItemTurma].turmas[idItemAluno]
+                      dados[idItemSerie].series[nameSerie].turmas[idItemAluno]
                         .alunos[idItemNota].media_geral
                     }
                   </p>
@@ -541,15 +589,13 @@ function ContentDados() {
                       Turma
                     </p>
                     {idItemAluno > -1 &&
-                      dados[idItemSerie].disciplinas.series[
-                        idItemTurma
-                      ].turmas.map(
+                      dados[nameDisc].disciplinas.series[nameSerie].turmas.map(
                         (item, index) =>
                           // {
                           //   for (
                           //     var t = 0;
                           //     t <
-                          //     dados[idItemSerie].disciplinas.series[idItemTurma]
+                          //     dados[idItemSerie].disciplinas.series[nameSerie]
                           //       .turmas[idItemAluno].alunos.length;
                           //     t++
                           //   ) {
@@ -579,7 +625,7 @@ function ContentDados() {
                       Aluno
                     </p>
                     {idItemAluno > -1 &&
-                      dados[idItemSerie].disciplinas.series[idItemTurma].turmas[
+                      dados[nameDisc].disciplinas.series[nameSerie].turmas[
                         idItemAluno
                       ].alunos.map((item, i) => {
                         return (
@@ -602,7 +648,7 @@ function ContentDados() {
                     </p>
 
                     {idItemAluno > -1 &&
-                      dados[idItemSerie].disciplinas.series[idItemTurma].turmas[
+                      dados[nameDisc].disciplinas.series[nameSerie].turmas[
                         idItemAluno
                       ].alunos.map((item, i) => {
                         // handleVerificarNota(item.media_geral);
