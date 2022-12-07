@@ -16,7 +16,6 @@ export function ModalComponent() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
   const [title, setTitle] = useState("");
-  let subtitle;
 
   const optionTipo = [
     { id: 1, nome: "Múltipla escolha", value: "objetiva" },
@@ -48,8 +47,6 @@ export function ModalComponent() {
       alert("Ocorreu um erro. Tente novamente.");
     }
   }
-
-  // console.log(title);
 
   function openModal() {
     setModalIsOpen(true);
