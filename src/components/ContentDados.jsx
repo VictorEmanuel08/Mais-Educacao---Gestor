@@ -300,7 +300,7 @@ function ContentDados() {
                 name="aluno"
               >
                 <option value={-1} disabled selected>
-                  Selecione uma turma:
+                  Selecione um aluno:
                 </option>
                 {nameTurma > -1 &&
                   dados[nameDisc].disciplinas.series[nameSerie].turmas[

@@ -41,8 +41,8 @@ export function ModalComponent() {
         questions: questions,
       });
       document.location.reload(true);
-      alert("Conteudo cadastrado!");
-      console.log("criado");
+      alert("Atividade cadastrada!");
+      console.log("atividade criada");
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
     }
