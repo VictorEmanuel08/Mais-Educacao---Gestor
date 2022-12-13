@@ -35,7 +35,7 @@ function ContentDados() {
     getData();
   }, []);
 
-  // console.log(dados);
+  console.log(dados);
   // console.log(user);
 
   const [nameDisc, setNameDisc] = useState(-1);
@@ -43,6 +43,12 @@ function ContentDados() {
   const [nameTurma, setNameTurma] = useState(-1);
   const [nameAluno, setNameAluno] = useState(-1);
   const [notaAluno, setNotaAluno] = useState(-1);
+
+  if (nameDisc != -1 && nameSerie != -1) {
+    console.log("oi");
+  } else {
+    console.log("ainda nao");
+  }
 
   useEffect(() => {
     setNameSerie(-1);
@@ -76,144 +82,145 @@ function ContentDados() {
     setNotaAluno(e.target.value);
   };
 
-  {
-    // const handleVerificarNota = (nota) => {
-    //   if (8 <= nota && nota <= 10) {
-    //     count1++;
-    //   }
-    //   if (nota >= 6 && nota < 8) {
-    //     count2++;
-    //   }
-    //   if (nota >= 4 && nota < 6) {
-    //     count3++;
-    //   }
-    //   if (nota >= 2 && nota < 4) {
-    //     count4++;
-    //   }
-    //   if (nota >= 0) {
-    //     count5++;
-    //   }
-    //   return null;
-    // };
-    // const optionsArea1 = {
-    //   chart: {
-    //     height: 350,
-    //     type: "area",
-    //   },
-    //   dataLabels: {
-    //     enabled: true,
-    //   },
-    //   stroke: {
-    //     curve: "smooth",
-    //   },
-    //   xaxis: {
-    //     categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
-    //   },
-    // };
-    // const seriesArea1 = [
-    //   {
-    //     name: "Notas",
-    //     data: [
-    //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[nameSerie].turmas[nameSerie].alunos[
-    //           idItemNota
-    //         ].bimestre1,
-    //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[nameSerie].turmas[nameSerie].alunos[
-    //           idItemNota
-    //         ].bimestre2,
-    //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[nameSerie].turmas[nameSerie].alunos[
-    //           idItemNota
-    //         ].bimestre3,
-    //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[nameSerie].turmas[nameSerie].alunos[
-    //           idItemNota
-    //         ].bimestre4,
-    //     ],
-    //   },
-    // ];
-    // const optionsArea2 = {
-    //   chart: {
-    //     height: 350,
-    //     type: "area",
-    //   },
-    //   dataLabels: {
-    //     enabled: true,
-    //   },
-    //   stroke: {
-    //     curve: "smooth",
-    //   },
-    //   xaxis: {
-    //     categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
-    //   },
-    // };
-    // const seriesArea2 = [
-    //   {
-    //     name: "Notas",
-    //     data: [
-    //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[nameSerie].turmas[nameSerie].alunos[
-    //           idItemNota
-    //         ].bimestre1,
-    //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[nameSerie].turmas[nameSerie].alunos[
-    //           idItemNota
-    //         ].bimestre2,
-    //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[nameSerie].turmas[nameSerie].alunos[
-    //           idItemNota
-    //         ].bimestre3,
-    //       idItemNota > -1 &&
-    //         dados[idItemSerie].series[nameSerie].turmas[nameSerie].alunos[
-    //           idItemNota
-    //         ].bimestre4,
-    //     ],
-    //   },
-    // ];
-    // const optionsArea3 = {
-    //   chart: {
-    //     height: 350,
-    //     type: "area",
-    //   },
-    //   dataLabels: {
-    //     enabled: true,
-    //   },
-    //   stroke: {
-    //     curve: "smooth",
-    //   },
-    //   xaxis: {
-    //     categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
-    //   },
-    // };
-    // const seriesArea3 = [
-    //   {
-    //     name: "Notas",
-    //     data: [4, 3, 2, 1],
-    //   },
-    // ];
-    // const optionsArea4 = {
-    //   chart: {
-    //     height: 350,
-    //     type: "area",
-    //   },
-    //   dataLabels: {
-    //     enabled: true,
-    //   },
-    //   stroke: {
-    //     curve: "smooth",
-    //   },
-    //   xaxis: {
-    //     categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
-    //   },
-    // };
-    // const seriesArea4 = [
-    //   {
-    //     name: "Notas",
-    //     data: [1, 2, 3, 4],
-    //   },
-    // ];
-  }
+  const handleVerificarNota = (nota) => {
+    if (8 <= nota && nota <= 10) {
+      count1++;
+    }
+    if (nota >= 6 && nota < 8) {
+      count2++;
+    }
+    if (nota >= 4 && nota < 6) {
+      count3++;
+    }
+    if (nota >= 2 && nota < 4) {
+      count4++;
+    }
+    if (nota >= 0 && nota < 2) {
+      count5++;
+    }
+    return null;
+  };
+
+  const optionsArea1 = {
+    chart: {
+      height: 350,
+      type: "area",
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: "smooth",
+    },
+    xaxis: {
+      categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
+    },
+  };
+
+  const seriesArea1 = [
+    {
+      name: "Notas",
+      data: [1, 2, 3, 4],
+      // data: [
+      //   nameAluno > -1 &&
+      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[
+      //       nameAluno
+      //     ].bimestre1,
+      //   nameAluno > -1 &&
+      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[
+      //       nameAluno
+      //     ].bimestre2,
+      //   nameAluno > -1 &&
+      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[
+      //       nameAluno
+      //     ].bimestre3,
+      //   nameAluno > -1 &&
+      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[
+      //       nameAluno
+      //     ].bimestre4,
+      // ],
+    },
+  ];
+
+  const optionsArea2 = {
+    chart: {
+      height: 350,
+      type: "area",
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: "smooth",
+    },
+    xaxis: {
+      categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
+    },
+  };
+  const seriesArea2 = [
+    {
+      name: "Notas",
+      data: [1, 2, 3, 4],
+      // data: [
+      //   nameAluno > -1 &&
+      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[nameAluno]
+      //       .bimestre1,
+      //   nameAluno > -1 &&
+      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[nameAluno]
+      //       .bimestre2,
+      //   nameAluno > -1 &&
+      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[nameAluno]
+      //       .bimestre3,
+      //   nameAluno > -1 &&
+      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[nameAluno]
+      //       .bimestre4,
+      // ],
+    },
+  ];
+
+  const optionsArea3 = {
+    chart: {
+      height: 350,
+      type: "area",
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: "smooth",
+    },
+    xaxis: {
+      categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
+    },
+  };
+  const seriesArea3 = [
+    {
+      name: "Notas",
+      data: [4, 3, 2, 1],
+    },
+  ];
+
+  const optionsArea4 = {
+    chart: {
+      height: 350,
+      type: "area",
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: "smooth",
+    },
+    xaxis: {
+      categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
+    },
+  };
+  const seriesArea4 = [
+    {
+      name: "Notas",
+      data: [1, 2, 3, 4],
+    },
+  ];
 
   return (
     <div className="flex flex-col ml-12 w-4/5">
@@ -299,6 +306,7 @@ function ContentDados() {
                   dados[nameDisc].disciplinas.series[nameSerie].turmas[
                     nameTurma
                   ].alunos.map((item, i) => {
+                    console.log(item);
                     return (
                       <option key={"Aluno" + i} value={i}>
                         {item.name}
@@ -390,34 +398,6 @@ function ContentDados() {
                   </p>
                 </div>
               )}
-
-              {/* {nameAluno != -1 ? (
-                nameAluno > -1 &&
-                dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-                  .alunos[nameAluno].media_geral > 0 ? (
-                  <div>
-                    <p className="text-[#748FFC] mt-8 text-[75px] font-bold">
-                      {
-                        dados[nameDisc].disciplinas.series[nameSerie].turmas[
-                          nameTurma
-                        ].alunos[nameAluno].media_geral
-                      }
-                    </p>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center">
-                    <p className="text-[#748FFC] mt-8 text-[20px] font-bold">
-                      Sem nota cadastrada.
-                    </p>
-                  </div>
-                )
-              ) : (
-                <div className="flex items-center justify-center">
-                  <p className="text-[#748FFC] mt-8 text-[20px] font-bold">
-                    Sem nota cadastrada.
-                  </p>
-                </div>
-              )} */}
             </div>
           </div>
 
@@ -503,7 +483,7 @@ function ContentDados() {
                   </label>
                 </div>
               </div>
-              {/* 
+
               {visivle == "1" && (
                 <ApexChart
                   className=""
@@ -544,7 +524,7 @@ function ContentDados() {
                   height={300}
                   width={700}
                 />
-              )} */}
+              )}
             </div>
           </div>
 
@@ -635,7 +615,7 @@ function ContentDados() {
                       dados[nameDisc].disciplinas.series[nameSerie].turmas[
                         nameTurma
                       ].alunos.map((item, i) => {
-                        // handleVerificarNota(item.media_geral);
+                        handleVerificarNota(item.media_geral);
                         if (item.media_geral > 0) {
                           return (
                             <p
@@ -645,8 +625,7 @@ function ContentDados() {
                                   : `bg-[#EDF2FF] text-dark-purple`
                               } font-normal w-full flex justify-center items-center`}
                             >
-                              {parseFloat(item.media_geral.toFixed(2))}
-                              {/* {item.media_geral} */}
+                              {item.media_geral}
                             </p>
                           );
                         }
