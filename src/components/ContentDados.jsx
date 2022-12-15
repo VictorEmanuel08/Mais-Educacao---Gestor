@@ -10,7 +10,7 @@ function ContentDados() {
   const [dados, setDados] = useState("");
   const [newDados, setNewDados] = useState([]);
   const [visivle, setVisivle] = useState("");
-  // const [count, setCount] = useState(0);
+
   let count1 = 0; //8-10
   let count2 = 0; //6-8
   let count3 = 0; //4-6
@@ -35,32 +35,27 @@ function ContentDados() {
     getData();
   }, []);
 
-  console.log(dados);
-  // console.log(user);
-
   const [nameDisc, setNameDisc] = useState(-1);
   const [nameSerie, setNameSerie] = useState(-1);
   const [nameTurma, setNameTurma] = useState(-1);
   const [nameAluno, setNameAluno] = useState(-1);
   const [notaAluno, setNotaAluno] = useState(-1);
 
-  if (nameDisc != -1 && nameSerie != -1) {
-    console.log("oi");
-  } else {
-    console.log("ainda nao");
-  }
-
-  useEffect(() => {
+  function mudançaNameDisc(disc) {
+    setNameDisc(disc);
     setNameSerie(-1);
-  }, [nameDisc]);
-
-  useEffect(() => {
     setNameTurma(-1);
-  }, [nameSerie]);
-
-  useEffect(() => {
     setNameAluno(-1);
-  }, [nameTurma]);
+  }
+  function mudançaNameSerie(serie) {
+    setNameSerie(serie);
+    setNameTurma(-1);
+    setNameAluno(-1);
+  }
+  function mudançaNameTurma(turma) {
+    setNameTurma(turma);
+    setNameAluno(-1);
+  }
 
   const handleCarregarDisc = function (e) {
     setNameDisc(e.target.value);
@@ -81,6 +76,21 @@ function ContentDados() {
   const handleCarregarNota = function (e) {
     setNotaAluno(e.target.value);
   };
+
+  useEffect(() => {
+    setNameSerie(-1);
+    setNameTurma(-1);
+    setNameAluno(-1);
+  }, [nameDisc]);
+
+  useEffect(() => {
+    setNameTurma(-1);
+    setNameAluno(-1);
+  }, [nameSerie]);
+
+  useEffect(() => {
+    setNameAluno(-1);
+  }, [nameTurma]);
 
   const handleVerificarNota = (nota) => {
     if (8 <= nota && nota <= 10) {
@@ -119,26 +129,21 @@ function ContentDados() {
 
   const seriesArea1 = [
     {
-      name: "Notas",
-      data: [1, 2, 3, 4],
-      // data: [
-      //   nameAluno > -1 &&
-      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[
-      //       nameAluno
-      //     ].bimestre1,
-      //   nameAluno > -1 &&
-      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[
-      //       nameAluno
-      //     ].bimestre2,
-      //   nameAluno > -1 &&
-      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[
-      //       nameAluno
-      //     ].bimestre3,
-      //   nameAluno > -1 &&
-      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[
-      //       nameAluno
-      //     ].bimestre4,
-      // ],
+      name: "Médias",
+      data: [
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b1.media,
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b2.media,
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b3.media,
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b4.media,
+      ],
     },
   ];
 
@@ -159,22 +164,21 @@ function ContentDados() {
   };
   const seriesArea2 = [
     {
-      name: "Notas",
-      data: [1, 2, 3, 4],
-      // data: [
-      //   nameAluno > -1 &&
-      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[nameAluno]
-      //       .bimestre1,
-      //   nameAluno > -1 &&
-      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[nameAluno]
-      //       .bimestre2,
-      //   nameAluno > -1 &&
-      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[nameAluno]
-      //       .bimestre3,
-      //   nameAluno > -1 &&
-      //     dados[nameDisc].series[nameSerie].turmas[nameTurma].alunos[nameAluno]
-      //       .bimestre4,
-      // ],
+      name: "Quantidade de atividades",
+      data: [
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b1.atividades_realizadas,
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b2.atividades_realizadas,
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b3.atividades_realizadas,
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b4.atividades_realizadas,
+      ],
     },
   ];
 
@@ -195,30 +199,21 @@ function ContentDados() {
   };
   const seriesArea3 = [
     {
-      name: "Notas",
-      data: [4, 3, 2, 1],
-    },
-  ];
-
-  const optionsArea4 = {
-    chart: {
-      height: 350,
-      type: "area",
-    },
-    dataLabels: {
-      enabled: true,
-    },
-    stroke: {
-      curve: "smooth",
-    },
-    xaxis: {
-      categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
-    },
-  };
-  const seriesArea4 = [
-    {
-      name: "Notas",
-      data: [1, 2, 3, 4],
+      name: "Quantidade de aulas assistidas",
+      data: [
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b1.aulas_assistidas,
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b2.aulas_assistidas,
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b3.aulas_assistidas,
+        nameAluno > -1 &&
+          dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+            .alunos[nameAluno].b4.aulas_assistidas,
+      ],
     },
   ];
 
@@ -231,12 +226,15 @@ function ContentDados() {
               <p className="text-[20px] font-semibold">Disciplina</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                onClick={handleCarregarDisc}
+                // onChange={(e) => {
+                //   setNameDisc(e.target.value);
+                // }}
+                onChange={(e) => {
+                  mudançaNameDisc(e.target.value);
+                }}
                 id="disciplina"
               >
-                <option value={-1} disabled selected>
-                  Selecione uma disciplina:
-                </option>
+                <option value={-1}>Selecione uma disciplina:</option>
 
                 {Object.entries(dados).map((item, i) => {
                   return (
@@ -252,12 +250,13 @@ function ContentDados() {
               <p className="text-[20px] font-semibold">Série</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                onClick={handleCarregarSerie}
+                // onClick={handleCarregarSerie}
+                onChange={(e) => {
+                  mudançaNameSerie(e.target.value);
+                }}
                 name="serie"
               >
-                <option value={-1} disabled selected>
-                  Selecione uma série:
-                </option>
+                <option value={-1}>Selecione uma série:</option>
                 {nameDisc > -1 &&
                   dados[nameDisc].disciplinas.series.map((item, i) => {
                     return (
@@ -273,12 +272,13 @@ function ContentDados() {
               <p className="text-[20px] font-semibold">Turma</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                onClick={handleCarregarTurma}
+                // onClick={handleCarregarTurma}
+                onChange={(e) => {
+                  mudançaNameTurma(e.target.value);
+                }}
                 name="turma"
               >
-                <option value={-1} disabled selected>
-                  Selecione uma turma:
-                </option>
+                <option value={-1}>Selecione uma turma:</option>
                 {nameSerie > -1 &&
                   dados[nameDisc].disciplinas.series[nameSerie].turmas.map(
                     (item, i) => {
@@ -299,14 +299,11 @@ function ContentDados() {
                 onClick={handleCarregarAluno}
                 name="aluno"
               >
-                <option value={-1} disabled selected>
-                  Selecione um aluno:
-                </option>
+                <option value={-1}>Selecione um aluno:</option>
                 {nameTurma > -1 &&
                   dados[nameDisc].disciplinas.series[nameSerie].turmas[
                     nameTurma
                   ].alunos.map((item, i) => {
-                    console.log(item);
                     return (
                       <option key={"Aluno" + i} value={i}>
                         {item.name}
@@ -338,45 +335,87 @@ function ContentDados() {
           </div>
 
           <div className="w-full flex flex-row justify-between mt-10 mb-12 px-16">
-            <div className="flex flex-col w-1/3">
+            <div className="flex flex-col w-1/3 pr-10">
               <p className="text-[#02C4B2] text-[20px] font-bold">
                 Tempo na plataforma
               </p>
-              <div className="flex flex-row justify-between text-[16px] pt-2 mr-16">
+              <div className="flex flex-row justify-between text-[16px] pt-2">
                 <p className="text-[#748FFC] font-semibold">Tempo em aula:</p>
-                <p className="text-[#748FFC] font-bold">90 min</p>
+                {nameAluno > -1 ? (
+                  <p className="text-[#748FFC] font-bold">
+                    {
+                      dados[nameDisc].disciplinas.series[nameSerie].turmas[
+                        nameTurma
+                      ].alunos[nameAluno].total_tempo_aula
+                    }{" "}
+                    min
+                  </p>
+                ) : (
+                  <p></p>
+                )}
               </div>
-              <div className="flex flex-row justify-between  text-[16px] pt-2 mr-16">
+              <div className="flex flex-row justify-between  text-[16px] pt-2">
                 <p className="text-[#748FFC] font-semibold">
                   Tempo em atividade:
                 </p>
-                <p className="text-[#748FFC] font-bold ">22 min</p>
+                {nameAluno > -1 ? (
+                  <p className="text-[#748FFC] font-bold">
+                    {
+                      dados[nameDisc].disciplinas.series[nameSerie].turmas[
+                        nameTurma
+                      ].alunos[nameAluno].total_tempo_atividade
+                    }{" "}
+                    min
+                  </p>
+                ) : (
+                  <p></p>
+                )}
               </div>
             </div>
 
-            <div className="flex flex-col w-1/3 pl-4">
+            <div className="flex flex-col w-1/3 px-5">
               <p className="text-[#02C4B2] text-[20px] font-bold">
                 Participação
               </p>
-              <div className="flex flex-row justify-between text-[16px] pt-2 mr-16">
+              <div className="flex flex-row justify-between text-[16px] pt-2">
                 <p className="text-[#748FFC] font-semibold">
                   Aulas assistidas:
                 </p>
-                <p className="text-[#748FFC] font-bold">25</p>
+                {nameAluno > -1 ? (
+                  <p className="text-[#748FFC] font-bold">
+                    {
+                      dados[nameDisc].disciplinas.series[nameSerie].turmas[
+                        nameTurma
+                      ].alunos[nameAluno].total_aulas_assistidas
+                    }
+                  </p>
+                ) : (
+                  <p></p>
+                )}
               </div>
-              <div className="flex flex-row justify-between text-[16px] pt-2 mr-16">
+              <div className="flex flex-row justify-between text-[16px] pt-2">
                 <p className="text-[#748FFC] font-semibold">
                   Atividades realizadas:
                 </p>
-                <p className="text-[#748FFC] font-bold ">16</p>
+                {nameAluno > -1 ? (
+                  <p className="text-[#748FFC] font-bold">
+                    {
+                      dados[nameDisc].disciplinas.series[nameSerie].turmas[
+                        nameTurma
+                      ].alunos[nameAluno].total_atividades_realizadas
+                    }
+                  </p>
+                ) : (
+                  <p></p>
+                )}
               </div>
-              <div className="flex flex-row justify-between text-[16px] pt-2 mr-16">
+              <div className="flex flex-row justify-between text-[16px] pt-2">
                 <p className="text-[#748FFC] font-semibold">Materiais lidos:</p>
                 <p className="text-[#748FFC] font-bold">12</p>
               </div>
             </div>
 
-            <div className="flex flex-col w-1/3 items-center">
+            <div className="flex flex-col w-1/3 pl-10 items-center">
               <p className="text-[#02C4B2] text-[20px] font-bold">Média</p>
 
               {nameAluno > -1 &&
@@ -392,7 +431,7 @@ function ContentDados() {
                   </p>
                 </div>
               ) : (
-                <div className="flex items-center justify-center">
+                <div className="flex">
                   <p className="text-[#748FFC] mt-8 text-[20px] font-bold">
                     Sem nota cadastrada.
                   </p>
@@ -403,7 +442,7 @@ function ContentDados() {
 
           <div className="flex flex-col px-16 pb-12">
             <div className="flex flex-row justify-between">
-              <p className="text-[#02C4B2] text-[20px] font-bold mr-4">
+              <p className="text-[#02C4B2] text-[20px] font-bold ">
                 Evolução
               </p>
               <div className="flex flex-row ">
@@ -440,26 +479,11 @@ function ContentDados() {
                 <div className="flex flex-row items-center">
                   <input
                     name="theradio"
-                    id="radio2"
+                    id="radio3"
                     type="radio"
                     className="h-4 w-4 cursor-pointer"
                     value="2"
                     onClick={() => setVisivle("2")}
-                  />
-                  <label for="radio2" className="cursor-pointer">
-                    <span className="text-[18px] font-semibold text-dark-purple pl-4 hover:text-[#02C4B2] active:text-[#02C4B2]">
-                      Notas das atividades
-                    </span>
-                  </label>
-                </div>
-                <div className="flex flex-row items-center">
-                  <input
-                    name="theradio"
-                    id="radio3"
-                    type="radio"
-                    className="h-4 w-4 cursor-pointer"
-                    value="3"
-                    onClick={() => setVisivle("3")}
                   />
                   <label for="radio3" className="cursor-pointer">
                     <span className="text-[18px] font-semibold text-dark-purple pl-4 hover:text-[#02C4B2] active:text-[#02C4B2]">
@@ -473,12 +497,12 @@ function ContentDados() {
                     id="radio4"
                     type="radio"
                     className="h-4 w-4 cursor-pointer"
-                    value="4"
-                    onClick={() => setVisivle("4")}
+                    value="3"
+                    onClick={() => setVisivle("3")}
                   />
                   <label for="radio4" className="cursor-pointer">
                     <span className="text-[18px] font-semibold text-dark-purple pl-4 hover:text-[#02C4B2] active:text-[#02C4B2]">
-                      Quantidades de aulas Assistidas
+                      Quantidades de aulas assistidas
                     </span>
                   </label>
                 </div>
@@ -491,7 +515,7 @@ function ContentDados() {
                   series={seriesArea1}
                   type="area"
                   height={300}
-                  width={700}
+                  width={500}
                 />
               )}
 
@@ -502,7 +526,7 @@ function ContentDados() {
                   series={seriesArea2}
                   type="area"
                   height={300}
-                  width={700}
+                  width={500}
                 />
               )}
               {visivle == "3" && (
@@ -512,17 +536,7 @@ function ContentDados() {
                   series={seriesArea3}
                   type="area"
                   height={300}
-                  width={700}
-                />
-              )}
-              {visivle == "4" && (
-                <ApexChart
-                  className=""
-                  options={optionsArea4}
-                  series={seriesArea4}
-                  type="area"
-                  height={300}
-                  width={700}
+                  width={500}
                 />
               )}
             </div>
@@ -555,25 +569,6 @@ function ContentDados() {
                     {nameTurma > -1 &&
                       dados[nameDisc].disciplinas.series[nameSerie].turmas.map(
                         (item, index) =>
-                          // {
-                          //   for (
-                          //     var t = 0;
-                          //     t <
-                          //     dados[nameDisc].disciplinas.series[nameSerie]
-                          //       .turmas[nameTurma].alunos.length;
-                          //     t++
-                          //   ) {
-                          //     console.log(t);
-                          //     nameTurma == index && (
-                          //       <div className="bg-[#748FFC] h-full flex items-center px-5">
-                          //         {console.log(item.name)}
-                          //         <p className=" text-[18px] text-white font-normal w-full ">
-                          //           {item.name}
-                          //         </p>
-                          //       </div>
-                          //     );
-                          //   }
-                          // }
                           nameTurma == index && (
                             <div className="bg-[#748FFC] h-full flex items-center px-5">
                               <p className=" text-[18px] text-white font-normal w-full ">
@@ -585,7 +580,7 @@ function ContentDados() {
                   </div>
 
                   <div className="flex flex-col border-r items-center">
-                    <p className="font-normal pl-4 pr-4 text-white text-[20px]">
+                    <p className="font-normal px-4 text-white text-[20px]">
                       Aluno
                     </p>
                     {nameTurma > -1 &&
@@ -594,7 +589,7 @@ function ContentDados() {
                       ].alunos.map((item, i) => {
                         return (
                           <p
-                            className={`pr-4 text-[18px] pl-4 ${
+                            className={`px-4 text-[18px] ${
                               i % 2 != 0
                                 ? `bg-[#748FFC] text-white`
                                 : `bg-[#EDF2FF] text-dark-purple`
@@ -607,7 +602,7 @@ function ContentDados() {
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <p className="font-normal pl-4 pr-4 text-white text-[20px]">
+                    <p className="font-normal px-4 text-white text-[20px]">
                       Média
                     </p>
 
@@ -619,7 +614,7 @@ function ContentDados() {
                         if (item.media_geral > 0) {
                           return (
                             <p
-                              className={`pr-4 text-[18px] pl-4 ${
+                              className={`px-4 text-[18px] ${
                                 i % 2 != 0
                                   ? `bg-[#748FFC] text-white`
                                   : `bg-[#EDF2FF] text-dark-purple`
@@ -631,7 +626,7 @@ function ContentDados() {
                         }
                         return (
                           <p
-                            className={`pr-4 text-[18px] pl-4 ${
+                            className={`px-4 text-[18px] ${
                               i % 2 != 0
                                 ? `bg-[#748FFC] text-white`
                                 : `bg-[#EDF2FF] text-dark-purple`
