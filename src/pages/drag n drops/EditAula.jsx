@@ -65,8 +65,6 @@ export function EditAula() {
     getConteudos();
   }, []);
 
-  console.log(aula);
-
   function switchEyes() {
     setClicked(!clicked);
   }
@@ -132,7 +130,6 @@ export function EditAula() {
     // Coluna 1: Conteudo = junção de tudo
     // Coluna 2: Atividades
     // Coluna 3: Materiais
-    console.log(dragItem);
 
     if (re.source.droppableId == 0 && re.destination.droppableId == 1) {
       AulasToConteudo(dragItem.id, "aula");
@@ -407,7 +404,9 @@ export function EditAula() {
                                         key={item.id}
                                         data={item}
                                         index={iIndex}
+                                        idAtividade={item.id}
                                       />
+                                      {console.log(item.id)}
                                     </div>
                                   );
                                 }

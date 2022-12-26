@@ -10,6 +10,7 @@ import { Private } from "./components/Private";
 import { CriarAula } from "./pages/drag n drops/CriarAula";
 import { EditAula } from "./pages/drag n drops/EditAula";
 import { ModalComponent } from "./components/Modalcomponent";
+import { ModalcomponentEditarAtividade } from "./components/ModalcomponentEditarAtividade";
 import { TesteDados } from "./components/dados/TesteDados";
 
 import { initializeApp } from "firebase/app";
@@ -98,6 +99,14 @@ function App() {
             element={
               <Private>
                 <ModalComponent />
+              </Private>
+            }
+          />
+          <Route
+            path="/editar/:idAtividade"
+            element={
+              <Private>
+                <ModalcomponentEditarAtividade />
               </Private>
             }
           />
