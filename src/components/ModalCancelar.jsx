@@ -20,7 +20,6 @@ export function ModalCancelar({ data, descartar, salvar }) {
     salvar();
   }
 
-  console.log(data);
 
   return (
     <div className="">

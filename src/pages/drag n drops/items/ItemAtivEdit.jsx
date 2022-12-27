@@ -1,13 +1,10 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
+import { ModalcomponentEditarAtividade } from "../../../components/ModalcomponentEditarAtividade";
 
 export function ItemAtivEdit({ data, index, idAtividade }) {
   const navigate = useNavigate();
-
-  function EditarAtividade(idAtividade) {
-    navigate(`{/editar/${idAtividade}}`);
-  }
 
   return (
     <Draggable index={index} draggableId={data.id.toString()}>
@@ -30,9 +27,11 @@ export function ItemAtivEdit({ data, index, idAtividade }) {
               </p>
             </div>
           </div>
-          <button className="flex object-top" onClick={EditarAtividade(idAtividade)}>
-            <EditIcon className="text-[#EEF2FE]" />
-          </button>
+          <div
+            className="flex object-top"
+          >
+            <ModalcomponentEditarAtividade itemIdAtividade={idAtividade}/>
+          </div>
         </div>
       )}
     </Draggable>

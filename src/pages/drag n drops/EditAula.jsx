@@ -406,7 +406,6 @@ export function EditAula() {
                                         index={iIndex}
                                         idAtividade={item.id}
                                       />
-                                      {console.log(item.id)}
                                     </div>
                                   );
                                 }

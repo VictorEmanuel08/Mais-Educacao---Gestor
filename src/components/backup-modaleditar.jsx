@@ -23,7 +23,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   ];
 
   const [questions, setQuestions] = useState([]);
-
+  
   const [atividades, setAtividades] = useState([]);
   const [titleAtividade, setTitleAtividade] = useState("");
   const [questionsAtividade, setQuestionsAtividade] = useState([]);
@@ -42,16 +42,18 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
 
   function showItens() {
     console.log(questionsAtividade);
+    // console.log(itemIdAtividade);
+    console.log(questions);
   }
 
   async function EditAtiv() {
     try {
-      await app.put(`/atividades/${itemIdAtividade}`, {
+      await app.post(`/atividades/${itemIdAtividade}`, {
         title: titleAtividade,
         description: "Resolva as questões para ganhar pontos",
         id_serie: idSerie,
         id_disciplina: idDisc,
-        questions: questionsAtividade,
+        questions: questions,
       });
       document.location.reload(true);
       alert("Atividade cadastrada!");
@@ -69,69 +71,69 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   }
 
   function changeQuestion(text, i) {
-    var newQuestion = [...questionsAtividade];
+    var newQuestion = [...questions];
     newQuestion[i].title_question = text;
-    setQuestionsAtividade(newQuestion);
+    setQuestions(newQuestion);
   }
 
   function changeOptionValue(text, i, j) {
-    var optionsQuestion = [...questionsAtividade];
+    var optionsQuestion = [...questions];
     optionsQuestion[i].options[j].description = text;
-    setQuestionsAtividade(optionsQuestion);
+    setQuestions(optionsQuestion);
   }
 
-  function changeTipoQuestao(text, i) {
-    var TypeQuestion = [...questionsAtividade];
-    TypeQuestion[i].question_type = text;
-    setQuestionsAtividade(TypeQuestion);
-  }
+  // function changeTipoQuestao(text, i) {
+  //   var TypeQuestion = [...questions];
+  //   TypeQuestion[i].question_type = text;
+  //   setQuestions(TypeQuestion);
+  // }
 
   function handleChange(text, i, j) {
-    var optionQuestionCorrect = [...questionsAtividade];
+    var optionQuestionCorrect = [...questions];
     optionQuestionCorrect[i].options[j].is_correct = !checked;
-    setQuestionsAtividade(optionQuestionCorrect);
+    setQuestions(optionQuestionCorrect);
   }
 
   function removeOption(i, j) {
-    var RemoveOptionQuestion = [...questionsAtividade];
+    var RemoveOptionQuestion = [...questions];
     if (RemoveOptionQuestion[i].options.length > 1) {
       RemoveOptionQuestion[i].options.splice(j, 1);
-      setQuestionsAtividade(RemoveOptionQuestion);
+      setQuestions(RemoveOptionQuestion);
     }
   }
 
   function addOption(i) {
-    var optionsOfQuestion = [...questionsAtividade];
+    var optionsOfQuestion = [...questions];
     if (optionsOfQuestion[i].options.length < 5) {
       optionsOfQuestion[i].options.push({ description: "", is_correct: false });
     } else {
     }
 
-    setQuestionsAtividade(optionsOfQuestion);
+    setQuestions(optionsOfQuestion);
   }
 
   function deleteQuestion(i) {
-    let qs = [...questionsAtividade];
+    let qs = [...questions];
     if (questions.length > 1) {
       qs.splice(i, 1);
     }
-    setQuestionsAtividade(qs);
+    setQuestions(qs);
   }
 
   function addMoreQuestionField() {
-    setQuestionsAtividade([
-      ...questionsAtividade,
+    setQuestions([
+      ...questions,
       {
         title_question: "",
         id_disciplina: "0edbbd06-e902-4714-a18e-ddd4dc82ddeb",
-        question_type: "objetiva",
+        // question_type: "objetiva",
         options: [{ description: "", is_correct: false }],
       },
     ]);
   }
 
   function clearQuestion() {
-    questionsAtividade.pop();
+    questions.pop();
     closeModal();
   }
 
@@ -139,13 +141,13 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
     if (!result.destination) {
       return;
     }
-    var itemgg = [...questionsAtividade];
+    var itemgg = [...questions];
     const itemF = reorder(
       itemgg,
       result.source.index,
       result.destination.index
     );
-    setQuestionsAtividade(itemF);
+    setQuestions(itemF);
   }
 
   const reorder = (list, startIndex, endIndex) => {
@@ -156,7 +158,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   };
 
   function questionsUI() {
-    return questionsAtividade.map((ques, i) => (
+    return questions.map((ques, i) => (
       <Draggable key={i} draggableId={i + "id"} index={i}>
         {(provided, snapshot) => (
           <div
@@ -188,9 +190,9 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
                       <select
                         className="bg-transparent w-full rounded-lg outline-none"
                         name="TipoDeQuestão"
-                        onChange={(e) => {
-                          changeTipoQuestao(e.target.value, i);
-                        }}
+                        // onChange={(e) => {
+                        //   changeTipoQuestao(e.target.value, i);
+                        // }}
                       >
                         {optionTipo.map((item) => (
                           <option key={item.id} value={item.value}>
@@ -205,20 +207,20 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
                 <div className="mt-4 mb-12 w-full h-[40px]">
                   <textarea
                     placeholder="Pergunta"
-                    value={ques.title}
+                    value={ques.title_question}
                     onChange={(e) => {
                       changeQuestion(e.target.value, i);
                     }}
                     className="bg-[#EDF2FF] w-full h-fit placeholder-black outline-none text-black text-[18px] rounded-lg p-2 scrollbar-thin resize-none"
                   />
                 </div>
-                {ques.opcoes.map((op, j) => (
+                {ques.options.map((op, j) => (
                   <div className="add_question_body" key={j}>
                     <div>
                       <div className="flex flex-row items-center justify-between mt-2">
                         <Checkbox
                           className="cursor-pointer text-black"
-                          value={ques.opcoes[j].is_correct}
+                          value={ques.options[j].is_correct}
                           onChange={(e) => {
                             handleChange(e.target.value, i, j);
                           }}
@@ -227,7 +229,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
                           type="text"
                           className="bg-[#EDF2FF] w-full h-[40px] text-black placeholder-black outline-none text-[18px] rounded-lg p-2 scrollbar-thin resize-none"
                           placeholder={`Alternativa ${j + 1}`}
-                          value={ques.opcoes[j]}
+                          value={ques.options[j].optionText}
                           onChange={(e) => {
                             changeOptionValue(e.target.value, i, j);
                           }}
@@ -243,7 +245,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
                   </div>
                 ))}
 
-                {ques.opcoes.length < 5 ? (
+                {ques.options.length < 5 ? (
                   <div className="add_question_body">
                     <div className="h-[40px] mt-4 mb-4">
                       <button
@@ -300,10 +302,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
               className="w-fit placeholder-dark-purple outline-none text-[25px]"
             />
           </div>
-          {questionsAtividade.map((ques, i) => {
-            console.log(ques.opcoes.length);
-            return <div></div>;
-          })}
+
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
@@ -325,7 +324,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
           </div>
           <div className="flex flex-row items-center justify-end my-8 px-4 w-full">
             <ModalCancelar
-              data={questionsAtividade}
+              data={questions}
               descartar={clearQuestion}
               salvar={EditAtiv}
             />
