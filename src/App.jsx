@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import { DisciplinasFirst } from "./pages/DisciplinasFirst";
 import DisciplinasSecond from "./pages/DisciplinasSecond";
 import Dados from "./pages/Dados";
+import { Calendario } from "./components/Calendario";
 import { ItemAulaEdit } from "./pages/drag n drops/items/ItemAulaEdit";
 import { AuthProvider } from "./context/auth";
 import { Private } from "./components/Private";
@@ -11,10 +12,8 @@ import { CriarAula } from "./pages/drag n drops/CriarAula";
 import { EditAula } from "./pages/drag n drops/EditAula";
 import { ModalComponent } from "./components/Modalcomponent";
 import { ModalcomponentEditarAtividade } from "./components/ModalcomponentEditarAtividade";
-import { TesteDados } from "./components/dados/TesteDados";
 
 import { initializeApp } from "firebase/app";
-import { DropDownTeste } from "./components/dados/newDropdrownTeste";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC_lP-XRuonKQ2bSnTEAw_RD6kUDnNO6hg",
@@ -33,8 +32,6 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/dropdown" element={<DropDownTeste />} />
-          <Route path="/teste" element={<TesteDados />} />
           <Route path="/" element={<Login />} />
           <Route
             path="/home"
@@ -99,6 +96,14 @@ function App() {
             element={
               <Private>
                 <ModalComponent />
+              </Private>
+            }
+          />
+          <Route
+            path="/Calendario"
+            element={
+              <Private>
+                <Calendario />
               </Private>
             }
           />

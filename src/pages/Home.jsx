@@ -4,6 +4,7 @@ import { IoMdPerson, IoMdExit } from 'react-icons/io'
 import { MdOutlineNotifications } from 'react-icons/md'
 import { Sidebar } from '../components/Sidebar'
 import { ContentHome } from '../components/ContentHome'
+// import { Calendario } from '../components/Calendario'
 import { useNavigate } from 'react-router-dom'
 
 function Home() {
@@ -24,7 +25,7 @@ function Home() {
     <div className="flex w-full min-h-screen font-sans bg-dark-theme">
       <Sidebar />
       <main className="text-2xl font-semibold flex-1 bg-dark-theme gap-6">
-        <div className="w-full h-16 bg-dark-purple relative">
+        <div className="flex flex-row w-full h-16 bg-dark-purple relative">
           <div className="absolute right-5 pt-5 text-white">
             <ul className="flex">
               <li className="pr-2">
@@ -42,6 +43,7 @@ function Home() {
         <div className="flex pt-5">
           <ContentHome />
         </div>
+        {/* <Calendario/> */}
       </main>
 
       <aside></aside>
