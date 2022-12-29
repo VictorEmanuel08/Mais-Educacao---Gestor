@@ -8,7 +8,7 @@ export function Calendario() {
     <div className="sidebarRight" >
       <div className="calendario">
         <div>
-          <Calendar locale={'pt'} onChange={onChange} value={value} />
+          {/* <Calendar locale={'pt'} onChange={onChange} value={value} /> */}
         </div>
       </div>
     </div>
