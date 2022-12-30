@@ -41,7 +41,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   }, []);
 
   function showItens() {
-    console.log(questionsAtividade);
+    // console.log(questionsAtividade);
   }
 
   async function EditAtiv() {
@@ -72,8 +72,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   function changeQuestion(text, i) {
     var newQuestion = [...questionsAtividade];
     newQuestion[i].questao.title = text;
-    console.log(newQuestion)
-    // console.log(i)
+    // console.log(newQuestion[i].questao.title)
     setQuestionsAtividade(newQuestion);
   }
 
@@ -91,14 +90,15 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
 
   function handleChange(text, i, j) {
     var optionQuestionCorrect = [...questionsAtividade];
-    optionQuestionCorrect[i].opcao[j].is_correct = !checked;
+    optionQuestionCorrect[i].questao.opcao[j].is_correct = !checked;
+    // console.log(optionQuestionCorrect)
     setQuestionsAtividade(optionQuestionCorrect);
   }
 
   function removeOption(i, j) {
     var RemoveOptionQuestion = [...questionsAtividade];
-    if (RemoveOptionQuestion[i].opcao.length > 1) {
-      RemoveOptionQuestion[i].opcao.splice(j, 1);
+    if (RemoveOptionQuestion[i].questao.opcao.length > 1) {
+      RemoveOptionQuestion[i].questao.opcao.splice(j, 1);
       setQuestionsAtividade(RemoveOptionQuestion);
     }
   }
@@ -128,14 +128,15 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
     setQuestionsAtividade([
       ...questionsAtividade,
       {
-        title: "",
-        id_disciplina: "0edbbd06-e902-4714-a18e-ddd4dc82ddeb",
-        question_type: "objetiva",
-        opcao: [{ description: "", is_correct: false }],
+        questao: {
+          title: "",
+          id_disciplina: idDisc,
+          question_type: "objetiva",
+          opcao: [{ description: "", is_correct: false }],
+        },
       },
     ]);
   }
-
   function clearQuestion() {
     questionsAtividade.pop();
     closeModal();
@@ -215,9 +216,6 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
                     defaultValue={ques.questao.title}
 
                     onChange={(e) => {
-                      // var newQuestion = [...questionsAtividade];
-                      // newQuestion[i].title = e.target.value;
-                      // setQuestionsAtividade(newQuestion);
                       changeQuestion(e.target.value, i);
                     }}
                     className="bg-[#EDF2FF] w-full h-fit placeholder-black outline-none text-black text-[18px] rounded-lg p-2 scrollbar-thin resize-none"
@@ -229,7 +227,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
                       <div className="flex flex-row items-center justify-between mt-2">
                         <Checkbox
                           className="cursor-pointer text-black"
-                          value={ques.questao.opcao[j].is_correct}
+                          defaultValue={ques.questao.opcao[j].is_correct}
                           onChange={(e) => {
                             handleChange(e.target.value, i, j);
                           }}

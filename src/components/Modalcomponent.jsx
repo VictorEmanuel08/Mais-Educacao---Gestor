@@ -77,6 +77,7 @@ export function ModalComponent() {
   function handleChange(text, i, j) {
     var optionQuestionCorrect = [...questions];
     optionQuestionCorrect[i].options[j].is_correct = !checked;
+    console.log(optionQuestionCorrect)
     setQuestions(optionQuestionCorrect);
   }
 
