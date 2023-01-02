@@ -25,6 +25,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   const [questions, setQuestions] = useState([]);
 
   const [atividades, setAtividades] = useState([]);
+  const [questionTypeEdit, setQuestionTypeEdit] = useState([])
   const [titleAtividade, setTitleAtividade] = useState("");
   const [questionsAtividade, setQuestionsAtividade] = useState([]);
 
@@ -46,12 +47,14 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
 
   async function EditAtiv() {
     try {
+      console.log(questionsAtividade);
+      console.log(itemIdAtividade)
       await app.put(`/atividades/${itemIdAtividade}`, {
         title: titleAtividade,
         description: "Resolva as questões para ganhar pontos",
         id_serie: idSerie,
         id_disciplina: idDisc,
-        questions: questionsAtividade,
+        questoes: questionsAtividade,
       });
       document.location.reload(true);
       alert("Atividade cadastrada!");
@@ -69,10 +72,11 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
     setModalIsOpen(false);
   }
 
+  console.log(questionsAtividade)
+
   function changeQuestion(text, i) {
     var newQuestion = [...questionsAtividade];
     newQuestion[i].questao.title = text;
-    // console.log(newQuestion[i].questao.title)
     setQuestionsAtividade(newQuestion);
   }
 
@@ -84,14 +88,14 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
 
   function changeTipoQuestao(text, i) {
     var TypeQuestion = [...questionsAtividade];
-    TypeQuestion[i].question_type = text;
+    TypeQuestion[i].questao.question_type = text;
     setQuestionsAtividade(TypeQuestion);
+    console.log(TypeQuestion)
   }
 
   function handleChange(text, i, j) {
     var optionQuestionCorrect = [...questionsAtividade];
     optionQuestionCorrect[i].questao.opcao[j].is_correct = !checked;
-    // console.log(optionQuestionCorrect)
     setQuestionsAtividade(optionQuestionCorrect);
   }
 
@@ -112,7 +116,6 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
       });
     } else {
     }
-
     setQuestionsAtividade(optionsOfQuestion);
   }
 
@@ -129,14 +132,15 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
       ...questionsAtividade,
       {
         questao: {
-          title: "",
-          id_disciplina: idDisc,
-          question_type: "objetiva",
-          opcao: [{ description: "", is_correct: false }],
+        title: "",
+        id_disciplina: idDisc,
+        question_type: "objetiva",
+        opcao: [{ description: "", is_correct: false }],
         },
       },
     ]);
   }
+
   function clearQuestion() {
     questionsAtividade.pop();
     closeModal();
@@ -214,12 +218,12 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
                     // placeholder={`${ques.questao.title}`}
                     placeholder="Pergunta"
                     defaultValue={ques.questao.title}
-
                     onChange={(e) => {
                       changeQuestion(e.target.value, i);
                     }}
                     className="bg-[#EDF2FF] w-full h-fit placeholder-black outline-none text-black text-[18px] rounded-lg p-2 scrollbar-thin resize-none"
                   />
+                  {/* {console.log(ques.questao.title)} */}
                 </div>
                 {ques.questao.opcao.map((op, j) => (
                   <div className="add_question_body" key={j}>

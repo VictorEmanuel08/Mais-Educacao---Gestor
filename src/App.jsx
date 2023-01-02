@@ -14,6 +14,7 @@ import { ModalComponent } from "./components/Modalcomponent";
 import { ModalcomponentEditarAtividade } from "./components/ModalcomponentEditarAtividade";
 
 import { initializeApp } from "firebase/app";
+import { Ramon } from "./pages/Ramon";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC_lP-XRuonKQ2bSnTEAw_RD6kUDnNO6hg",
@@ -112,6 +113,14 @@ function App() {
             element={
               <Private>
                 <ModalcomponentEditarAtividade />
+              </Private>
+            }
+          />
+          <Route
+            path="/Ramon"
+            element={
+              <Private>
+                <Ramon />
               </Private>
             }
           />
