@@ -20,7 +20,7 @@ export function Sidebar() {
   return (
     <div
       className={`${
-        open ? "w-72" : "w-20"
+        open ? "w-60" : "w-20"
       } min-h-screen bg-dark-purple relative duration-300 p-6 pt-8`}
     >
       {open ? (

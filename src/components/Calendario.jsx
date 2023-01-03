@@ -7,10 +7,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export function Calendario() {
   const [value, setValue] = useState(new Date());
-  // const [value, setValue] = React.useState<Dayjs | null>(null);
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center p-5">
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <StaticDatePicker
           orientation="portrait"
@@ -19,16 +18,9 @@ export function Calendario() {
           onChange={(newValue) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField {...params} />}
-        />
-        <DatePicker
-          views={["day", "month", "year"]}
-          label="Invert the order of views"
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} helperText={null} />}
+          renderInput={(params) => (
+            <TextField className="bg-black" {...params} />
+          )}
         />
       </LocalizationProvider>
       {console.log(value)}

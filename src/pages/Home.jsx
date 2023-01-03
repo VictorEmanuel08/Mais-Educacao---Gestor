@@ -1,16 +1,15 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/auth";
-import { IoMdPerson, IoMdExit } from 'react-icons/io'
-import { MdOutlineNotifications } from 'react-icons/md'
-import { Sidebar } from '../components/Sidebar'
-import { ContentHome } from '../components/ContentHome'
-// import { Calendario } from '../components/Calendario'
-import { useNavigate } from 'react-router-dom'
+import { IoMdPerson, IoMdExit } from "react-icons/io";
+import { MdOutlineNotifications } from "react-icons/md";
+import { Sidebar } from "../components/Sidebar";
+import { ContentHome } from "../components/ContentHome";
+import { Calendario } from "../components/Calendario";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-
   const { logout } = useContext(AuthContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [mat, setMat] = useState("");
   const [password, setPassword] = useState("");
@@ -19,12 +18,12 @@ function Home() {
     e.preventDefault();
 
     logout();
-  }
+  };
 
   return (
     <div className="flex w-full min-h-screen font-sans bg-dark-theme">
       <Sidebar />
-      <main className="text-2xl font-semibold flex-1 bg-dark-theme gap-6">
+      <main className="text-2xl font-semibold flex-1 bg-dark-theme">
         <div className="flex flex-row w-full h-16 bg-dark-purple relative">
           <div className="absolute right-5 pt-5 text-white">
             <ul className="flex">
@@ -35,20 +34,24 @@ function Home() {
                 <MdOutlineNotifications />
               </li>
               <li className="pr-2">
-                <IoMdExit onClick={handleSubmit} className="cursor-pointer" alt="sair"/>
+                <IoMdExit
+                  onClick={handleSubmit}
+                  className="cursor-pointer"
+                  alt="sair"
+                />
               </li>
             </ul>
           </div>
         </div>
-        <div className="flex pt-5">
+        <div className="flex flex-row pt-5">
           <ContentHome />
+          <Calendario />
         </div>
-        {/* <Calendario/> */}
       </main>
 
       <aside></aside>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

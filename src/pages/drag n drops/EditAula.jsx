@@ -155,15 +155,14 @@ export function EditAula() {
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex relative w-full">
-              {aula.map((board, bIndex) => {
-                return (
-                  <div key={board.name}>
-                    <Droppable droppableId={bIndex.toString()}>
-                      {(provided, snapshot) => (
-                        <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                          className={`
+              {aula.map((board, bIndex) => (
+                <div key={board.name}>
+                  <Droppable droppableId={bIndex.toString()}>
+                    {(provided, snapshot) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className={`
                           ${
                             board.name == "aulas"
                               ? "bg-dark-purple w-[300px] h-screen select-none scrollbar-thin"
@@ -185,240 +184,227 @@ export function EditAula() {
                               : "0"
                           }
                           `}
-                        >
-                          <div className="flex justify-center">
-                            <div className="text-[22px] text-[#FFFFFF] font-roboto mb-4">
-                              <p>
-                                {board.name == "aulas" ? `Vídeo Aulas` : ""}
-                                {board.name == "atividades" ? `Atividades` : ""}
-                                {board.name == "materiais" ? `Materiais` : ""}
-                              </p>
-                            </div>
-
-                            {board.name === "conteudos" ? (
-                              <div className="w-full relative">
-                                <div>
-                                  <div className="w-full bg-gradient-to-r from-[#3B5BDB] to-[#BAC8FD] rounded-t-lg">
-                                    <div className="flex justify-between py-4 px-5 items-center ">
-                                      <p className="text-[#FFFFFF] text-[20px] font-rubik">
-                                        {disc.name}
-                                      </p>
-                                      <div className="w-[180px] flex justify-between items-center flex-row ">
-                                        <ModalCancelarConteudo
-                                          salvar={AttAula}
-                                        />
-                                        <button
-                                          className="py-[2px] px-[15px] bg-[#3B5BDB] rounded-md text-white text-[14px]"
-                                          type="submit"
-                                          onClick={AttAula}
-                                        >
-                                          Salvar
-                                        </button>
-                                        <ToastContainer
-                                          position="top-right"
-                                          autoClose={5000}
-                                          hideProgressBar={false}
-                                          newestOnTop={false}
-                                          closeOnClick
-                                          rtl={false}
-                                          pauseOnFocusLoss
-                                          draggable
-                                          pauseOnHover
-                                          theme="light"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="flex flex-col p-8 w-full ">
-                                  {bimestre.map((num) => {
-                                    aula[1].items.id_bimestre == num.id ??
-                                      setValorBimestre(num.id);
-                                  })}
-
-                                  <div className="flex flex-row justify-between">
-                                    <input
-                                      placeholder="Título do conteudo"
-                                      className="bg-[#EDF2FF] rounded-lg border-none text-[16px] text-[#131313] font-roboto mb-4 p-1 pl-4 w-1/3 outline-none placeholder:text-[14px] font-light"
-                                      type="text"
-                                      value={nameConteudo}
-                                      onChange={(e) =>
-                                        setNameConteudo(e.target.value)
-                                      }
-                                    />
-
-                                    <div className=" rounded-lg w-[200px] mb-5 flex justify-center text-zinc-700">
-                                      <select
-                                        className="text-[14px] w-[200px] border-none outline-none"
-                                        onChange={(e) =>
-                                          setBimestreId(e.target.value)
-                                        }
-                                        defaultValue={valorBimestre}
-                                      >
-                                        <option
-                                          value="none"
-                                          className="text-[12px]"
-                                        >
-                                          Selecione o bimestre
-                                        </option>
-                                        {bimestre.map((bim) => {
-                                          return valorBimestre == bim.id ? (
-                                            <option key={bim.id} value={bim.id}>
-                                              {bim.number}
-                                            </option>
-                                          ) : (
-                                            <option key={bim.id} value={bim.id}>
-                                              {bim.number}
-                                            </option>
-                                          );
-                                        })}
-                                      </select>
-                                    </div>
-                                    {clicked2 ? (
-                                      <button
-                                        className="w-[25px] h-[25px]"
-                                        onClick={switchEyesGlobal}
-                                      >
-                                        <img
-                                          className="w-[25px] h-[25px]"
-                                          src={EyesOpen}
-                                          alt=""
-                                        />
-                                      </button>
-                                    ) : (
-                                      <button
-                                        onClick={switchEyesGlobal}
-                                        className="w-[25px] h-[25px]"
-                                      >
-                                        <img
-                                          className="w-[25px] h-[25px]"
-                                          src={EyesCloked}
-                                          alt=""
-                                        />
-                                      </button>
-                                    )}
-                                  </div>
-
-                                  {board.items.length == 0 && (
-                                    <div className="bg-[#EDF2FF] h-[150px] rounded-lg mb-4 p-1 pl-4 flex items-center justify-center">
-                                      <p className="text-center text-[#707070] text-[18px] font-roboto">
-                                        Nenhuma aula cadastrada
-                                      </p>
-                                    </div>
-                                  )}
-
-                                  {board.name == "conteudos"
-                                    ? board.items.array_conteudos.length > 0 &&
-                                      board.items.array_conteudos.map(
-                                        (item, iIndex) => {
-                                          return (
-                                            <div className="bg-[#EDF2FF] rounded-lg p-4">
-                                              <div className="flex flex-row items-center">
-                                                <div className="w-1/3 flex items-center">
-                                                  <ItemContEdit
-                                                    key={item.id}
-                                                    data={item}
-                                                    index={iIndex}
-                                                  />
-                                                </div>
-                                                <div>
-                                                  <p className="text-[#343434] text-[16px] font-semibold">
-                                                    {item.title}
-                                                  </p>
-                                                </div>
-                                                <div>
-                                                  {clicked ? (
-                                                    <button
-                                                      className="w-[25px] h-[25px] ml-4"
-                                                      onClick={() =>
-                                                        switchEyes()
-                                                      }
-                                                    >
-                                                      <img
-                                                        src={EyesOpen}
-                                                        alt=""
-                                                        className="w-[25px] h-[25px]"
-                                                      />
-                                                    </button>
-                                                  ) : (
-                                                    <button
-                                                      className="w-[25px] h-[25px] ml-4"
-                                                      onClick={() =>
-                                                        switchEyes()
-                                                      }
-                                                    >
-                                                      <img
-                                                        className="w-[25px] h-[25px]"
-                                                        src={EyesCloked}
-                                                        alt=""
-                                                      />
-                                                    </button>
-                                                  )}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          );
-                                        }
-                                      )
-                                    : ""}
-                                </div>
-                              </div>
-                            ) : (
-                              ""
-                            )}
+                      >
+                        <div className="flex justify-center">
+                          <div className="text-[22px] text-[#FFFFFF] font-roboto mb-4">
+                            <p>
+                              {board.name == "aulas" ? `Vídeo Aulas` : ""}
+                              {board.name == "atividades" ? `Atividades` : ""}
+                              {board.name == "materiais" ? `Materiais` : ""}
+                            </p>
                           </div>
 
-                          {board.name == "atividades" ? (
-                            <div className="flex justify-center text-dark-purple">
-                              <ModalComponent />
+                          {board.name === "conteudos" ? (
+                            <div className="w-full relative">
+                              <div>
+                                <div className="w-full bg-gradient-to-r from-[#3B5BDB] to-[#BAC8FD] rounded-t-lg">
+                                  <div className="flex justify-between py-4 px-5 items-center ">
+                                    <p className="text-[#FFFFFF] text-[20px] font-rubik">
+                                      {disc.name}
+                                    </p>
+                                    <div className="w-[180px] flex justify-between items-center flex-row ">
+                                      <ModalCancelarConteudo salvar={AttAula} />
+                                      <button
+                                        className="py-[2px] px-[15px] bg-[#3B5BDB] rounded-md text-white text-[14px]"
+                                        type="submit"
+                                        onClick={AttAula}
+                                      >
+                                        Salvar
+                                      </button>
+                                      <ToastContainer
+                                        position="top-right"
+                                        autoClose={5000}
+                                        hideProgressBar={false}
+                                        newestOnTop={false}
+                                        closeOnClick
+                                        rtl={false}
+                                        pauseOnFocusLoss
+                                        draggable
+                                        pauseOnHover
+                                        theme="light"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex flex-col p-8 w-full ">
+                                <div className="flex flex-row justify-between">
+                                  <input
+                                    placeholder="Título do conteudo"
+                                    className="bg-[#EDF2FF] rounded-lg border-none text-[16px] text-[#131313] font-roboto mb-4 p-1 pl-4 w-1/3 outline-none placeholder:text-[14px] font-light"
+                                    type="text"
+                                    value={nameConteudo}
+                                    onChange={(e) =>
+                                      setNameConteudo(e.target.value)
+                                    }
+                                  />
+
+                                  <div className=" rounded-lg w-[200px] mb-5 flex justify-center text-zinc-700">
+                                    <select
+                                      className="text-[14px] w-[200px] border-none outline-none"
+                                      onChange={(e) =>
+                                        setBimestreId(e.target.value)
+                                      }
+                                      defaultValue={valorBimestre}
+                                    >
+                                      <option
+                                        value="none"
+                                        className="text-[12px]"
+                                      >
+                                        Selecione o bimestre
+                                      </option>
+                                      {bimestre.map((bim) => {
+                                        return valorBimestre == bim.id ? (
+                                          <option key={bim.id} value={bim.id}>
+                                            {bim.number}
+                                          </option>
+                                        ) : (
+                                          <option key={bim.id} value={bim.id}>
+                                            {bim.number}
+                                          </option>
+                                        );
+                                      })}
+                                    </select>
+                                  </div>
+                                  {clicked2 ? (
+                                    <button
+                                      className="w-[25px] h-[25px]"
+                                      onClick={switchEyesGlobal}
+                                    >
+                                      <img
+                                        className="w-[25px] h-[25px]"
+                                        src={EyesOpen}
+                                        alt=""
+                                      />
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={switchEyesGlobal}
+                                      className="w-[25px] h-[25px]"
+                                    >
+                                      <img
+                                        className="w-[25px] h-[25px]"
+                                        src={EyesCloked}
+                                        alt=""
+                                      />
+                                    </button>
+                                  )}
+                                </div>
+
+                                {board.items.length == 0 && (
+                                  <div className="bg-[#EDF2FF] h-[150px] rounded-lg mb-4 p-1 pl-4 flex items-center justify-center">
+                                    <p className="text-center text-[#707070] text-[18px] font-roboto">
+                                      Nenhuma aula cadastrada
+                                    </p>
+                                  </div>
+                                )}
+
+                                {board.name == "conteudos"
+                                  ? board.items.array_conteudos.length > 0 &&
+                                    board.items.array_conteudos.map(
+                                      (item, iIndex) => {
+                                        return (
+                                          <div
+                                            key={iIndex}
+                                            className="bg-[#EDF2FF] rounded-lg p-4"
+                                          >
+                                            <div className="flex flex-row items-center">
+                                              <div className="w-1/3 flex items-center">
+                                                <ItemContEdit
+                                                  key={item.id}
+                                                  data={item}
+                                                  index={iIndex}
+                                                />
+                                              </div>
+                                              <div>
+                                                <p className="text-[#343434] text-[16px] font-semibold">
+                                                  {item.title}
+                                                </p>
+                                              </div>
+                                              <div>
+                                                {clicked ? (
+                                                  <button
+                                                    className="w-[25px] h-[25px] ml-4"
+                                                    onClick={() => switchEyes()}
+                                                  >
+                                                    <img
+                                                      src={EyesOpen}
+                                                      alt=""
+                                                      className="w-[25px] h-[25px]"
+                                                    />
+                                                  </button>
+                                                ) : (
+                                                  <button
+                                                    className="w-[25px] h-[25px] ml-4"
+                                                    onClick={() => switchEyes()}
+                                                  >
+                                                    <img
+                                                      className="w-[25px] h-[25px]"
+                                                      src={EyesCloked}
+                                                      alt=""
+                                                    />
+                                                  </button>
+                                                )}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        );
+                                      }
+                                    )
+                                  : ""}
+                              </div>
                             </div>
                           ) : (
                             ""
                           )}
-
-                          {board.name == "aulas"
-                            ? board.items.array_conteudos.length > 0 &&
-                              board.items.array_conteudos.map(
-                                (item, iIndex) => {
-                                  return (
-                                    <div className="flex items-center justify-center">
-                                      {/* <MenuIcon className="text-[#FFFFFF] active:text-[#263B4A] opacity-1 mb-8" /> */}
-                                      <ItemAulaEdit
-                                        key={item.id}
-                                        data={item}
-                                        index={iIndex}
-                                      />
-                                    </div>
-                                  );
-                                }
-                              )
-                            : ""}
-
-                          {board.name == "atividades"
-                            ? board.items.array_conteudos.length > 0 &&
-                              board.items.array_conteudos.map(
-                                (item, iIndex) => {
-                                  return (
-                                    <div className="flex items-center justify-center">
-                                      <ItemAtivEdit
-                                        key={item.id}
-                                        data={item}
-                                        index={iIndex}
-                                        idAtividade={item.id}
-                                      />
-                                    </div>
-                                  );
-                                }
-                              )
-                            : ""}
-
-                          {provided.placeholder}
                         </div>
-                      )}
-                    </Droppable>
-                  </div>
-                );
-              })}
+
+                        {board.name == "atividades" ? (
+                          <div className="flex justify-center text-dark-purple">
+                            <ModalComponent />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+
+                        {board.name == "aulas"
+                          ? board.items.array_conteudos.length > 0 &&
+                            board.items.array_conteudos.map((item, iIndex) => {
+                              return (
+                                <div key={iIndex} className="flex items-center justify-center">
+                                  {/* <MenuIcon className="text-[#FFFFFF] active:text-[#263B4A] opacity-1 mb-8" /> */}
+                                  <ItemAulaEdit
+                                    key={item.id}
+                                    data={item}
+                                    index={iIndex}
+                                  />
+                                </div>
+                              );
+                            })
+                          : ""}
+
+                        {board.name == "atividades"
+                          ? board.items.array_conteudos.length > 0 &&
+                            board.items.array_conteudos.map((item, iIndex) => {
+                              return (
+                                <div key={iIndex} className="flex items-center justify-center">
+                                  <ItemAtivEdit
+                                    key={item.id}
+                                    data={item}
+                                    index={iIndex}
+                                    idAtividade={item.id}
+                                  />
+                                </div>
+                              );
+                            })
+                          : ""}
+
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </div>
+              ))}
             </div>
           </DragDropContext>
         )}

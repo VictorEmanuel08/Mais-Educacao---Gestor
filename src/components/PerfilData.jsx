@@ -3,18 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { app } from "../api/app";
 import { AuthContext } from "../context/auth";
 import professorIcon from "../assets/professor.png";
-import {MessageChat} from './MessageChat'
+import { MessageChat } from "./MessageChat";
 
 export default function PerfilData() {
   const { user } = useContext(AuthContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [nameProf, setNameProf] = useState("");
   const [emailProf, setEmail] = useState("");
   const [matProf, setMatProf] = useState("");
   const [CPFProf, setCPFProf] = useState("");
   // const [emailProf, setEmail] = useState("");
 
-  function VaiParaChat(){
+  function VaiParaChat() {
     navigate("/Chats");
   }
 
@@ -27,7 +27,7 @@ export default function PerfilData() {
     });
   });
 
-  console.log(nameProf)
+  console.log(nameProf);
 
   return (
     <div className=" w-full px-5">
@@ -104,10 +104,6 @@ export default function PerfilData() {
             </div>
           </div>
         </div>
-
-        {/* <button className="bg-white" onClick={VaiParaChat}>
-          Vai para o chat
-        </button> */}
         <MessageChat />
       </div>
     </div>

@@ -77,7 +77,12 @@ export function ModalComponent() {
   function handleChange(text, i, j) {
     var optionQuestionCorrect = [...questions];
     optionQuestionCorrect[i].options[j].is_correct = !checked;
-    console.log(optionQuestionCorrect)
+    setQuestions(optionQuestionCorrect);
+  }
+
+  function ChangeFalse(text, i, j) {
+    var optionQuestionCorrect = [...questions];
+    optionQuestionCorrect[i].options[j].is_correct = checked;
     setQuestions(optionQuestionCorrect);
   }
 
@@ -202,16 +207,33 @@ export function ModalComponent() {
                   />
                 </div>
                 {ques.options.map((op, j) => (
-                  <div className="add_question_body" key={j}>
+                  <div key={j}>
                     <div>
                       <div className="flex flex-row items-center justify-between mt-2">
-                        <Checkbox
-                          className="cursor-pointer text-black"
-                          value={ques.options[j].is_correct}
-                          onChange={(e) => {
-                            handleChange(e.target.value, i, j);
-                          }}
-                        />
+                        {ques.options[j].is_correct == false ? (
+                          <div>
+                            <Checkbox
+                              className="cursor-pointer text-black"
+                              checked={checked}
+                              // defaultValue={ques.options[j].is_correct}
+                              onChange={(e) => {
+                                handleChange(e.target.value, i, j);
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div>
+                            <Checkbox
+                              className="cursor-pointer text-black"
+                              checked={!checked}
+                              // defaultValue={ques.options[j].is_correct}
+                              onChange={(e) => {
+                                ChangeFalse(e.target.value, i, j);
+                              }}
+                            />
+                          </div>
+                        )}
+                        {console.log(ques.options[j])}
                         <textarea
                           type="text"
                           className="bg-[#EDF2FF] w-full h-[40px] text-black placeholder-black outline-none text-[18px] rounded-lg p-2 scrollbar-thin resize-none"

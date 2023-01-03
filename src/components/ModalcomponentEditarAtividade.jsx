@@ -15,40 +15,27 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   const { idSerie, idDisc } = useParams();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [title, setTitle] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
 
   const optionTipo = [
     { id: 1, nome: "Múltipla escolha", value: "objetiva" },
     { id: 2, nome: "Subjetiva", value: "subjetiva" },
   ];
 
-  const [questions, setQuestions] = useState([]);
-
-  const [atividades, setAtividades] = useState([]);
-  const [questionTypeEdit, setQuestionTypeEdit] = useState([])
   const [titleAtividade, setTitleAtividade] = useState("");
   const [questionsAtividade, setQuestionsAtividade] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
-      // const response = await app.get(`/atividades/47de20bc-58d2-47e5-824f-057b7baddfff}`);
       const response = await app.get(`/atividades/${itemIdAtividade}/webView`);
-      setAtividades(response.data.atividade);
       setTitleAtividade(response.data.atividade.title);
       setQuestionsAtividade(response.data.atividade.questoes);
-      // setQuestions(response.data.atividade.questoes);
     };
     getData();
   }, []);
 
-  function showItens() {
-    // console.log(questionsAtividade);
-  }
-
   async function EditAtiv() {
     try {
-      console.log(questionsAtividade);
-      console.log(itemIdAtividade)
       await app.put(`/atividades/${itemIdAtividade}`, {
         title: titleAtividade,
         description: "Resolva as questões para ganhar pontos",
@@ -58,7 +45,6 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
       });
       document.location.reload(true);
       alert("Atividade cadastrada!");
-      console.log("editado");
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
     }
@@ -72,45 +58,48 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
     setModalIsOpen(false);
   }
 
-  console.log(questionsAtividade)
-
   function changeQuestion(text, i) {
     var newQuestion = [...questionsAtividade];
-    newQuestion[i].questao.title = text;
+    newQuestion[i].title = text;
     setQuestionsAtividade(newQuestion);
   }
 
   function changeOptionValue(text, i, j) {
     var optionsQuestion = [...questionsAtividade];
-    optionsQuestion[i].questao.opcao[j].description = text;
+    optionsQuestion[i].opcao[j].description = text;
     setQuestionsAtividade(optionsQuestion);
   }
 
   function changeTipoQuestao(text, i) {
     var TypeQuestion = [...questionsAtividade];
-    TypeQuestion[i].questao.question_type = text;
+    TypeQuestion[i].question_type = text;
     setQuestionsAtividade(TypeQuestion);
-    console.log(TypeQuestion)
   }
 
   function handleChange(text, i, j) {
     var optionQuestionCorrect = [...questionsAtividade];
-    optionQuestionCorrect[i].questao.opcao[j].is_correct = !checked;
+    optionQuestionCorrect[i].opcao[j].is_correct = !checked;
+    setQuestionsAtividade(optionQuestionCorrect);
+  }
+
+  function ChangeFalse(text, i, j) {
+    var optionQuestionCorrect = [...questionsAtividade];
+    optionQuestionCorrect[i].opcao[j].is_correct = checked;
     setQuestionsAtividade(optionQuestionCorrect);
   }
 
   function removeOption(i, j) {
     var RemoveOptionQuestion = [...questionsAtividade];
-    if (RemoveOptionQuestion[i].questao.opcao.length > 1) {
-      RemoveOptionQuestion[i].questao.opcao.splice(j, 1);
+    if (RemoveOptionQuestion[i].opcao.length > 1) {
+      RemoveOptionQuestion[i].opcao.splice(j, 1);
       setQuestionsAtividade(RemoveOptionQuestion);
     }
   }
 
   function addOption(i) {
     var optionsOfQuestion = [...questionsAtividade];
-    if (optionsOfQuestion[i].questao.opcao.length < 5) {
-      optionsOfQuestion[i].questao.opcao.push({
+    if (optionsOfQuestion[i].opcao.length < 5) {
+      optionsOfQuestion[i].opcao.push({
         description: "",
         is_correct: false,
       });
@@ -131,19 +120,12 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
     setQuestionsAtividade([
       ...questionsAtividade,
       {
-        questao: {
         title: "",
         id_disciplina: idDisc,
         question_type: "objetiva",
         opcao: [{ description: "", is_correct: false }],
-        },
       },
     ]);
-  }
-
-  function clearQuestion() {
-    questionsAtividade.pop();
-    closeModal();
   }
 
   function onDragEnd(result) {
@@ -215,32 +197,44 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
 
                 <div className="mt-4 mb-12 w-full h-[40px]">
                   <textarea
-                    // placeholder={`${ques.questao.title}`}
                     placeholder="Pergunta"
-                    defaultValue={ques.questao.title}
+                    defaultValue={ques.title}
                     onChange={(e) => {
                       changeQuestion(e.target.value, i);
                     }}
                     className="bg-[#EDF2FF] w-full h-fit placeholder-black outline-none text-black text-[18px] rounded-lg p-2 scrollbar-thin resize-none"
                   />
-                  {/* {console.log(ques.questao.title)} */}
                 </div>
-                {ques.questao.opcao.map((op, j) => (
-                  <div className="add_question_body" key={j}>
+                {ques.opcao.map((op, j) => (
+                  <div key={j}>
                     <div>
                       <div className="flex flex-row items-center justify-between mt-2">
-                        <Checkbox
-                          className="cursor-pointer text-black"
-                          defaultValue={ques.questao.opcao[j].is_correct}
-                          onChange={(e) => {
-                            handleChange(e.target.value, i, j);
-                          }}
-                        />
+                        {ques.opcao[j].is_correct == true ? (
+                          <div>
+                            <Checkbox
+                              className="cursor-pointer text-black"
+                              checked={!checked}
+                              onChange={(e) => {
+                                ChangeFalse(e.target.value, i, j);
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div>
+                            <Checkbox
+                              className="cursor-pointer text-black"
+                              checked={checked}
+                              onChange={(e) => {
+                                handleChange(e.target.value, i, j);
+                              }}
+                            />
+                          </div>
+                        )}
                         <textarea
                           type="text"
                           className="bg-[#EDF2FF] w-full h-[40px] text-black placeholder-black outline-none text-[18px] rounded-lg p-2 scrollbar-thin resize-none"
                           placeholder={`Alternativa ${j + 1}`}
-                          defaultValue={ques.questao.opcao[j].description}
+                          defaultValue={ques.opcao[j].description}
                           onChange={(e) => {
                             changeOptionValue(e.target.value, i, j);
                           }}
@@ -256,7 +250,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
                   </div>
                 ))}
 
-                {ques.questao.opcao.length < 5 ? (
+                {ques.opcao.length < 5 ? (
                   <div className="add_question_body">
                     <div className="h-[40px] mt-4 mb-4">
                       <button
@@ -286,12 +280,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
           onClick={openModal}
           className="flex items-center justify-center"
         >
-          <EditIcon
-            className="text-[#EEF2FE]"
-            onClick={() => {
-              showItens(itemIdAtividade);
-            }}
-          />
+          <EditIcon className="text-[#EEF2FE]" />
         </button>
         <Modal
           isOpen={modalIsOpen}
@@ -335,7 +324,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
           <div className="flex flex-row items-center justify-end my-8 px-4 w-full">
             <ModalCancelar
               data={questionsAtividade}
-              descartar={clearQuestion}
+              descartar={closeModal}
               salvar={EditAtiv}
             />
             <button
