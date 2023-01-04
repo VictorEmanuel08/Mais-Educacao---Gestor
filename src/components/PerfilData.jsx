@@ -4,6 +4,7 @@ import { app } from "../api/app";
 import { AuthContext } from "../context/auth";
 import professorIcon from "../assets/professor.png";
 import { MessageChat } from "./MessageChat";
+import ChatApp from "./ChatApp";
 
 export default function PerfilData() {
   const { user } = useContext(AuthContext);
@@ -12,7 +13,7 @@ export default function PerfilData() {
   const [emailProf, setEmail] = useState("");
   const [matProf, setMatProf] = useState("");
   const [CPFProf, setCPFProf] = useState("");
-  // const [emailProf, setEmail] = useState("");
+  const [idProf, setIdProf] = useState("");
 
   function VaiParaChat() {
     navigate("/Chats");
@@ -24,10 +25,11 @@ export default function PerfilData() {
       setMatProf(response.data.professor.escola_user.mat);
       setEmail(response.data.professor.escola_user.email);
       setCPFProf(response.data.professor.escola_user.cpf);
+      setIdProf(response.data.professor.escola_user);
     });
   });
 
-  console.log(nameProf);
+  // console.log(idProf);
 
   return (
     <div className=" w-full px-5">
@@ -104,7 +106,8 @@ export default function PerfilData() {
             </div>
           </div>
         </div>
-        <MessageChat />
+        {/* <MessageChat /> */}
+        <ChatApp />
       </div>
     </div>
   );

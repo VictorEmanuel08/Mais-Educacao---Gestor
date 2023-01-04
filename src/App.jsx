@@ -13,21 +13,6 @@ import { EditAula } from "./pages/drag n drops/EditAula";
 import { ModalComponent } from "./components/Modalcomponent";
 import { ModalcomponentEditarAtividade } from "./components/ModalcomponentEditarAtividade";
 
-import { initializeApp } from "firebase/app";
-import { Ramon } from "./pages/Ramon";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyC_lP-XRuonKQ2bSnTEAw_RD6kUDnNO6hg",
-  authDomain: "chatram-89e1e.firebaseapp.com",
-  projectId: "chatram-89e1e",
-  storageBucket: "chatram-89e1e.appspot.com",
-  messagingSenderId: "867113784649",
-  appId: "1:867113784649:web:2dca6de296c61bc0c0f698",
-  measurementId: "G-22RQXFHSEK",
-};
-
-initializeApp(firebaseConfig);
-
 function App() {
   return (
     <BrowserRouter>
@@ -113,14 +98,6 @@ function App() {
             element={
               <Private>
                 <ModalcomponentEditarAtividade />
-              </Private>
-            }
-          />
-          <Route
-            path="/Ramon"
-            element={
-              <Private>
-                <Ramon />
               </Private>
             }
           />
