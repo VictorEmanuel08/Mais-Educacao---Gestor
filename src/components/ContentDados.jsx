@@ -162,6 +162,7 @@ function ContentDados() {
       categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
     },
   };
+  
   const seriesArea2 = [
     {
       name: "Quantidade de atividades",
@@ -197,6 +198,7 @@ function ContentDados() {
       categories: ["1º Bimestre", "2º Bimestre", "3º Bimestre", "4º Bimestre"],
     },
   };
+
   const seriesArea3 = [
     {
       name: "Quantidade de aulas assistidas",

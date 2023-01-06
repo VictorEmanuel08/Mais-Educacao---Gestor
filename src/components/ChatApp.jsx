@@ -1,54 +1,31 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/auth";
-import bigodeIcon from "../assets/bigode.png";
-import etIcon from "../assets/et.png";
-import pintinhoIcon from "../assets/pintinho.png";
-
-import socketServices from "../util/socketServices";
+import { useNavigate } from "react-router-dom";
 import { app } from "../api/app";
 
 export default function ChatApp() {
-  const { user } = useContext(AuthContext);
-
+  const navigate = useNavigate();
+  const { ConnectRoom, user } = useContext(AuthContext);
   const [conversas, setConversas] = useState([]);
 
-  useEffect(() => {
+  useEffect(()=> {
+  
     const getData = async () => {
-      const response = await app.get(`/openRooms/${user}`);
-      setConversas(response.data);
+      try {
+        const response = await app.get(`/openRooms/${user}`);
+        setConversas(response.data);
+      } catch (Error) {
+        console.warn("Não há mensagens cadastradas",Error)
+      }      
     };
+    
     getData();
   }, []);
 
-  // console.log(user);
-
-  const mensagens = [
-    {
-      id: 1,
-      name: "Ramon Maia",
-      message: "Boa tarde professor, um triângulo é tridimensional?",
-      img: bigodeIcon,
-    },
-    {
-      id: 2,
-      name: "José Neto",
-      message: "Bom dia professor, existe um triângulo redondo?",
-      img: etIcon,
-    },
-    {
-      id: 3,
-      name: "Vinicíus Travincas",
-      message: "Oi Professor, um triângulo pode ter quatro lados?",
-      img: pintinhoIcon,
-    },
-  ];
-
-  useEffect(() => {
-    socketServices.initializeSocket();
-    socketServices.on("open_chats", (res) => {
-      console.log(res);
-    });
-  }, []);
+  const roomChat = async (msg) => {    
+    ConnectRoom(msg.id_aluno, msg.id_professor )
+    navigate('/Chat')
+  }
 
   return (
     <div className="w-[500px]">
@@ -57,9 +34,20 @@ export default function ChatApp() {
           Mensagens
         </h2>
       </div>
-
       <div className="bg-white h-[250px] w-full">
-        <div className="flex flex-col justify-between"></div>
+        <div className="flex flex-col justify-between">
+          {conversas.length >= 1 ? conversas.map((msg, i) => {
+            return (
+              <div className="border-l-rose-800 border-solid border-2 overflow-y-auto" key={i} onClick={() => roomChat(msg)}>
+                <h1 className="font-poppins text-[20px]">{msg.aluno_name}</h1>
+                <p className="text-[14px]">{msg.msg.text}</p>
+              </div>
+            );
+          }) : 
+          <div>
+            <p className="text-zinc-500 text-sm mt-2">Não há mensagens cadastradas!</p>
+          </div>}
+        </div>
       </div>
     </div>
   );

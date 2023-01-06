@@ -12,8 +12,16 @@ import { CriarAula } from "./pages/drag n drops/CriarAula";
 import { EditAula } from "./pages/drag n drops/EditAula";
 import { ModalComponent } from "./components/Modalcomponent";
 import { ModalcomponentEditarAtividade } from "./components/ModalcomponentEditarAtividade";
+import Chat from "./pages/Chat";
+import { useEffect } from "react";
+import socketServices from "./util/socketServices";
 
 function App() {
+
+  useEffect(() => {
+    socketServices.initializeSocket();
+  }, []);
+
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -98,6 +106,14 @@ function App() {
             element={
               <Private>
                 <ModalcomponentEditarAtividade />
+              </Private>
+            }
+          />
+          <Route
+            path="/Chat"
+            element={
+              <Private>
+                <Chat />
               </Private>
             }
           />

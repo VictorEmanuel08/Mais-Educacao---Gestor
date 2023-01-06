@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/auth";
 import { IoMdPerson, IoMdExit } from "react-icons/io";
 import { MdOutlineNotifications } from "react-icons/md";
@@ -6,6 +6,7 @@ import { Sidebar } from "../components/Sidebar";
 import { ContentHome } from "../components/ContentHome";
 import { Calendario } from "../components/Calendario";
 import { useNavigate } from "react-router-dom";
+import socketServices from "../util/socketServices";
 
 function Home() {
   const { logout } = useContext(AuthContext);
@@ -19,6 +20,15 @@ function Home() {
 
     logout();
   };
+
+  useEffect(() => {
+    socketServices.emit(
+      "teste_conquista",
+      {
+        id: 1
+      }
+    )
+  }, [])
 
   return (
     <div className="flex w-full min-h-screen font-sans bg-dark-theme">
@@ -45,7 +55,7 @@ function Home() {
         </div>
         <div className="flex flex-row pt-5">
           <ContentHome />
-          <Calendario />
+          {/* <Calendario /> */}
         </div>
       </main>
 
