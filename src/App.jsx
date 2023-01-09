@@ -4,7 +4,8 @@ import Home from "./pages/Home";
 import { DisciplinasFirst } from "./pages/DisciplinasFirst";
 import DisciplinasSecond from "./pages/DisciplinasSecond";
 import Dados from "./pages/Dados";
-import { Calendario } from "./components/Calendario";
+import { NewCalendar } from "./components/NewCalendar";
+import { Calendario } from "./components/Calendario/Calendario";
 import { ItemAulaEdit } from "./pages/drag n drops/items/ItemAulaEdit";
 import { AuthProvider } from "./context/auth";
 import { Private } from "./components/Private";
@@ -17,7 +18,6 @@ import { useEffect } from "react";
 import socketServices from "./util/socketServices";
 
 function App() {
-
   useEffect(() => {
     socketServices.initializeSocket();
   }, []);
@@ -94,6 +94,14 @@ function App() {
             }
           />
           <Route
+            path="/editar/:idAtividade"
+            element={
+              <Private>
+                <ModalcomponentEditarAtividade />
+              </Private>
+            }
+          />
+          <Route
             path="/Calendario"
             element={
               <Private>
@@ -102,10 +110,10 @@ function App() {
             }
           />
           <Route
-            path="/editar/:idAtividade"
+            path="/NewCalendar"
             element={
               <Private>
-                <ModalcomponentEditarAtividade />
+                <NewCalendar />
               </Private>
             }
           />

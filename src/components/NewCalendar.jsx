@@ -6,7 +6,7 @@ import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import TextField from "@mui/material/TextField";
 // import { Badge } from "@mui/icons-material";
 
-export function Calendario() {
+export function NewCalendar() {
   const [value, setValue] = useState(new Date());
 
   return (
