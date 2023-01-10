@@ -1,3 +1,4 @@
+// https://stackblitz.com/github/samselikoff/2023-05-11-tailwind-ui-interactive-calendar?file=pages%2Findex.jsx
 import { Menu, Transition } from "@headlessui/react";
 import MenuIcon from "@mui/icons-material/Menu";
 // import { DotsVerticalIcon } from "@heroicons/react/outline";
@@ -28,40 +29,40 @@ const meetings = [
     name: "Leslie Alexander",
     imageUrl:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    startDatetime: "2022-05-11T13:00",
-    endDatetime: "2022-05-11T14:30",
+    startDatetime: "2023-01-11T13:00",
+    endDatetime: "2023-01-11T14:30",
   },
   {
     id: 2,
     name: "Michael Foster",
     imageUrl:
       "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    startDatetime: "2022-05-20T09:00",
-    endDatetime: "2022-05-20T11:30",
+    startDatetime: "2023-01-20T09:00",
+    endDatetime: "2023-01-20T11:30",
   },
   {
     id: 3,
     name: "Dries Vincent",
     imageUrl:
       "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    startDatetime: "2022-05-20T17:00",
-    endDatetime: "2022-05-20T18:30",
+    startDatetime: "2023-01-20T17:00",
+    endDatetime: "2023-01-20T18:30",
   },
   {
     id: 4,
     name: "Leslie Alexander",
     imageUrl:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    startDatetime: "2022-06-09T13:00",
-    endDatetime: "2022-06-09T14:30",
+    startDatetime: "2023-01-09T13:00",
+    endDatetime: "2023-01-09T14:30",
   },
   {
     id: 5,
     name: "Michael Foster",
     imageUrl:
       "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    startDatetime: "2022-05-13T14:00",
-    endDatetime: "2022-05-13T14:30",
+    startDatetime: "2023-01-13T14:00",
+    endDatetime: "2023-01-13T14:30",
   },
 ];
 
@@ -95,114 +96,110 @@ export function Calendario() {
   );
 
   return (
-    <div className="pt-16 ">
-      <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
-        <div className="md:grid flex flex-col md:divide-x md:divide-gray-200">
-          <div className="md:p-4 bg-[#4263EB] rounded-lg">
-            <div className="flex items-center">
-              <h2 className="flex-auto font-semibold text-[#F8F9FA]">
-                {format(firstDayCurrentMonth, "MMMM", { locale: ptBrLocale }).toUpperCase()}
+    <div className="px-4">
+      <div className="flex flex-col">
+        <div className="py-4 px-6 bg-[#4263EB] rounded-lg">
+          <div className="flex items-center justify-between mt-1">
+            <div>
+              <h2 className="font-semibold text-[#F8F9FA] text-base">
+                {format(firstDayCurrentMonth, "MMMM / yyyy", {
+                  locale: ptBrLocale,
+                }).toUpperCase()}
               </h2>
+            </div>
+            <div className="flex flex-row">
               <button
                 type="button"
                 onClick={previousMonth}
-                className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-[#F8F9FA] hover:text-gray-500"
+                className="flex flex-none items-center justify-center p-1.5 text-[#F8F9FA] hover:text-[#18C4B3]"
               >
-                <span className="sr-only">Previous month</span>
                 <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
               </button>
               <button
                 onClick={nextMonth}
                 type="button"
-                className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-[#F8F9FA] hover:text-gray-500"
+                className="ml-2 flex flex-none items-center justify-center p-1.5 text-[#F8F9FA] hover:text-[#18C4B3]"
               >
-                <span className="sr-only">Next month</span>
                 <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            {/* <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-[gray-500]"> */}
-            <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-[#EDF2FF]">
-              <div>DOM</div>
-              <div>SEG</div>
-              <div>TER</div>
-              <div>QUA</div>
-              <div>QUI</div>
-              <div>SEX</div>
-              <div>SAB</div>
-            </div>
-            <div className="grid grid-cols-7 mt-2 text-sm ">
-              {days.map((day, dayIdx) => (
-                <div
-                  key={day.toString()}
+          </div>
+          <div className="grid grid-cols-7 mt-2 leading-6 text-center text-[#EDF2FF] opacity-70 text-[12px]">
+            <p>DOM</p>
+            <p>SEG</p>
+            <p>TER</p>
+            <p>QUA</p>
+            <p>QUI</p>
+            <p>SEX</p>
+            <p>SAB</p>
+          </div>
+          <div className="grid grid-cols-7 text-[14px]">
+            {days.map((day, dayIdx) => (
+              <div
+                key={day.toString()}
+                className={classNames(
+                  dayIdx === 0 && colStartClasses[getDay(day)],
+                  "py-1"
+                )}
+              >
+                <button
+                  type="button"
+                  onClick={() => setSelectedDay(day)}
                   className={classNames(
-                    dayIdx === 0 && colStartClasses[getDay(day)],
-                    "py-1.5"
+                    isEqual(day, selectedDay) && "text-white",
+                    !isEqual(day, selectedDay) &&
+                      isToday(day) &&
+                      "text-[#02C4B2] font-bold",
+                    !isEqual(day, selectedDay) &&
+                      !isToday(day) &&
+                      isSameMonth(day, firstDayCurrentMonth) &&
+                      "text-[#FFFFFF]",
+                    !isEqual(day, selectedDay) &&
+                      !isToday(day) &&
+                      !isSameMonth(day, firstDayCurrentMonth) &&
+                      "text-gray-400",
+                    isEqual(day, selectedDay) && isToday(day) && "bg-[#02C4B2]",
+                    isEqual(day, selectedDay) &&
+                      !isToday(day) &&
+                      "bg-[#02C4B2]",
+                    !isEqual(day, selectedDay) && "hover:bg-[#748FFC]",
+                    (isEqual(day, selectedDay) || isToday(day)) &&
+                      "font-semibold",
+                    "flex h-8 w-8 items-center justify-center rounded-full"
                   )}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDay(day)}
-                    className={classNames(
-                      isEqual(day, selectedDay) && "text-white",
-                      !isEqual(day, selectedDay) &&
-                        isToday(day) &&
-                        "text-red-500",
-                      !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        isSameMonth(day, firstDayCurrentMonth) &&
-                        "text-[#FFFFFF]",
-                      !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        !isSameMonth(day, firstDayCurrentMonth) &&
-                        "text-gray-400",
-                      isEqual(day, selectedDay) &&
-                        isToday(day) &&
-                        "bg-[#02C4B2]",
-                      isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        "bg-gray-900",
-                      !isEqual(day, selectedDay) && "hover:bg-gray-200",
-                      (isEqual(day, selectedDay) || isToday(day)) &&
-                        "font-semibold",
-                      "mx-auto flex h-8 w-8 items-center justify-center rounded-full"
-                    )}
-                  >
-                    <time dateTime={format(day, "yyyy-MM-dd")}>
-                      {format(day, "d")}
-                    </time>
-                  </button>
+                  <time dateTime={format(day, "yyyy-MM-dd")}>
+                    {format(day, "d")}
+                    {console.log(selectedDay)}
+                  </time>
+                </button>
 
-                  <div className="w-1 h-1 mx-auto mt-1">
-                    {meetings.some((meeting) =>
-                      isSameDay(parseISO(meeting.startDatetime), day)
-                    ) && (
-                      <div className="w-1 h-1 rounded-full bg-sky-500"></div>
-                    )}
-                  </div>
+                <div className="w-1 h-1 mt-1">
+                  {meetings.some((meeting) =>
+                    isSameDay(parseISO(meeting.startDatetime), day)
+                  ) && <div className="w-1 h-1 rounded-full bg-sky-500"></div>}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-          <section className="mt-12 md:mt-0 md:pl-14">
-            <h2 className="font-semibold text-gray-900">
-              Cronograma para {""}
-              {/* <time dateTime={format(selectedDay, "yyyy-MM-dd")}> */}
-              <time dateTime={format(selectedDay, "dd-MM-yyyy")}>
-                {/* {format(selectedDay, "MMM dd, yyy")} */}
-                {format(selectedDay, "dd/MMM/yyy")}
-              </time>
-            </h2>
-            <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
-              {selectedDayMeetings.length > 0 ? (
-                selectedDayMeetings.map((meeting) => (
-                  <Meeting meeting={meeting} key={meeting.id} />
-                ))
-              ) : (
-                <p>No meetings for today.</p>
-              )}
-            </ol>
-          </section>
         </div>
+        <section className="mt-4">
+          <h2 className="font-rubik text-[16px] text-gray-900">
+            Cronograma para {""}
+            <time dateTime={format(selectedDay, "dd-MM-yyyy")}>
+              {format(selectedDay, "dd/MMM/yyy")}
+            </time>
+          </h2>
+          <ol className="mt-4 text-[14px] leading-6 text-gray-500">
+            {selectedDayMeetings.length > 0 ? (
+              selectedDayMeetings.map((meeting) => (
+                <Meeting meeting={meeting} key={meeting.id} />
+              ))
+            ) : (
+              <p>Sem eventos hoje.</p>
+            )}
+          </ol>
+        </section>
       </div>
     </div>
   );
@@ -219,7 +216,7 @@ function Meeting({ meeting }) {
         alt=""
         className="flex-none w-10 h-10 rounded-full"
       />
-      <div className="flex-auto">
+      <div className="flex">
         <p className="text-gray-900">{meeting.name}</p>
         <p className="mt-0.5">
           <time dateTime={meeting.startDatetime}>
