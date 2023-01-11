@@ -1,9 +1,7 @@
 // https://stackblitz.com/github/samselikoff/2023-05-11-tailwind-ui-interactive-calendar?file=pages%2Findex.jsx
 import { Menu, Transition } from "@headlessui/react";
 import MenuIcon from "@mui/icons-material/Menu";
-// import { DotsVerticalIcon } from "@heroicons/react/outline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-// import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
@@ -22,6 +20,7 @@ import {
 } from "date-fns";
 import ptBrLocale from "date-fns/locale/pt-BR";
 import { Fragment, useState } from "react";
+import { ModalEvent } from "../ModalEvent";
 
 const meetings = [
   {
@@ -96,7 +95,7 @@ export function Calendario() {
   );
 
   return (
-    <div className="px-4">
+    <div className="px-4 w-1/4">
       <div className="flex flex-col">
         <div className="py-4 px-6 bg-[#4263EB] rounded-lg">
           <div className="flex items-center justify-between mt-1">
@@ -170,7 +169,6 @@ export function Calendario() {
                 >
                   <time dateTime={format(day, "yyyy-MM-dd")}>
                     {format(day, "d")}
-                    {console.log(selectedDay)}
                   </time>
                 </button>
 
@@ -181,6 +179,15 @@ export function Calendario() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center ">
+          <div className="w-full">
+            <ModalEvent />
+          </div>
+          {/* map aqui */}
+          <div className="flex items-center justify-center mt-4 rounded-lg bg-[#FFFFFF] w-full h-12">
+            Teste
           </div>
         </div>
         <section className="mt-4">
