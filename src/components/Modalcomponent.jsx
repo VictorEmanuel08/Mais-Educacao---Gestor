@@ -326,11 +326,13 @@ export function ModalComponent() {
             </button>
           </div>
           <div className="flex flex-row items-center justify-end my-8 px-4 w-full">
-            <ModalCancelar
-              data={questions}
-              descartar={clearQuestion}
-              salvar={AddAtiv}
-            />
+            <div className="w-1/6 bg-[#EDF2FF] rounded-lg">
+              <ModalCancelar
+                data={questions}
+                descartar={clearQuestion}
+                salvar={AddAtiv}
+              />
+            </div>
             <button
               onClick={AddAtiv}
               className="bg-dark-purple rounded-lg text-white w-1/6 h-[40px] ml-4"

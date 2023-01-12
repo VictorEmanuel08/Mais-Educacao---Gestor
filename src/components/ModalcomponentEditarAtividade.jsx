@@ -322,11 +322,13 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
             </button>
           </div>
           <div className="flex flex-row items-center justify-end my-8 px-4 w-full">
-            <ModalCancelar
-              data={questionsAtividade}
-              descartar={closeModal}
-              salvar={EditAtiv}
-            />
+            <div className="w-1/6 bg-[#EDF2FF] rounded-lg">
+              <ModalCancelar
+                data={questionsAtividade}
+                descartar={closeModal}
+                salvar={EditAtiv}
+              />
+            </div>
             <button
               onClick={EditAtiv}
               className="bg-dark-purple rounded-lg text-white w-1/6 h-[40px] ml-4"

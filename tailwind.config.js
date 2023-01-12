@@ -22,6 +22,7 @@ module.exports = {
     },
     fontFamily: {
       poppins: ["Poppins"],
+      roboto: ["Roboto"],
     },
   },
   plugins: [require("tailwind-scrollbar")],

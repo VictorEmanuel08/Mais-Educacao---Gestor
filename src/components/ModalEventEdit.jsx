@@ -3,8 +3,9 @@ import Modal from "react-modal";
 import AddIcon from "@mui/icons-material/Add";
 import { app } from "../api/app";
 import { AuthContext } from "../context/auth";
+import EditIcon from "@mui/icons-material/Edit";
 
-export function ModalEvent() {
+export function ModalEventEdit() {
   const { user } = useContext(AuthContext);
   const [dados, setDados] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -16,6 +17,7 @@ export function ModalEvent() {
   const [nameDisc, setNameDisc] = useState("");
   const [nameSerie, setNameSerie] = useState("");
   const [nameTurma, setNameTurma] = useState("");
+  const [lembretes, setLembretes] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -26,9 +28,19 @@ export function ModalEvent() {
     getData();
   }, []);
 
+  useEffect(() => {
+    const getData = async () => {
+      const response = await app.get(`/lembretes/`);
+
+      setLembretes(response.data);
+    };
+    getData();
+  }, []);
+
+
   async function enviarLembrete() {
     try {
-      await app.post(`/lembretes`, {
+      await app.put(`/lembretes`, {
         title: titleEvent,
         description: descriptionEvent,
         data: `${dataEvent} 00:00`,
@@ -88,14 +100,13 @@ export function ModalEvent() {
     setModalIsOpen(false);
   }
 
-
   return (
     <div>
       <button
         onClick={openModal}
-        className="flex items-center justify-center mt-4 rounded-lg bg-[#FFFFFF] w-full h-12 text-[#4263EB]"
+        className="flex items-center justify-center  text-[#4263EB]"
       >
-        <AddIcon className="font-bold" />
+        <EditIcon className="text-[#748FFC] " />
       </button>
       <Modal
         isOpen={modalIsOpen}
