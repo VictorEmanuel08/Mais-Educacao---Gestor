@@ -5,11 +5,11 @@ import { app } from "../api/app";
 import { AuthContext } from "../context/auth";
 import EditIcon from "@mui/icons-material/Edit";
 
-export function ModalEventEdit() {
+export function ModalEventEdit({ eventId }) {
   const { user } = useContext(AuthContext);
   const [dados, setDados] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [titleEvent, setTitleEvent] = useState("");
+  const [titleEvent, setTitleEvent] = useState([]);
   const [descriptionEvent, setDescriptionEvent] = useState("");
   const [dataEvent, setDataEvent] = useState([]);
   const [inicioDateTime, setInicioDateTime] = useState([]);
@@ -30,17 +30,26 @@ export function ModalEventEdit() {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await app.get(`/lembretes/`);
+      const response = await app.get(`/lembretes/${eventId}`);
 
-      setLembretes(response.data);
+      setLembretes(response.data.lembrete);
+      setTitleEvent(response.data.lembrete.title);
+      setDescriptionEvent(response.data.lembrete.description);
+      setDataEvent(response.data.lembrete.data.slice(0, 10));
+      setInicioDateTime(response.data.lembrete.start.slice(11, 16));
+      setFimDateTime(response.data.lembrete.end.slice(11, 16));
+      setNameDisc(response.data.lembrete.id_disciplina);
+      setNameTurma(response.data.lembrete.turma.id);
+      setNameSerie(response.data.lembrete.turma.id_serie);
     };
     getData();
   }, []);
 
+  console.log(nameDisc);
 
   async function enviarLembrete() {
     try {
-      await app.put(`/lembretes`, {
+      await app.put(`/lembretes/${eventId}`, {
         title: titleEvent,
         description: descriptionEvent,
         data: `${dataEvent} 00:00`,
@@ -115,12 +124,13 @@ export function ModalEventEdit() {
         className="flex flex-col bg-white w-1/3 h-3/5 rounded-lg p-1 px-8 text-dark-purple scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"
       >
         <div className="flex items-center justify-center">
-          <p className="text-[25px] font-semibold">Novo evento</p>
+          <p className="text-[25px] font-semibold">Novo lembrete</p>
         </div>
 
         <div className="flex flex-col text-dark-purple py-4 border-dashed border-b-2 border-dark-purple">
           <input
             placeholder="Título"
+            defaultValue={titleEvent}
             onChange={(e) => {
               setTitleEvent(e.target.value);
             }}
@@ -133,10 +143,11 @@ export function ModalEventEdit() {
             <div className="flex flex-col text-dark-purple py-4">
               <textarea
                 placeholder="Descrição"
+                value={descriptionEvent}
                 onChange={(e) => {
                   setDescriptionEvent(e.target.value);
                 }}
-                className="w-fit placeholder-dark-purple outline-none text-[20px]"
+                className="w-fit h-fit placeholder-dark-purple outline-none text-[20px] scrollbar-thin resize-none"
               />
             </div>
 
@@ -144,6 +155,7 @@ export function ModalEventEdit() {
               <p className="text-[20px]">Data do evento:</p>
               <input
                 type="date"
+                value={dataEvent}
                 onChange={(e) => {
                   setDataEvent(e.target.value);
                 }}
@@ -155,6 +167,7 @@ export function ModalEventEdit() {
               <p className="text-[20px]">Início do evento:</p>
               <input
                 type="time"
+                value={inicioDateTime}
                 onChange={(e) => {
                   setInicioDateTime(e.target.value);
                 }}
@@ -166,6 +179,7 @@ export function ModalEventEdit() {
               <p className="text-[20px]">Fim do evento:</p>
               <input
                 type="time"
+                value={fimDateTime}
                 onChange={(e) => {
                   setFimDateTime(e.target.value);
                 }}
@@ -187,10 +201,15 @@ export function ModalEventEdit() {
                 <option value={-1}>Selecione uma disciplina:</option>
 
                 {Object.entries(dados).map((item, i) => {
-                  return (
-                    <option key={"disciplina" + i} value={i}>
-                      {item[1].disciplinas.name}
-                    </option>
+                  nameDisc === item[1].disciplinas.id ? (
+                    <div>
+                      {item[1].disciplinas.id}
+                      <option key={"disciplina" + i} value={i}>
+                        {item[1].disciplinas.name}
+                      </option>
+                    </div>
+                  ) : (
+                    <p></p>
                   );
                 })}
               </select>
@@ -200,7 +219,6 @@ export function ModalEventEdit() {
               <p className="text-[20px] font-semibold">Série</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                // onClick={handleCarregarSerie}
                 onChange={(e) => {
                   mudançaindexSerie(e.target.value);
                 }}
@@ -222,7 +240,6 @@ export function ModalEventEdit() {
               <p className="text-[20px] font-semibold">Turma</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                // onClick={handleCarregarTurma}
                 onChange={(e) => {
                   mudançaindexTurma(e.target.value);
                 }}

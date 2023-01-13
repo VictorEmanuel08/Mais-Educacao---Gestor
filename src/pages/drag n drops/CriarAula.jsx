@@ -355,14 +355,15 @@ export function CriarAula() {
                                 );
                               })
                             : ""}
-
+{/* data, index, idAtividade */}
                           {board.name == "atividades"
                             ? board.items.length > 0 &&
                               board.items.map((item, iIndex) => {
+                                console.log(item.id)
                                 return (
-                                  <div className="flex items-center justify-center">
+                                  <div key={iIndex} className="flex items-center justify-center">
                                     <ItemAtivEdit
-                                      key={item.id}
+                                      idAtividade={item.id}
                                       data={item}
                                       index={iIndex}
                                     />

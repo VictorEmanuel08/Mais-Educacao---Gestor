@@ -160,7 +160,9 @@ export function Calendario() {
                 <Meeting meeting={meeting} key={meeting.id} />
               ))
             ) : (
-              <p>Sem eventos hoje.</p>
+              <div className="flex items-center justify-center mt-4 rounded-lg bg-[#FFFFFF] w-full h-12 text-[#4263EB]">
+                <p>Sem lembretes para hoje.</p>
+              </div>
             )}
           </ol>
         </section>
@@ -181,7 +183,7 @@ function Meeting({ meeting }) {
               </p>
             </div>
             <div>
-              <ModalEventEdit className="text-[10px]" />
+              <ModalEventEdit className="text-[10px]" eventId={meeting.id} />
             </div>
           </div>
           <div className="flex justify-between">

@@ -198,6 +198,7 @@ export function ModalComponent() {
 
                 <div className="mt-4 mb-12 w-full h-[40px]">
                   <textarea
+                    required
                     placeholder="Pergunta"
                     value={ques.title_question}
                     onChange={(e) => {
@@ -215,26 +216,26 @@ export function ModalComponent() {
                             <Checkbox
                               className="cursor-pointer text-black"
                               checked={checked}
-                              // defaultValue={ques.options[j].is_correct}
                               onChange={(e) => {
                                 handleChange(e.target.value, i, j);
                               }}
+                              required
                             />
                           </div>
                         ) : (
                           <div>
                             <Checkbox
+                              required
                               className="cursor-pointer text-black"
                               checked={!checked}
-                              // defaultValue={ques.options[j].is_correct}
                               onChange={(e) => {
                                 ChangeFalse(e.target.value, i, j);
                               }}
                             />
                           </div>
                         )}
-                        {console.log(ques.options[j])}
                         <textarea
+                          required
                           type="text"
                           className="bg-[#EDF2FF] w-full h-[40px] text-black placeholder-black outline-none text-[18px] rounded-lg p-2 scrollbar-thin resize-none"
                           placeholder={`Alternativa ${j + 1}`}

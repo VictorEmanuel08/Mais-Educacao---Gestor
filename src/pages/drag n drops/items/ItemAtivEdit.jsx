@@ -30,7 +30,7 @@ export function ItemAtivEdit({ data, index, idAtividade }) {
           <div
             className="flex object-top"
           >
-            <ModalcomponentEditarAtividade itemIdAtividade={idAtividade}/>
+            <ModalcomponentEditarAtividade itemIdAtividade={idAtividade} />
           </div>
         </div>
       )}

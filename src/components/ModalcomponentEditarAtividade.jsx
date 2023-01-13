@@ -26,12 +26,15 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   const [questionsAtividade, setQuestionsAtividade] = useState([]);
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await app.get(`/atividades/${itemIdAtividade}/webView`);
-      setTitleAtividade(response.data.atividade.title);
-      setQuestionsAtividade(response.data.atividade.questoes);
-    };
-    getData();
+    console.log(itemIdAtividade)
+    if (itemIdAtividade){
+      const getData = async () => {
+        const response = await app.get(`/atividades/${itemIdAtividade}/webView`);
+        setTitleAtividade(response.data.atividade.title);
+        setQuestionsAtividade(response.data.atividade.questoes);
+      };
+      getData();
+    }
   }, []);
 
   async function EditAtiv() {

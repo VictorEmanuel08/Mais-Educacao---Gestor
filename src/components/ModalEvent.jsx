@@ -104,7 +104,7 @@ export function ModalEvent() {
         className="flex flex-col bg-white w-1/3 h-3/5 rounded-lg p-1 px-8 text-dark-purple scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"
       >
         <div className="flex items-center justify-center">
-          <p className="text-[25px] font-semibold">Novo evento</p>
+          <p className="text-[25px] font-semibold">Novo lembrete</p>
         </div>
 
         <div className="flex flex-col text-dark-purple py-4 border-dashed border-b-2 border-dark-purple">
@@ -125,7 +125,7 @@ export function ModalEvent() {
                 onChange={(e) => {
                   setDescriptionEvent(e.target.value);
                 }}
-                className="w-fit placeholder-dark-purple outline-none text-[20px]"
+                className="w-fit h-fit placeholder-dark-purple outline-none text-[20px] scrollbar-thin resize-none"
               />
             </div>
 
