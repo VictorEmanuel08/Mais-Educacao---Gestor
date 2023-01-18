@@ -6,25 +6,46 @@ import { AuthContext } from "../context/auth";
 
 export function ModalEvent() {
   const { user } = useContext(AuthContext);
-  const [dados, setDados] = useState("");
+  const [disciplinas, setDisciplinas] = useState("");
+  const [series, setSeries] = useState("");
+  const [turmas, setTurmas] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [titleEvent, setTitleEvent] = useState("");
   const [descriptionEvent, setDescriptionEvent] = useState("");
   const [dataEvent, setDataEvent] = useState([]);
   const [inicioDateTime, setInicioDateTime] = useState([]);
   const [fimDateTime, setFimDateTime] = useState([]);
-  const [nameDisc, setNameDisc] = useState("");
-  const [nameSerie, setNameSerie] = useState("");
-  const [nameTurma, setNameTurma] = useState("");
+  const [idDisc, setIdDisc] = useState("");
+  const [idSerie, setIdSerie] = useState("");
+  const [idTurma, setIdTurma] = useState("");
 
   useEffect(() => {
     const getData = async () => {
-      const response = await app.get(`/dados/${user}`);
+      const response = await app.get(`/disciplinas`);
 
-      setDados(response.data);
+      setDisciplinas(response.data.disciplinas);
     };
     getData();
   }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await app.get(`/series`);
+
+      setSeries(response.data.series);
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await app.get(`/turmas`);
+
+      setTurmas(response.data.turmas);
+    };
+    getData();
+  }, []);
+
 
   async function enviarLembrete() {
     try {
@@ -35,9 +56,9 @@ export function ModalEvent() {
         start: `${dataEvent} ${inicioDateTime}`,
         end: `${dataEvent} ${fimDateTime}`,
         id_professor: user,
-        id_disciplina: nameDisc,
-        id_serie: nameTurma,
-        id_turma: nameTurma,
+        id_disciplina: idDisc,
+        id_serie: idSerie,
+        id_turma: idTurma,
       });
       alert("Lembrete criado!");
       document.location.reload(true);
@@ -47,39 +68,6 @@ export function ModalEvent() {
     }
   }
 
-  const [indexDisc, setIndexDisc] = useState(-1);
-  const [indexSerie, setIndexSerie] = useState(-1);
-  const [indexTurma, setindexTurma] = useState(-1);
-
-  function mudançaindexDisc(disc) {
-    setIndexDisc(disc);
-    setIndexSerie(-1);
-    setindexTurma(-1);
-    setNameDisc(dados[disc].disciplinas.id);
-  }
-
-  function mudançaindexSerie(serie) {
-    setIndexSerie(serie);
-    setindexTurma(-1);
-    setNameSerie(dados[indexDisc].disciplinas.series[serie].id);
-  }
-
-  function mudançaindexTurma(turma) {
-    setindexTurma(turma);
-    setNameTurma(
-      dados[indexDisc].disciplinas.series[indexSerie].turmas[turma].id
-    );
-  }
-
-  useEffect(() => {
-    setIndexSerie(-1);
-    setindexTurma(-1);
-  }, [indexDisc]);
-
-  useEffect(() => {
-    setindexTurma(-1);
-  }, [indexSerie]);
-
   function openModal() {
     setModalIsOpen(true);
   }
@@ -87,7 +75,6 @@ export function ModalEvent() {
   function closeModal() {
     setModalIsOpen(false);
   }
-
 
   return (
     <div>
@@ -169,16 +156,16 @@ export function ModalEvent() {
               <select
                 className="bg-[#FFFFFF] text-[16px]"
                 onChange={(e) => {
-                  mudançaindexDisc(e.target.value);
+                  setIdDisc(e.target.value);
                 }}
                 id="disciplina"
               >
                 <option value={-1}>Selecione uma disciplina:</option>
 
-                {Object.entries(dados).map((item, i) => {
+                {Object.entries(disciplinas).map((item, i) => {
                   return (
-                    <option key={"disciplina" + i} value={i}>
-                      {item[1].disciplinas.name}
+                    <option key={"disciplina" + i} value={item[1].id}>
+                      {item[1].name}
                     </option>
                   );
                 })}
@@ -189,21 +176,19 @@ export function ModalEvent() {
               <p className="text-[20px] font-semibold">Série</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                // onClick={handleCarregarSerie}
                 onChange={(e) => {
-                  mudançaindexSerie(e.target.value);
+                  setIdSerie(e.target.value);
                 }}
                 name="serie"
               >
                 <option value={-1}>Selecione uma série:</option>
-                {indexDisc > -1 &&
-                  dados[indexDisc].disciplinas.series.map((item, i) => {
-                    return (
-                      <option key={"serie" + i} value={i}>
-                        {item.name}
-                      </option>
-                    );
-                  })}
+                {Object.entries(series).map((item, i) => {
+                  return (
+                    <option key={"serie" + i} value={item[1].id}>
+                      {item[1].name}
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
@@ -211,23 +196,19 @@ export function ModalEvent() {
               <p className="text-[20px] font-semibold">Turma</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                // onClick={handleCarregarTurma}
                 onChange={(e) => {
-                  mudançaindexTurma(e.target.value);
+                  setIdTurma(e.target.value);
                 }}
                 name="turma"
               >
                 <option value={-1}>Selecione uma turma:</option>
-                {indexSerie > -1 &&
-                  dados[indexDisc].disciplinas.series[indexSerie].turmas.map(
-                    (item, i) => {
-                      return (
-                        <option key={"turma" + i} value={i}>
-                          {item.name}
-                        </option>
-                      );
-                    }
-                  )}
+                {Object.entries(turmas).map((item, i) => {
+                  return (
+                    <option key={"turma" + i} value={item[1].id}>
+                      {item[1].name}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>

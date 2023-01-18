@@ -7,23 +7,45 @@ import EditIcon from "@mui/icons-material/Edit";
 
 export function ModalEventEdit({ eventId }) {
   const { user } = useContext(AuthContext);
-  const [dados, setDados] = useState("");
+  // const [dados, setDados] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [titleEvent, setTitleEvent] = useState([]);
   const [descriptionEvent, setDescriptionEvent] = useState("");
   const [dataEvent, setDataEvent] = useState([]);
   const [inicioDateTime, setInicioDateTime] = useState([]);
   const [fimDateTime, setFimDateTime] = useState([]);
-  const [nameDisc, setNameDisc] = useState("");
-  const [nameSerie, setNameSerie] = useState("");
-  const [nameTurma, setNameTurma] = useState("");
+  const [disciplinas, setDisciplinas] = useState("");
+  const [series, setSeries] = useState("");
+  const [turmas, setTurmas] = useState("");
   const [lembretes, setLembretes] = useState([]);
+
+  const [idDisc, setIdDisc] = useState("");
+  const [idSerie, setIdSerie] = useState("");
+  const [idTurma, setIdTurma] = useState("");
 
   useEffect(() => {
     const getData = async () => {
-      const response = await app.get(`/dados/${user}`);
+      const response = await app.get(`/disciplinas`);
 
-      setDados(response.data);
+      setDisciplinas(response.data.disciplinas);
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await app.get(`/series`);
+
+      setSeries(response.data.series);
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await app.get(`/turmas`);
+
+      setTurmas(response.data.turmas);
     };
     getData();
   }, []);
@@ -35,17 +57,13 @@ export function ModalEventEdit({ eventId }) {
       setLembretes(response.data.lembrete);
       setTitleEvent(response.data.lembrete.title);
       setDescriptionEvent(response.data.lembrete.description);
-      setDataEvent(response.data.lembrete.data.slice(0, 10));
-      setInicioDateTime(response.data.lembrete.start.slice(11, 16));
-      setFimDateTime(response.data.lembrete.end.slice(11, 16));
-      setNameDisc(response.data.lembrete.id_disciplina);
-      setNameTurma(response.data.lembrete.turma.id);
-      setNameSerie(response.data.lembrete.turma.id_serie);
+      setDataEvent(response.data.lembrete.data);
+      setInicioDateTime(response.data.lembrete.start.slice(0, 5));
+      setFimDateTime(response.data.lembrete.end.slice(0, 5));
+      setIdDisc(response.data.lembrete.id_disciplina)
     };
     getData();
   }, []);
-
-  console.log(nameDisc);
 
   async function enviarLembrete() {
     try {
@@ -53,12 +71,12 @@ export function ModalEventEdit({ eventId }) {
         title: titleEvent,
         description: descriptionEvent,
         data: `${dataEvent} 00:00`,
-        start: `${dataEvent} ${inicioDateTime}`,
-        end: `${dataEvent} ${fimDateTime}`,
+        start: `${dataEvent} ${inicioDateTime}:00`,
+        end: `${dataEvent} ${fimDateTime}:00`,
         id_professor: user,
-        id_disciplina: nameDisc,
-        id_serie: nameTurma,
-        id_turma: nameTurma,
+        id_disciplina: idDisc,
+        id_serie: idSerie,
+        id_turma: idTurma,
       });
       alert("Lembrete criado!");
       document.location.reload(true);
@@ -67,40 +85,6 @@ export function ModalEventEdit({ eventId }) {
       document.location.reload(true);
     }
   }
-
-  const [indexDisc, setIndexDisc] = useState(-1);
-  const [indexSerie, setIndexSerie] = useState(-1);
-  const [indexTurma, setindexTurma] = useState(-1);
-
-  function mudançaindexDisc(disc) {
-    setIndexDisc(disc);
-    setIndexSerie(-1);
-    setindexTurma(-1);
-    setNameDisc(dados[disc].disciplinas.id);
-  }
-
-  function mudançaindexSerie(serie) {
-    setIndexSerie(serie);
-    setindexTurma(-1);
-    setNameSerie(dados[indexDisc].disciplinas.series[serie].id);
-  }
-
-  function mudançaindexTurma(turma) {
-    setindexTurma(turma);
-    setNameTurma(
-      dados[indexDisc].disciplinas.series[indexSerie].turmas[turma].id
-    );
-  }
-
-  useEffect(() => {
-    setIndexSerie(-1);
-    setindexTurma(-1);
-  }, [indexDisc]);
-
-  useEffect(() => {
-    setindexTurma(-1);
-  }, [indexSerie]);
-
   function openModal() {
     setModalIsOpen(true);
   }
@@ -130,7 +114,7 @@ export function ModalEventEdit({ eventId }) {
         <div className="flex flex-col text-dark-purple py-4 border-dashed border-b-2 border-dark-purple">
           <input
             placeholder="Título"
-            defaultValue={titleEvent}
+            value={titleEvent}
             onChange={(e) => {
               setTitleEvent(e.target.value);
             }}
@@ -138,7 +122,7 @@ export function ModalEventEdit({ eventId }) {
           />
         </div>
 
-        <div className="flex flex-row">
+        <div className="flex flex -row">
           <div className="flex flex-col w-1/2">
             <div className="flex flex-col text-dark-purple py-4">
               <textarea
@@ -194,22 +178,23 @@ export function ModalEventEdit({ eventId }) {
               <select
                 className="bg-[#FFFFFF] text-[16px]"
                 onChange={(e) => {
-                  mudançaindexDisc(e.target.value);
+                  setIdDisc(e.target.value);
                 }}
                 id="disciplina"
+                value={idDisc}
               >
                 <option value={-1}>Selecione uma disciplina:</option>
 
-                {Object.entries(dados).map((item, i) => {
-                  nameDisc === item[1].disciplinas.id ? (
-                    <div>
-                      {item[1].disciplinas.id}
-                      <option key={"disciplina" + i} value={i}>
-                        {item[1].disciplinas.name}
-                      </option>
-                    </div>
+                {Object.entries(disciplinas).map((item, i) => {
+                  console.log(item);
+                  return idDisc == item[1].id ? (
+                    <option key={"disciplina" + i} value={item[1].id}>
+                      {item[1].name}
+                    </option>
                   ) : (
-                    <p></p>
+                    <option key={"disciplina" + i} value={item[1].id}>
+                      {item[1].name}
+                    </option>
                   );
                 })}
               </select>
@@ -219,20 +204,20 @@ export function ModalEventEdit({ eventId }) {
               <p className="text-[20px] font-semibold">Série</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                onChange={(e) => {
-                  mudançaindexSerie(e.target.value);
-                }}
+                // onChange={(e) => {
+                //   mudançaindexSerie(e.target.value);
+                // }}
                 name="serie"
               >
                 <option value={-1}>Selecione uma série:</option>
-                {indexDisc > -1 &&
+                {/* {indexDisc > -1 &&
                   dados[indexDisc].disciplinas.series.map((item, i) => {
                     return (
                       <option key={"serie" + i} value={i}>
                         {item.name}
                       </option>
                     );
-                  })}
+                  })} */}
               </select>
             </div>
 
@@ -240,13 +225,13 @@ export function ModalEventEdit({ eventId }) {
               <p className="text-[20px] font-semibold">Turma</p>
               <select
                 className="bg-[#FFFFFF] text-[16px]"
-                onChange={(e) => {
-                  mudançaindexTurma(e.target.value);
-                }}
+                // onChange={(e) => {
+                //   mudançaindexTurma(e.target.value);
+                // }}
                 name="turma"
               >
                 <option value={-1}>Selecione uma turma:</option>
-                {indexSerie > -1 &&
+                {/* {indexSerie > -1 &&
                   dados[indexDisc].disciplinas.series[indexSerie].turmas.map(
                     (item, i) => {
                       return (
@@ -255,7 +240,7 @@ export function ModalEventEdit({ eventId }) {
                         </option>
                       );
                     }
-                  )}
+                  )} */}
               </select>
             </div>
           </div>

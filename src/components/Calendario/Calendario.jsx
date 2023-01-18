@@ -6,6 +6,7 @@ import {
   endOfMonth,
   format,
   getDay,
+  getMonth,
   isEqual,
   isSameDay,
   isSameMonth,
@@ -13,12 +14,14 @@ import {
   parse,
   parseISO,
   startOfToday,
+  formatISO9075,
 } from "date-fns";
 import ptBrLocale from "date-fns/locale/pt-BR";
 import { useState, useEffect } from "react";
 import { ModalEvent } from "../ModalEvent";
 import { app } from "../../api/app";
 import { ModalEventEdit } from "../ModalEventEdit";
+import { ptBR } from "date-fns/locale";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -34,7 +37,6 @@ export function Calendario() {
   useEffect(() => {
     const getData = async () => {
       const response = await app.get(`/lembretes`);
-
       setLembretes(response.data.lembretes);
     };
     getData();
@@ -56,10 +58,37 @@ export function Calendario() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
   }
+  function adicionaZero(numero) {
+    if (numero <= 9) return "0" + numero;
+    else return numero;
+  }
 
-  let selectedDayMeetings = meetings.filter((meeting) =>
-    isSameDay(parseISO(meeting.start), selectedDay)
-  );
+  function verificaData(dataSelecionada, dataBackend) {
+    if (dataSelecionada == dataBackend.data) {
+      // console.log(dataBackend);
+      return dataBackend.data;
+    }
+    return false;
+  }
+
+  let selectedDayMeetings = meetings.filter((meeting) => {
+    // const dataFormatada = ((selectedDay.getDate() )) + "/" + ((selectedDay.getMonth() + 1)) + "/" + selectedDay.getFullYear();
+    // const dataSelected = formatISO9075(selectedDay, { representation: 'date'});
+    const dataAtualFormatada =
+      adicionaZero(selectedDay.getDate().toString()) +
+      "/" +
+      adicionaZero(selectedDay.getMonth() + 1).toString() +
+      "/" +
+      selectedDay.getFullYear();
+
+    return (
+      // console.log(formatISO9075(meeting.data, { representation: 'date'}))
+
+      verificaData(dataAtualFormatada, meeting)
+      // console.log(`Data Lembrete ${meeting.start} - Data Selecionada ${selectedDay}`)
+      // isSameDay(parseISO(meeting.data), Date.parse(selectedDay) )
+    );
+  });
 
   return (
     <div className="px-4 w-1/5">
@@ -134,7 +163,7 @@ export function Calendario() {
                     "flex h-8 w-8 items-center justify-center rounded-full"
                   )}
                 >
-                  <time dateTime={format(day, "yyyy-MM-dd")}>
+                  <time dateTime={format(day, "MMMM / yyyy")}>
                     {format(day, "d")}
                   </time>
                 </button>
@@ -156,9 +185,9 @@ export function Calendario() {
         <section className="mt-4">
           <ol className="mt-4 text-[14px] leading-6 text-gray-500">
             {selectedDayMeetings.length > 0 ? (
-              selectedDayMeetings.map((meeting) => (
-                <Meeting meeting={meeting} key={meeting.id} />
-              ))
+              selectedDayMeetings.map((meeting) => {
+                return <Meeting meeting={meeting} key={meeting.id} />;
+              })
             ) : (
               <div className="flex items-center justify-center mt-4 rounded-lg bg-[#FFFFFF] w-full h-12 text-[#4263EB]">
                 <p>Sem lembretes para hoje.</p>
@@ -194,12 +223,12 @@ function Meeting({ meeting }) {
           <div className="flex flex-row justify-between">
             <div>
               <p className="text-[#748FFC] text-[14px] font-medium ">
-                {meeting.start.slice(11, 16)} - {meeting.end.slice(11, 16)}
+                {meeting.start.slice(0, 5)} - {meeting.end.slice(0, 5)}
               </p>
             </div>
             <div>
               <p className="text-[#02C4B2] text-[14px] font-roboto ">
-                3 Ano - A
+                {meeting.turma.name}
               </p>
             </div>
           </div>
