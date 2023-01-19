@@ -46,7 +46,6 @@ export function ModalEvent() {
     getData();
   }, []);
 
-
   async function enviarLembrete() {
     try {
       await app.post(`/lembretes`, {
@@ -96,6 +95,7 @@ export function ModalEvent() {
 
         <div className="flex flex-col text-dark-purple py-4 border-dashed border-b-2 border-dark-purple">
           <input
+            required
             placeholder="Título"
             onChange={(e) => {
               setTitleEvent(e.target.value);
@@ -107,7 +107,7 @@ export function ModalEvent() {
         <div className="flex flex-row">
           <div className="flex flex-col w-1/2">
             <div className="flex flex-col text-dark-purple py-4">
-              <textarea
+              <textarea required
                 placeholder="Descrição"
                 onChange={(e) => {
                   setDescriptionEvent(e.target.value);
@@ -118,7 +118,7 @@ export function ModalEvent() {
 
             <div className="flex flex-col text-dark-purple py-4">
               <p className="text-[20px]">Data do evento:</p>
-              <input
+              <input required
                 type="date"
                 onChange={(e) => {
                   setDataEvent(e.target.value);
@@ -129,7 +129,7 @@ export function ModalEvent() {
 
             <div className="flex flex-col text-dark-purple py-4">
               <p className="text-[20px]">Início do evento:</p>
-              <input
+              <input required
                 type="time"
                 onChange={(e) => {
                   setInicioDateTime(e.target.value);
@@ -140,7 +140,7 @@ export function ModalEvent() {
 
             <div className="flex flex-col text-dark-purple py-4">
               <p className="text-[20px]">Fim do evento:</p>
-              <input
+              <input required
                 type="time"
                 onChange={(e) => {
                   setFimDateTime(e.target.value);
@@ -153,7 +153,7 @@ export function ModalEvent() {
           <div>
             <div className="flex flex-col text-[#4263EB] py-4">
               <p className="text-[20px] font-semibold">Disciplina</p>
-              <select
+              <select required
                 className="bg-[#FFFFFF] text-[16px]"
                 onChange={(e) => {
                   setIdDisc(e.target.value);
@@ -174,7 +174,7 @@ export function ModalEvent() {
 
             <div className="flex flex-col text-[#4263EB] py-4">
               <p className="text-[20px] font-semibold">Série</p>
-              <select
+              <select required
                 className="bg-[#FFFFFF] text-[16px]"
                 onChange={(e) => {
                   setIdSerie(e.target.value);
@@ -194,7 +194,7 @@ export function ModalEvent() {
 
             <div className="flex flex-col text-[#4263EB] py-4">
               <p className="text-[20px] font-semibold">Turma</p>
-              <select
+              <select required
                 className="bg-[#FFFFFF] text-[16px]"
                 onChange={(e) => {
                   setIdTurma(e.target.value);
