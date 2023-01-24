@@ -12,9 +12,9 @@ export function ModalEvent() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [titleEvent, setTitleEvent] = useState("");
   const [descriptionEvent, setDescriptionEvent] = useState("");
-  const [dataEvent, setDataEvent] = useState([]);
-  const [inicioDateTime, setInicioDateTime] = useState([]);
-  const [fimDateTime, setFimDateTime] = useState([]);
+  const [dataEvent, setDataEvent] = useState("");
+  const [inicioDateTime, setInicioDateTime] = useState("");
+  const [fimDateTime, setFimDateTime] = useState("");
   const [idDisc, setIdDisc] = useState("");
   const [idSerie, setIdSerie] = useState("");
   const [idTurma, setIdTurma] = useState("");
@@ -85,146 +85,157 @@ export function ModalEvent() {
       </button>
       <Modal
         isOpen={modalIsOpen}
+        ariaHideApp={false}
         onRequestClose={closeModal}
         overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black-rgba"
         className="flex flex-col bg-white w-1/3 h-3/5 rounded-lg p-1 px-8 text-dark-purple scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"
       >
-        <div className="flex items-center justify-center">
-          <p className="text-[25px] font-semibold">Novo lembrete</p>
-        </div>
+        <form>
+          <div className="flex items-center justify-center">
+            <p className="text-[25px] font-semibold">Novo lembrete</p>
+          </div>
 
-        <div className="flex flex-col text-dark-purple py-4 border-dashed border-b-2 border-dark-purple">
-          <input
-            required
-            placeholder="Título"
-            onChange={(e) => {
-              setTitleEvent(e.target.value);
-            }}
-            className="w-fit placeholder-dark-purple outline-none text-[25px]"
-          />
-        </div>
+          <div className="flex flex-col text-dark-purple py-4 border-dashed border-b-2 border-dark-purple">
+            <input
+              required
+              placeholder="Título"
+              onChange={(e) => {
+                setTitleEvent(e.target.value);
+              }}
+              className="w-fit placeholder-dark-purple outline-none text-[25px]"
+            />
+          </div>
 
-        <div className="flex flex-row">
-          <div className="flex flex-col w-1/2">
-            <div className="flex flex-col text-dark-purple py-4">
-              <textarea required
-                placeholder="Descrição"
-                onChange={(e) => {
-                  setDescriptionEvent(e.target.value);
-                }}
-                className="w-fit h-fit placeholder-dark-purple outline-none text-[20px] scrollbar-thin resize-none"
-              />
+          <div className="flex flex-row">
+            <div className="flex flex-col w-1/2">
+              <div className="flex flex-col text-dark-purple py-4">
+                <textarea
+                  required
+                  placeholder="Descrição"
+                  onChange={(e) => {
+                    setDescriptionEvent(e.target.value);
+                  }}
+                  className="w-fit h-fit placeholder-dark-purple outline-none text-[20px] scrollbar-thin resize-none"
+                />
+              </div>
+
+              <div className="flex flex-col text-dark-purple py-4">
+                <p className="text-[20px]">Data do evento:</p>
+                <input
+                  required
+                  type="date"
+                  onChange={(e) => {
+                    setDataEvent(e.target.value);
+                  }}
+                  className="w-fit placeholder-dark-purple outline-none text-[18px]"
+                />
+              </div>
+
+              <div className="flex flex-col text-dark-purple py-4">
+                <p className="text-[20px]">Início do evento:</p>
+                <input
+                  required
+                  type="time"
+                  onChange={(e) => {
+                    setInicioDateTime(e.target.value);
+                  }}
+                  className="w-fit placeholder-dark-purple outline-none text-[18px]"
+                />
+              </div>
+
+              <div className="flex flex-col text-dark-purple py-4">
+                <p className="text-[20px]">Fim do evento:</p>
+                <input
+                  required
+                  type="time"
+                  onChange={(e) => {
+                    setFimDateTime(e.target.value);
+                  }}
+                  className="w-fit placeholder-dark-purple outline-none text-[18px]"
+                />
+              </div>
             </div>
 
-            <div className="flex flex-col text-dark-purple py-4">
-              <p className="text-[20px]">Data do evento:</p>
-              <input required
-                type="date"
-                onChange={(e) => {
-                  setDataEvent(e.target.value);
-                }}
-                className="w-fit placeholder-dark-purple outline-none text-[18px]"
-              />
-            </div>
+            <div>
+              <div className="flex flex-col text-[#4263EB] py-4">
+                <p className="text-[20px] font-semibold">Disciplina</p>
+                <select
+                  className="bg-[#FFFFFF] text-[16px]"
+                  onChange={(e) => {
+                    setIdDisc(e.target.value);
+                  }}
+                  id="disciplina"
+                  required
+                >
+                  <option value="">Selecione uma disciplina:</option>
 
-            <div className="flex flex-col text-dark-purple py-4">
-              <p className="text-[20px]">Início do evento:</p>
-              <input required
-                type="time"
-                onChange={(e) => {
-                  setInicioDateTime(e.target.value);
-                }}
-                className="w-fit placeholder-dark-purple outline-none text-[18px]"
-              />
-            </div>
+                  {Object.entries(disciplinas).map((item, i) => {
+                    return (
+                      <option key={"disciplina" + i} value={item[1].id}>
+                        {item[1].name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
 
-            <div className="flex flex-col text-dark-purple py-4">
-              <p className="text-[20px]">Fim do evento:</p>
-              <input required
-                type="time"
-                onChange={(e) => {
-                  setFimDateTime(e.target.value);
-                }}
-                className="w-fit placeholder-dark-purple outline-none text-[18px]"
-              />
+              <div className="flex flex-col text-[#4263EB] py-4">
+                <p className="text-[20px] font-semibold">Série</p>
+                <select
+                  className="bg-[#FFFFFF] text-[16px]"
+                  onChange={(e) => {
+                    setIdSerie(e.target.value);
+                  }}
+                  name="serie"
+                  required
+                >
+                  <option value="">Selecione uma série:</option>
+                  {Object.entries(series).map((item, i) => {
+                    return (
+                      <option key={"serie" + i} value={item[1].id}>
+                        {item[1].name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
+              <div className="flex flex-col text-[#4263EB] py-4">
+                <p className="text-[20px] font-semibold">Turma</p>
+                <select
+                  className="bg-[#FFFFFF] text-[16px]"
+                  onChange={(e) => {
+                    setIdTurma(e.target.value);
+                  }}
+                  name="turma"
+                  required
+                >
+                  <option value="">Selecione uma turma:</option>
+                  {Object.entries(turmas).map((item, i) => {
+                    return (
+                      <option key={"turma" + i} value={item[1].id}>
+                        {item[1].name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
           </div>
 
-          <div>
-            <div className="flex flex-col text-[#4263EB] py-4">
-              <p className="text-[20px] font-semibold">Disciplina</p>
-              <select required
-                className="bg-[#FFFFFF] text-[16px]"
-                onChange={(e) => {
-                  setIdDisc(e.target.value);
-                }}
-                id="disciplina"
-              >
-                <option value={-1}>Selecione uma disciplina:</option>
-
-                {Object.entries(disciplinas).map((item, i) => {
-                  return (
-                    <option key={"disciplina" + i} value={item[1].id}>
-                      {item[1].name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-
-            <div className="flex flex-col text-[#4263EB] py-4">
-              <p className="text-[20px] font-semibold">Série</p>
-              <select required
-                className="bg-[#FFFFFF] text-[16px]"
-                onChange={(e) => {
-                  setIdSerie(e.target.value);
-                }}
-                name="serie"
-              >
-                <option value={-1}>Selecione uma série:</option>
-                {Object.entries(series).map((item, i) => {
-                  return (
-                    <option key={"serie" + i} value={item[1].id}>
-                      {item[1].name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-
-            <div className="flex flex-col text-[#4263EB] py-4">
-              <p className="text-[20px] font-semibold">Turma</p>
-              <select required
-                className="bg-[#FFFFFF] text-[16px]"
-                onChange={(e) => {
-                  setIdTurma(e.target.value);
-                }}
-                name="turma"
-              >
-                <option value={-1}>Selecione uma turma:</option>
-                {Object.entries(turmas).map((item, i) => {
-                  return (
-                    <option key={"turma" + i} value={item[1].id}>
-                      {item[1].name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
+          <div className="flex flex-row items-center justify-end my-4 px-4 w-full">
+            <button className="w-1/5 h-full bg-[#EDF2FF] rounded-lg text-black mr-2 ">
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              onClick={enviarLembrete}
+              className="bg-dark-purple rounded-lg text-white w-1/5 h-[40px] ml-4"
+            >
+              Salvar
+            </button>
           </div>
-        </div>
-
-        <div className="flex flex-row items-center justify-end my-4 px-4 w-full">
-          <button className="w-1/5 h-full bg-[#EDF2FF] rounded-lg text-black mr-2 ">
-            Cancelar
-          </button>
-          <button
-            onClick={enviarLembrete}
-            className="bg-dark-purple rounded-lg text-white w-1/5 h-[40px] ml-4"
-          >
-            Salvar
-          </button>
-        </div>
+        </form>
       </Modal>
     </div>
   );

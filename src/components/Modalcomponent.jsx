@@ -289,6 +289,7 @@ export function ModalComponent() {
         </button>
         <Modal
           isOpen={modalIsOpen}
+          ariaHideApp={false}
           onRequestClose={closeModal}
           overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black-rgba"
           className="flex flex-col bg-white w-2/5 h-4/5 rounded-lg p-1 px-8 text-dark-purple scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"

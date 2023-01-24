@@ -15,7 +15,6 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   const { idSerie, idDisc } = useParams();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
   const optionTipo = [
     { id: 1, nome: "Múltipla escolha", value: "objetiva" },
@@ -26,10 +25,11 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
   const [questionsAtividade, setQuestionsAtividade] = useState([]);
 
   useEffect(() => {
-    console.log(itemIdAtividade)
-    if (itemIdAtividade){
+    if (itemIdAtividade) {
       const getData = async () => {
-        const response = await app.get(`/atividades/${itemIdAtividade}/webView`);
+        const response = await app.get(
+          `/atividades/${itemIdAtividade}/webView`
+        );
         setTitleAtividade(response.data.atividade.title);
         setQuestionsAtividade(response.data.atividade.questoes);
       };
@@ -287,6 +287,7 @@ export function ModalcomponentEditarAtividade({ itemIdAtividade }) {
         </button>
         <Modal
           isOpen={modalIsOpen}
+          ariaHideApp={false}
           onRequestClose={closeModal}
           overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black-rgba"
           className="flex flex-col bg-white w-2/5 h-4/5 rounded-lg p-1 px-8 text-dark-purple scrollbar-thin scrollbar-thumb-[#EDF2FF]-700 scrollbar-track-[#000000]-300 overflow-y-scroll"

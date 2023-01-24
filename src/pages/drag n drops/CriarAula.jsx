@@ -47,8 +47,6 @@ export function CriarAula() {
     getData();
   }, [idDisc]);
 
-  console.log(aula);
-
   useEffect(() => {
     const getData = async () => {
       const response = await app.get(`/disciplinas/${idDisc}`);
@@ -355,11 +353,9 @@ export function CriarAula() {
                                 );
                               })
                             : ""}
-{/* data, index, idAtividade */}
                           {board.name == "atividades"
                             ? board.items.length > 0 &&
                               board.items.map((item, iIndex) => {
-                                console.log(item.id)
                                 return (
                                   <div key={iIndex} className="flex items-center justify-center">
                                     <ItemAtivEdit

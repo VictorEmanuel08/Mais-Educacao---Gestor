@@ -6,7 +6,6 @@ import {
   endOfMonth,
   format,
   getDay,
-  getMonth,
   isEqual,
   isSameDay,
   isSameMonth,
@@ -14,14 +13,12 @@ import {
   parse,
   parseISO,
   startOfToday,
-  formatISO9075,
 } from "date-fns";
 import ptBrLocale from "date-fns/locale/pt-BR";
 import { useState, useEffect } from "react";
 import { ModalEvent } from "../ModalEvent";
 import { app } from "../../api/app";
 import { ModalEventEdit } from "../ModalEventEdit";
-import { ptBR } from "date-fns/locale";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -65,15 +62,12 @@ export function Calendario() {
 
   function verificaData(dataSelecionada, dataBackend) {
     if (dataSelecionada == dataBackend.data) {
-      // console.log(dataBackend);
       return dataBackend.data;
     }
     return false;
   }
 
   let selectedDayMeetings = meetings.filter((meeting) => {
-    // const dataFormatada = ((selectedDay.getDate() )) + "/" + ((selectedDay.getMonth() + 1)) + "/" + selectedDay.getFullYear();
-    // const dataSelected = formatISO9075(selectedDay, { representation: 'date'});
     const dataAtualFormatada =
       adicionaZero(selectedDay.getDate().toString()) +
       "/" +
@@ -82,11 +76,8 @@ export function Calendario() {
       selectedDay.getFullYear();
 
     return (
-      // console.log(formatISO9075(meeting.data, { representation: 'date'}))
 
       verificaData(dataAtualFormatada, meeting)
-      // console.log(`Data Lembrete ${meeting.start} - Data Selecionada ${selectedDay}`)
-      // isSameDay(parseISO(meeting.data), Date.parse(selectedDay) )
     );
   });
 

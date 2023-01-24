@@ -386,7 +386,6 @@ export function EditAula() {
                         {board.name == "atividades"
                           ? board.items.array_conteudos.length > 0 &&
                             board.items.array_conteudos.map((item, iIndex) => {
-                              console.log(item)
                               return (
                                 <div key={iIndex} className="flex items-center justify-center">
                                   <ItemAtivEdit

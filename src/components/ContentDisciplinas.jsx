@@ -9,7 +9,6 @@ export function ContentDisciplinas() {
 
   useEffect(() => {
     app.get(`/escolas/users/professores/${user}/series`).then((response) => {
-      console.log(response.data.series);
       setSeries(response.data.series);
     });
   }, []);
