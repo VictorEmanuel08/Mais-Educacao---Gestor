@@ -17,7 +17,7 @@ export function ContentOverviewDisciplinas() {
       setDisc(response.data.disciplina);
     };
     getData();
-  }, []);
+  }, [idDisc]);
 
   useEffect(() => {
     try {
@@ -35,16 +35,16 @@ export function ContentOverviewDisciplinas() {
     }
   }, [user]);
 
-  function EditarConteudo(idConteudo) {
-    navigate(`/editar-disciplinas-conteudo/${idConteudo}/${idSerie}/${idDisc}`);
+  function CriarConteudo() {
+    navigate(`/criar-conteudo/${idSerie}/${idDisc}`);
   }
 
-  function CriarConteudo() {
-    navigate(`/criar-disciplinas-conteudo/${idSerie}/${idDisc}`);
+  function EditarConteudo(idConteudo) {
+    navigate(`/editar-conteudo/${idConteudo}/${idSerie}/${idDisc}`);
   }
 
   function HandleVerificar() {
-    if (conteudoArray.length == 0) {
+    if (conteudoArray.length === 0) {
       return (
         <p className="text-[#707070] font-rubik">Nenhuma aula cadastrada</p>
       );

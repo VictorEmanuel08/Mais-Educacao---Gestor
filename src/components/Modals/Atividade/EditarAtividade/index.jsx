@@ -9,12 +9,12 @@ import Modal from "react-modal";
 import EditIcon from "@mui/icons-material/Edit";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Checkbox } from "@mui/material";
-import { ModalCancelar } from "../../../ModalCancelar";
+import { CancelarAtividade } from "../../Atividade/CancelarAtividade";
 
 export function EditarAtividade({ itemIdAtividade }) {
   const { idSerie, idDisc } = useParams();
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [checked, setChecked] = useState(false);
+  let checked = false;
 
   const optionTipo = [
     { id: 1, nome: "Múltipla escolha", value: "objetiva" },
@@ -35,7 +35,7 @@ export function EditarAtividade({ itemIdAtividade }) {
       };
       getData();
     }
-  }, []);
+  }, [itemIdAtividade]);
 
   async function EditAtiv() {
     try {
@@ -212,7 +212,7 @@ export function EditarAtividade({ itemIdAtividade }) {
                   <div key={j}>
                     <div>
                       <div className="flex flex-row items-center justify-between mt-2">
-                        {ques.opcao[j].is_correct == true ? (
+                        {ques.opcao[j].is_correct === true ? (
                           <div>
                             <Checkbox
                               className="cursor-pointer text-black"
@@ -327,7 +327,7 @@ export function EditarAtividade({ itemIdAtividade }) {
           </div>
           <div className="flex flex-row items-center justify-end my-8 px-4 w-full">
             <div className="w-1/6 bg-[#EDF2FF] rounded-lg">
-              <ModalCancelar
+              <CancelarAtividade
                 data={questionsAtividade}
                 descartar={closeModal}
                 salvar={EditAtiv}

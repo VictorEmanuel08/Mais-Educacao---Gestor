@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { app } from "../../api/app";
 import { AuthContext } from "../../context/auth";
 import professorIcon from "../../assets/professor.png";
@@ -21,7 +20,7 @@ export function PerfilData() {
       setCPFProf(response.data.professor.escola_user.cpf);
     };
     getData();
-  }, []);
+  }, [user]);
 
   return (
     <div className=" w-full px-5">

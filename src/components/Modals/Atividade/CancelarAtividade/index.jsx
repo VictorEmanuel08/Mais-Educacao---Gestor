@@ -1,7 +1,7 @@
-import react, { useState } from "react";
+import { useState } from "react";
 import Modal from "react-modal";
 
-export function ModalCancelar({ data, descartar, salvar }) {
+export function CancelarAtividade({ data, descartar, salvar }) {
   const [cancelarIsOpen, setCancelarIsOpen] = useState(false);
 
   function openCancelar() {
@@ -20,7 +20,6 @@ export function ModalCancelar({ data, descartar, salvar }) {
     salvar();
   }
 
-
   return (
     <div className="">
       <button
@@ -31,6 +30,7 @@ export function ModalCancelar({ data, descartar, salvar }) {
       </button>
       <Modal
         isOpen={cancelarIsOpen}
+        ariaHideApp={false}
         onRequestClose={closeCancelar}
         overlayClassName="flex items-center justify-center fixed top-0 bottom-0 right-0 left-0 bg-black-rgba"
         className="flex flex-col bg-white w-1/5 h-1/6 rounded-lg place-content-between p-3 font-poppins text-[14px]"

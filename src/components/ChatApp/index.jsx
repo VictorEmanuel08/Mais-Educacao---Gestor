@@ -8,24 +8,23 @@ export function ChatApp() {
   const { ConnectRoom, user } = useContext(AuthContext);
   const [conversas, setConversas] = useState([]);
 
-  useEffect(()=> {
-  
+  useEffect(() => {
     const getData = async () => {
       try {
         const response = await app.get(`/openRooms/${user}`);
         setConversas(response.data);
       } catch (Error) {
-        console.warn("Não há mensagens cadastradas",Error)
-      }      
+        console.warn("Não há mensagens cadastradas", Error);
+      }
     };
-    
+
     getData();
   }, []);
 
-  const roomChat = async (msg) => {    
-    ConnectRoom(msg.id_aluno, msg.id_professor )
-    navigate('/Chat')
-  }
+  const roomChat = async (msg) => {
+    ConnectRoom(msg.id_aluno, msg.id_professor);
+    navigate("/chat");
+  };
 
   return (
     <div className="w-[500px]">
@@ -36,17 +35,26 @@ export function ChatApp() {
       </div>
       <div className="bg-white h-[250px] w-full">
         <div className="flex flex-col justify-between">
-          {conversas.length >= 1 ? conversas.map((msg, i) => {
-            return (
-              <div className="border-l-rose-800 border-solid border-2 overflow-y-auto" key={i} onClick={() => roomChat(msg)}>
-                <h1 className="font-poppins text-[20px]">{msg.aluno_name}</h1>
-                <p className="text-[14px]">{msg.msg.text}</p>
-              </div>
-            );
-          }) : 
-          <div>
-            <p className="text-zinc-500 text-sm mt-2">Não há mensagens cadastradas!</p>
-          </div>}
+          {conversas.length >= 1 ? (
+            conversas.map((msg, i) => {
+              return (
+                <div
+                  className="border-l-rose-800 border-solid border-2 overflow-y-auto"
+                  key={i}
+                  onClick={() => roomChat(msg)}
+                >
+                  <h1 className="font-poppins text-[20px]">{msg.aluno_name}</h1>
+                  <p className="text-[14px]">{msg.msg.text}</p>
+                </div>
+              );
+            })
+          ) : (
+            <div>
+              <p className="text-zinc-500 text-sm mt-2">
+                Não há mensagens cadastradas!
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

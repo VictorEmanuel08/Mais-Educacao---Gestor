@@ -59,6 +59,7 @@ export function CriarLembrete() {
         id_serie: idSerie,
         id_turma: idTurma,
       });
+      console.log(dataEvent);
       alert("Lembrete criado!");
       document.location.reload(true);
     } catch {
@@ -74,7 +75,6 @@ export function CriarLembrete() {
   function closeModal() {
     setModalIsOpen(false);
   }
-  console.log(dataEvent)
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { app } from "../../../../api/app";
 import { useParams } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
@@ -9,12 +9,12 @@ import Modal from "react-modal";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Checkbox } from "@mui/material";
-import { ModalCancelar } from "../../../ModalCancelar";
+import { CancelarAtividade } from "../../Atividade/CancelarAtividade";
 
 export function CriarAtividade() {
   const { idSerie, idDisc } = useParams();
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [checked, setChecked] = useState(false);
+  let checked = false;
   const [title, setTitle] = useState("");
 
   const optionTipo = [
@@ -211,7 +211,7 @@ export function CriarAtividade() {
                   <div key={j}>
                     <div>
                       <div className="flex flex-row items-center justify-between mt-2">
-                        {ques.options[j].is_correct == false ? (
+                        {ques.options[j].is_correct === false ? (
                           <div>
                             <Checkbox
                               className="cursor-pointer text-black"
@@ -329,7 +329,7 @@ export function CriarAtividade() {
           </div>
           <div className="flex flex-row items-center justify-end my-8 px-4 w-full">
             <div className="w-1/6 bg-[#EDF2FF] rounded-lg">
-              <ModalCancelar
+              <CancelarAtividade
                 data={questions}
                 descartar={clearQuestion}
                 salvar={AddAtiv}

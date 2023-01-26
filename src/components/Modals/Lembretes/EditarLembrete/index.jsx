@@ -9,7 +9,6 @@ export function EditarLembrete({ eventId }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [titleEvent, setTitleEvent] = useState("");
   const [descriptionEvent, setDescriptionEvent] = useState("");
-  const [dataEvent, setDataEvent] = useState("");
   const [inicioDateTime, setInicioDateTime] = useState("");
   const [fimDateTime, setFimDateTime] = useState("");
   const [disciplinas, setDisciplinas] = useState("");
@@ -18,7 +17,7 @@ export function EditarLembrete({ eventId }) {
   const [idDisc, setIdDisc] = useState("");
   const [idSerie, setIdSerie] = useState("");
   const [idTurma, setIdTurma] = useState("");
-
+  const [dataMasked, setDataMasked] = useState("");
   useEffect(() => {
     const getData = async () => {
       const response = await app.get(`/disciplinas`);
@@ -51,12 +50,12 @@ export function EditarLembrete({ eventId }) {
       const response = await app.get(`/lembretes/${eventId}`);
       setTitleEvent(response.data.lembrete.title);
       setDescriptionEvent(response.data.lembrete.description);
-      setDataEvent(response.data.lembrete.data);
       setInicioDateTime(response.data.lembrete.start.slice(0, 5));
       setFimDateTime(response.data.lembrete.end.slice(0, 5));
       setIdDisc(response.data.lembrete.id_disciplina);
       setIdSerie(response.data.lembrete.turma.id_serie);
       setIdTurma(response.data.lembrete.turma.id);
+      setDataMasked(response.data.lembrete.data_masked);
     };
     getData();
   }, [eventId]);
@@ -66,18 +65,19 @@ export function EditarLembrete({ eventId }) {
       await app.put(`/lembretes/${eventId}`, {
         title: titleEvent,
         description: descriptionEvent,
-        data: `${testeData} 00:00`,
-        start: `${testeData} ${inicioDateTime}:00`,
-        end: `${testeData} ${fimDateTime}:00`,
+        data: `${dataMasked} 00:00`,
+        start: `${dataMasked} ${inicioDateTime}`,
+        end: `${dataMasked} ${fimDateTime}`,
         id_professor: user,
         id_disciplina: idDisc,
         id_serie: idSerie,
         id_turma: idTurma,
       });
+      console.log(dataMasked);
       alert("Lembrete editado!");
       document.location.reload(true);
-    } catch (erro) {
-      alert(erro.message);
+    } catch {
+      alert("Ocorreu um erro. Tente novamente.");
       document.location.reload(true);
     }
   }
@@ -89,30 +89,6 @@ export function EditarLembrete({ eventId }) {
   function closeModal() {
     setModalIsOpen(false);
   }
-
-  function adicionaZero(numero) {
-    if (numero <= 9) return "0" + numero;
-    else return numero;
-  }
-
-  const data = dataEvent + "";
-
-  const [day, month, year] = data.split("/");
-  const date = new Date(year, month - 1, day);
-
-  var date1 = new Date(date);
-
-  let dataAtualFormatada =
-    date1.getFullYear() +
-    "-" +
-    adicionaZero(date1.getMonth() + 1).toString() +
-    "-" +
-    adicionaZero(date1.getDate().toString());
-
-  console.log(dataAtualFormatada);
-
-  const [testeData, setTesteData] = useState("");
-  console.log(dataEvent);
 
   return (
     <div>
@@ -165,9 +141,9 @@ export function EditarLembrete({ eventId }) {
                 <input
                   required
                   type="date"
-                  defaultValue={dataAtualFormatada}
+                  defaultValue={dataMasked}
                   onChange={(e) => {
-                    setTesteData(e.target.value);
+                    setDataMasked(e.target.value);
                   }}
                   className="w-fit placeholder-dark-purple outline-none text-[18px]"
                 />

@@ -8,10 +8,15 @@ export function ContentDisciplinas() {
   const [series, setSeries] = useState([]);
 
   useEffect(() => {
-    app.get(`/escolas/users/professores/${user}/series`).then((response) => {
+    const getData = async () => {
+      const response = await app.get(
+        `/escolas/users/professores/${user}/series`
+      );
+
       setSeries(response.data.series);
-    });
-  }, []);
+    };
+    getData();
+  }, [user]);
 
   return (
     <div>
@@ -21,9 +26,10 @@ export function ContentDisciplinas() {
             <p className="text-[#FFFFFF] text-[20px] font-rubik">Disciplinas</p>
           </div>
           <div className="flex justify-between flex-col">
-            {series.map((serie) => {
+            {series.map((serie, index) => {
+              console.log(serie);
               return (
-                <div key={serie.serie.id}>
+                <div key={index}>
                   <h2 className="text-[#4263EB] text-[20px] font-rubik ml-6 p-3 mb-[-20px]">
                     {serie.serie.name}
                   </h2>
@@ -37,7 +43,7 @@ export function ContentDisciplinas() {
                             className="flex justify-center mr-1 mt-4 items-center scale-100 ease-in duration-200 hover:scale-110"
                           >
                             <a
-                              href={`/editar-disciplinas/${serie.serie.id}/${Disciplina.id}`}
+                              href={`/view-disciplinas/${serie.serie.id}/${Disciplina.id}`}
                             >
                               <img
                                 src={Disciplina.bk_img}

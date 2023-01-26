@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
-import { Sidebar } from "../components/Sidebar";
+import React, { useState, useContext } from "react";
+import { Sidebar } from "../../components/Sidebar";
 
-import { AuthContext } from "../context/auth";
-import socketServices from "../util/socketServices";
+import { AuthContext } from "../../context/auth";
+import socketServices from "../../util/socketServices";
 
-function Chat() {
+export function Chat() {
   const [message, setMessage] = useState("");
   const { previousMessages, idSenha, idSala } = useContext(AuthContext);
 
@@ -39,7 +39,7 @@ function Chat() {
               {previousMessages.map((prevMessage, i) => {
                 return (
                   <div key={i} className="w-full">
-                    {idSenha != prevMessage.user._id ? (
+                    {idSenha !== prevMessage.user._id ? (
                       <li className="flex justify-start">
                         <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow bg-[#f2f7ff]">
                           <span className="flex">{prevMessage.text}</span>
@@ -84,5 +84,3 @@ function Chat() {
     </div>
   );
 }
-
-export default Chat;

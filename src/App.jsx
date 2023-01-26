@@ -10,8 +10,9 @@ import { CriarConteudo } from "./pages/CriarConteudo";
 import { EditarConteudo } from "./pages/EditarConteudo";
 import { useEffect } from "react";
 import socketServices from "./util/socketServices";
+import { Chat } from "./pages/Chat";
 
-function App() {
+export function App() {
   useEffect(() => {
     socketServices.initializeSocket();
   }, []);
@@ -29,7 +30,14 @@ function App() {
               </Private>
             }
           />
-
+          <Route
+            path="/chat"
+            element={
+              <Private>
+                <Chat />
+              </Private>
+            }
+          />
           <Route
             path="/disciplinas"
             element={
@@ -75,5 +83,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;
