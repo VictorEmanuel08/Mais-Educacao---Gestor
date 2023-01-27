@@ -19,7 +19,7 @@ export function ChatApp() {
     };
 
     getData();
-  }, []);
+  }, [user]);
 
   const roomChat = async (msg) => {
     ConnectRoom(msg.id_aluno, msg.id_professor);

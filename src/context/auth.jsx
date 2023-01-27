@@ -9,16 +9,15 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
-  const [userInfo, setUserInfo] = useState([]);
   const [idSenha, setIdSenha] = useState("");
   const [previousMessages, setPreviousMessages] = useState([]);
-  const [ idSala, setIdSala ] = useState("");
+  const [idSala, setIdSala] = useState("");
   const [conversas, setConversas] = useState([]);
 
   useEffect(() => {
     const recoveredUser = localStorage.getItem("user");
     const recoveredIdUser = localStorage.getItem("idSenha");
-    
+
     if (recoveredUser) {
       setUser(recoveredUser);
       setIdSenha(recoveredIdUser);
@@ -27,7 +26,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (mat, password) => {
-
     const response = await createSession(mat, password);
 
     //api para criar uma session
@@ -44,8 +42,6 @@ export const AuthProvider = ({ children }) => {
     setIdSenha(response.data.user.id_senha);
 
     navigate("/home");
-
-    setUserInfo(response.data.user);
   };
 
   const getData = async () => {
@@ -55,12 +51,10 @@ export const AuthProvider = ({ children }) => {
     return conversas;
   };
 
-
   const logout = () => {
     console.log("logout");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    // localStorage.removeItem("userInfo");
     app.defaults.headers.Authorization = null;
     setUser(null);
     navigate("/");
@@ -68,27 +62,37 @@ export const AuthProvider = ({ children }) => {
   };
 
   const ConnectRoom = (id_aluno, id_professor) => {
-
-    setTimeout(() => {    
-    socketServices.emit(
-      "select_room",
-      {
-      "id_connected": idSenha,
-        id_aluno,
-        id_professor,
-      }, (res) => {
-        console.log(res);
-        setPreviousMessages(res.messages);
-        setIdSala(res.room_id);
-    });
+    setTimeout(() => {
+      socketServices.emit(
+        "select_room",
+        {
+          id_connected: idSenha,
+          id_aluno,
+          id_professor,
+        },
+        (res) => {
+          console.log(res);
+          setPreviousMessages(res.messages);
+          setIdSala(res.room_id);
+        }
+      );
     }, 2000);
-
-  }
-
+  };
 
   return (
     <AuthContext.Provider
-      value={{ authenticated: !!user, user, userInfo, idSenha, login, loading, logout, ConnectRoom, previousMessages, idSala, getData}}
+      value={{
+        authenticated: !!user,
+        user,
+        idSenha,
+        login,
+        loading,
+        logout,
+        ConnectRoom,
+        previousMessages,
+        idSala,
+        getData,
+      }}
     >
       {children}
     </AuthContext.Provider>

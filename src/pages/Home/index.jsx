@@ -1,19 +1,13 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/auth";
 import { IoMdPerson, IoMdExit } from "react-icons/io";
 import { MdOutlineNotifications } from "react-icons/md";
 import { Sidebar } from "../../components/Sidebar";
 import { ContentHome } from "../../components/ContentHome";
-// import { Calendario } from "../components/Calendario";
-import { useNavigate } from "react-router-dom";
 import socketServices from "../../util/socketServices";
 
 export function Home() {
   const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  const [mat, setMat] = useState("");
-  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();

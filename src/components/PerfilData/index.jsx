@@ -10,6 +10,9 @@ export function PerfilData() {
   const [emailProf, setEmail] = useState("");
   const [matProf, setMatProf] = useState("");
   const [CPFProf, setCPFProf] = useState("");
+  const [numDisciplinas, setnumDisciplinas] = useState("");
+  const [numSeries, setnumSeries] = useState("");
+  const [numTurmas, setnumTurmas] = useState("");
 
   useEffect(() => {
     const getData = async () => {
@@ -18,6 +21,9 @@ export function PerfilData() {
       setMatProf(response.data.professor.escola_user.mat);
       setEmail(response.data.professor.escola_user.email);
       setCPFProf(response.data.professor.escola_user.cpf);
+      setnumDisciplinas(response.data.professor.num_disciplinas);
+      setnumSeries(response.data.professor.num_series);
+      setnumTurmas(response.data.professor.num_turmas);
     };
     getData();
   }, [user]);
@@ -64,14 +70,14 @@ export function PerfilData() {
                     <strong className="text-[16px] font-semibold text-[#4263EB] px-4">
                       Série:
                     </strong>
-                    <p className="text-sm text-[#707070]">2</p>
+                    <p className="text-sm text-[#707070]">{numSeries}</p>
                   </div>
 
                   <div className="flex flex-row items-center">
                     <strong className="text-[16px] font-semibold text-[#4263EB] px-4">
                       Disciplina:
                     </strong>
-                    <p className="text-sm text-[#707070]">3</p>
+                    <p className="text-sm text-[#707070]">{numDisciplinas}</p>
                   </div>
                 </div>
 
@@ -80,14 +86,14 @@ export function PerfilData() {
                     <strong className="text-[16px] font-semibold text-[#4263EB] px-4">
                       CPF:
                     </strong>
-                    <p className="text-sm text-[#707070]">{CPFProf}-01</p>
+                    <p className="text-sm text-[#707070]">{CPFProf}</p>
                   </div>
 
                   <div className="flex flex-row items-center mb-4">
                     <strong className="text-[16px] font-semibold text-[#4263EB] px-4">
                       Turmas:
                     </strong>
-                    <p className="text-sm text-[#707070]">6</p>
+                    <p className="text-sm text-[#707070]">{numTurmas}</p>
                   </div>
                 </div>
               </div>

@@ -1,9 +1,9 @@
-import react, { useState } from "react";
+import { useState } from "react";
 import Modal from "react-modal";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export function ModalCancelarConteudo({ salvar }) {
-  const { idSerie, idDisc, idConteudo } = useParams();
+  const { idSerie, idDisc } = useParams();
   const [cancelarIsOpen, setCancelarIsOpen] = useState(false);
 
   function openCancelar() {

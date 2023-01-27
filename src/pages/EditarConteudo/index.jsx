@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../context/auth";
 import { useNavigate, useParams } from "react-router-dom";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { app } from "../../api/app";
 import { ItemAulaEdit } from "../../components/ItensDragNDrop/ItemAulaEdit";
 import { ItemAtivEdit } from "../../components/ItensDragNDrop/ItemAtivEdit";
@@ -10,7 +10,6 @@ import EyesCloked from "../../assets/hidden.png";
 import EyesOpen from "../../assets/view.png";
 import { Header } from "../../components/Header";
 import { CriarAtividade } from "../../components/Modals/Atividade/CriarAtividade";
-import { EditarAtividade } from "../../components/Modals/Atividade/EditarAtividade";
 import { ModalCancelarConteudo } from "../drag n drops/ModalCancelarConteudo";
 
 export function EditarConteudo() {
@@ -59,7 +58,7 @@ export function EditarConteudo() {
       setNewConteudo(response.data["conteudo"][1]["items"].array_conteudos);
     };
     getConteudos();
-  }, []);
+  }, [idConteudo, idSerie, idDisc]);
 
   function switchEyes() {
     setClicked(!clicked);
@@ -124,17 +123,32 @@ export function EditarConteudo() {
     // Coluna 2: Atividades
     // Coluna 3: Materiais
 
-    if (re.source.droppableId == 0 && re.destination.droppableId == 1) {
+    if (re.source.droppableId === 0 && re.destination.droppableId === 1) {
       AulasToConteudo(dragItem.id, "aula");
-    } else if (re.source.droppableId == 2 && re.destination.droppableId == 1) {
+    } else if (
+      re.source.droppableId === 2 &&
+      re.destination.droppableId === 1
+    ) {
       AulasToConteudo(dragItem.id, "atividade");
-    } else if (re.source.droppableId == 3 && re.destination.droppableId == 1) {
+    } else if (
+      re.source.droppableId === 3 &&
+      re.destination.droppableId === 1
+    ) {
       AulasToConteudo(dragItem.id, "material");
-    } else if (re.source.droppableId == 1 && re.destination.droppableId == 0) {
+    } else if (
+      re.source.droppableId === 1 &&
+      re.destination.droppableId === 0
+    ) {
       ConteudoToAulas(dragItem.id, "aula");
-    } else if (re.source.droppableId == 1 && re.destination.droppableId == 2) {
+    } else if (
+      re.source.droppableId === 1 &&
+      re.destination.droppableId === 2
+    ) {
       ConteudoToAulas(dragItem.id, "atividade");
-    } else if (re.source.droppableId == 1 && re.destination.droppableId == 3) {
+    } else if (
+      re.source.droppableId === 1 &&
+      re.destination.droppableId === 3
+    ) {
       ConteudoToAulas(dragItem.id, "material");
     } else {
     }
@@ -157,22 +171,22 @@ export function EditarConteudo() {
                         ref={provided.innerRef}
                         className={`
                           ${
-                            board.name == "aulas"
+                            board.name === "aulas"
                               ? "bg-dark-purple w-[300px] h-screen select-none scrollbar-thin"
                               : "0"
                           }
                           ${
-                            board.name == "conteudos"
+                            board.name === "conteudos"
                               ? `h-[40rem] w-[60rem] mt-6 flex flex-col bg-white rounded-lg shadow-md shaow-[#333] ml-20 scrollbar-thin `
                               : "0"
                           }
                           ${
-                            board.name == "atividades"
+                            board.name === "atividades"
                               ? `absolute top-0 right-0 w-[350px] h-1/2 bg-dark-purple select-none scrollbar-thin`
                               : "0"
                           }
                           ${
-                            board.name == "materiais"
+                            board.name === "materiais"
                               ? `absolute bottom-0 right-0 w-[350px] h-1/2 bg-dark-purple select-none scrollbar-thin`
                               : "0"
                           }
@@ -181,9 +195,9 @@ export function EditarConteudo() {
                         <div className="flex justify-center">
                           <div className="text-[22px] text-[#FFFFFF] font-roboto mb-4">
                             <p>
-                              {board.name == "aulas" ? `Vídeo Aulas` : ""}
-                              {board.name == "atividades" ? `Atividades` : ""}
-                              {board.name == "materiais" ? `Materiais` : ""}
+                              {board.name === "aulas" ? `Vídeo Aulas` : ""}
+                              {board.name === "atividades" ? `Atividades` : ""}
+                              {board.name === "materiais" ? `Materiais` : ""}
                             </p>
                           </div>
 
@@ -235,7 +249,7 @@ export function EditarConteudo() {
                                         Selecione o bimestre
                                       </option>
                                       {bimestre.map((bim) => {
-                                        return valorBimestre == bim.id ? (
+                                        return valorBimestre === bim.id ? (
                                           <option key={bim.id} value={bim.id}>
                                             {bim.number}
                                           </option>
@@ -272,7 +286,7 @@ export function EditarConteudo() {
                                   )}
                                 </div>
 
-                                {board.items.length == 0 && (
+                                {board.items.length === 0 && (
                                   <div className="bg-[#EDF2FF] h-[150px] rounded-lg mb-4 p-1 pl-4 flex items-center justify-center">
                                     <p className="text-center text-[#707070] text-[18px] font-roboto">
                                       Nenhuma aula cadastrada
@@ -280,7 +294,7 @@ export function EditarConteudo() {
                                   </div>
                                 )}
 
-                                {board.name == "conteudos"
+                                {board.name === "conteudos"
                                   ? board.items.array_conteudos.length > 0 &&
                                     board.items.array_conteudos.map(
                                       (item, iIndex) => {
@@ -340,7 +354,7 @@ export function EditarConteudo() {
                           )}
                         </div>
 
-                        {board.name == "atividades" ? (
+                        {board.name === "atividades" ? (
                           <div className="flex justify-center text-dark-purple">
                             <CriarAtividade />
                           </div>
@@ -348,7 +362,7 @@ export function EditarConteudo() {
                           ""
                         )}
 
-                        {board.name == "aulas"
+                        {board.name === "aulas"
                           ? board.items.array_conteudos.length > 0 &&
                             board.items.array_conteudos.map((item, iIndex) => {
                               return (
@@ -367,7 +381,7 @@ export function EditarConteudo() {
                             })
                           : ""}
 
-                        {board.name == "atividades"
+                        {board.name === "atividades"
                           ? board.items.array_conteudos.length > 0 &&
                             board.items.array_conteudos.map((item, iIndex) => {
                               return (

@@ -90,6 +90,19 @@ export function EditarLembrete({ eventId }) {
     setModalIsOpen(false);
   }
 
+  function clearLembrete() {
+    setTitleEvent("");
+    setDescriptionEvent("");
+    setDataMasked("");
+    setInicioDateTime("");
+    setFimDateTime("");
+    setIdDisc("");
+    setIdSerie("");
+    setIdTurma("");
+    alert("Lembrete cancelado!");
+    closeModal();
+  }
+
   return (
     <div>
       <button
@@ -256,16 +269,38 @@ export function EditarLembrete({ eventId }) {
           </div>
 
           <div className="flex flex-row items-center justify-end my-4 px-4 w-full">
-            <button className="w-1/5 h-full bg-[#EDF2FF] rounded-lg text-black mr-2 ">
+            <button
+              onClick={clearLembrete}
+              className="bg-[#EDF2FF] rounded-lg text-black w-1/5 h-[40px] ml-4"
+            >
               Cancelar
             </button>
-            <button
-              type="submit"
-              onClick={enviarLembrete}
-              className="bg-dark-purple rounded-lg text-white w-1/5 h-[40px] ml-4"
-            >
-              Salvar
-            </button>
+
+            {titleEvent.length === 0 ||
+            descriptionEvent.length === 0 ||
+            dataMasked.length === 0 ||
+            inicioDateTime.length === 0 ||
+            fimDateTime.length === 0 ||
+            idDisc.length === 0 ||
+            idSerie.length === 0 ||
+            idTurma.length === 0 ? (
+              <button
+                type="submit"
+                disabled={true}
+                onClick={enviarLembrete}
+                className="bg-dark-purple rounded-lg text-white w-1/5 h-[40px] ml-4 cursor-not-allowed"
+              >
+                Salvar
+              </button>
+            ) : (
+              <button
+                type="submit"
+                onClick={enviarLembrete}
+                className="bg-dark-purple rounded-lg text-white w-1/5 h-[40px] ml-4"
+              >
+                Salvar
+              </button>
+            )}
           </div>
         </form>
       </Modal>
