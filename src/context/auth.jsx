@@ -52,7 +52,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    console.log("logout");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     app.defaults.headers.Authorization = null;
@@ -71,7 +70,6 @@ export const AuthProvider = ({ children }) => {
           id_professor,
         },
         (res) => {
-          console.log(res);
           setPreviousMessages(res.messages);
           setIdSala(res.room_id);
         }

@@ -42,7 +42,6 @@ export function CriarAtividade() {
       });
       document.location.reload(true);
       alert("Atividade cadastrada!");
-      console.log("atividade criada");
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
     }

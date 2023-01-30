@@ -45,7 +45,6 @@ export function ContentDados() {
     getData();
   }, [user]);
 
-  console.log(newDados);
 
   const [nameDisc, setNameDisc] = useState(-1);
   const [nameSerie, setNameSerie] = useState(-1);

@@ -1,4 +1,4 @@
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 import MenuIcon from "@mui/icons-material/Menu";
 
 export function ItemContEdit({ data, index }) {

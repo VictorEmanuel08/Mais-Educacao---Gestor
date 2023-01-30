@@ -73,7 +73,6 @@ export function EditarLembrete({ eventId }) {
         id_serie: idSerie,
         id_turma: idTurma,
       });
-      console.log(dataMasked);
       alert("Lembrete editado!");
       document.location.reload(true);
     } catch {

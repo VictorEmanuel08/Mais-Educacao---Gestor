@@ -24,7 +24,6 @@ export function Chat() {
     ];
 
     socketServices.emit("send_message", objectMessage, (res) => {
-      console.log("Mensagem enviada", res);
       setMessage("");
     });
   };

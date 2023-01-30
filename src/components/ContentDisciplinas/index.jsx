@@ -27,7 +27,6 @@ export function ContentDisciplinas() {
           </div>
           <div className="flex justify-between flex-col">
             {series.map((serie, index) => {
-              console.log(serie);
               return (
                 <div key={index}>
                   <h2 className="text-[#4263EB] text-[20px] font-rubik ml-6 p-3 mb-[-20px]">

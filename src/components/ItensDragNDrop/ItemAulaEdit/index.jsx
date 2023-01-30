@@ -1,4 +1,4 @@
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 
 export function ItemAulaEdit({ data, index }) {
   return (
