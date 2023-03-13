@@ -9391,6 +9391,13 @@
   optionalDependencies:
     "fsevents" "^2.3.2"
 
+"react-to-print@^2.14.12":
+  "integrity" "sha512-qFJAwvDFd95Z+FWNqitt+HaB1/z+Zdd0MMrNOPUSus3fG32vqv512yB+HXhQ94J3HKoyqaIg44v0Zfc6xUBqlg=="
+  "resolved" "https://registry.npmjs.org/react-to-print/-/react-to-print-2.14.12.tgz"
+  "version" "2.14.12"
+  dependencies:
+    "prop-types" "^15.8.1"
+
 "react-toastify@^9.1.1":
   "integrity" "sha512-pkFCla1z3ve045qvjEmn2xOJOy4ZciwRXm1oMPULVkELi5aJdHCN/FHnuqXq8IwGDLB7PPk2/J6uP9D8ejuiRw=="
   "resolved" "https://registry.npmjs.org/react-toastify/-/react-toastify-9.1.1.tgz"

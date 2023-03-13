@@ -1,15 +1,33 @@
+import React, { useContext } from "react";
+import { AuthContext } from "../../context/auth";
 import { IoMdPerson, IoMdExit } from "react-icons/io";
-import { MdOutlineNotifications } from "react-icons/md";
 import { Sidebar } from "../../components/Sidebar";
-import { useNavigate } from "react-router-dom";
-import {ContentDados} from "../../components/ContentDados";
+import { ContentDados } from "../../components/ContentDados";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function Dados() {
-  const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
+  const notify = () => {
+    toast.error("Deslogado!", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    notify();
+    setTimeout(() => {
+      logout();
+    }, 2500);
   };
 
   return (
@@ -23,24 +41,22 @@ export function Dados() {
                 <IoMdPerson />
               </li>
               <li className="pr-2">
-                <MdOutlineNotifications />
-              </li>
-              <li className="pr-2">
-                <IoMdExit
-                  onClick={logout}
-                  className="cursor-pointer"
-                  alt="sair"
-                />
+                <button>
+                  <IoMdExit
+                    onClick={handleSubmit}
+                    className="cursor-pointer"
+                    alt="sair"
+                  />
+                </button>
+                <ToastContainer />
               </li>
             </ul>
           </div>
         </div>
-        {/* <div className="grid grid-cols-2 gap-2"> */}
         <div className="flex pt-6 flex-row justify-between">
           <ContentDados />
         </div>
       </main>
     </div>
-
   );
 }

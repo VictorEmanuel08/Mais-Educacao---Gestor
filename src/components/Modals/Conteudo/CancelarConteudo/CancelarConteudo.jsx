@@ -2,7 +2,7 @@ import { useState } from "react";
 import Modal from "react-modal";
 import { useParams } from "react-router-dom";
 
-export function ModalCancelarConteudo({ salvar }) {
+export function CancelarConteudo({ salvar }) {
   const { idSerie, idDisc } = useParams();
   const [cancelarIsOpen, setCancelarIsOpen] = useState(false);
 
@@ -40,10 +40,10 @@ export function ModalCancelarConteudo({ salvar }) {
             className="w-1/2 h-full bg-dark-purple rounded-lg text-white mr-2"
             onClick={atualizar}
           >
-            <a href={`/editar-disciplinas/${idSerie}/${idDisc}`}>Salvar</a>
+            <a href={`/view-disciplinas/${idSerie}/${idDisc}`}>Salvar</a>
           </button>
           <button className="w-1/2 h-full bg-[#D1DEFE] rounded-lg">
-            <a href={`/editar-disciplinas/${idSerie}/${idDisc}`}>
+            <a href={`/view-disciplinas/${idSerie}/${idDisc}`}>
               Descartar alterações
             </a>
           </button>

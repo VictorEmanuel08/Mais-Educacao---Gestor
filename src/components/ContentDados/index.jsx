@@ -1,15 +1,19 @@
 import ApexChart from "react-apexcharts";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import DownloadIcon from "@mui/icons-material/Download";
 import { app } from "../../api/app";
 import { AuthContext } from "../../context/auth";
+import { useReactToPrint } from "react-to-print";
 
 export function ContentDados() {
   const { user } = useContext(AuthContext);
   const [dados, setDados] = useState("");
-  const [newDados, setNewDados] = useState([]);
   const [visivle, setVisivle] = useState("");
+
+  const [visivelNomeDisciplina, setVisivelNomeDisciplina] = useState("");
+  const [visivelNomeSerie, setVisivelNomeSerie] = useState("");
+  const [visivelNomeTurma, setVisivelNomeTurma] = useState("");
 
   let count1 = 0; //8-10
   let count2 = 0; //6-8
@@ -26,43 +30,28 @@ export function ContentDados() {
     getData();
   }, [user]);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await app.get(`/dadosBI/atividades/${user}`);
-        if (response.status(200)) {
-          setNewDados(response.data);
-        } else if(response.status(400)) {
-          alert("Sem dados cadastrados!");
-        }else{
-          console.log('teste')
-        }
-      } catch (erro) {
-        console.log(erro.message);
-        // alert("Nenhum dado cadastrado!");
-      }
-    };
-    getData();
-  }, [user]);
-
-
   const [nameDisc, setNameDisc] = useState(-1);
   const [nameSerie, setNameSerie] = useState(-1);
   const [nameTurma, setNameTurma] = useState(-1);
   const [nameAluno, setNameAluno] = useState(-1);
 
   function mudançaNameDisc(disc) {
+    setVisivelNomeDisciplina(dados[disc].disciplinas.name);
     setNameDisc(disc);
     setNameSerie(-1);
     setNameTurma(-1);
     setNameAluno(-1);
   }
   function mudançaNameSerie(serie) {
+    setVisivelNomeSerie(dados[nameDisc].disciplinas.series[serie].name);
     setNameSerie(serie);
     setNameTurma(-1);
     setNameAluno(-1);
   }
   function mudançaNameTurma(turma) {
+    setVisivelNomeTurma(
+      dados[nameDisc].disciplinas.series[nameSerie].turmas[turma].name
+    );
     setNameTurma(turma);
     setNameAluno(-1);
   }
@@ -127,19 +116,39 @@ export function ContentDados() {
       data: [
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b1.media,
+            .alunos[nameAluno].media_geral,
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b2.media,
+            .alunos[nameAluno].media_geral,
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b3.media,
+            .alunos[nameAluno].media_geral,
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b4.media,
+            .alunos[nameAluno].media_geral,
       ],
     },
   ];
+
+  // const seriesArea1 = [
+  //   {
+  //     name: "Médias",
+  //     data: [
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b1.media,
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b2.media,
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b3.media,
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b4.media,
+  //     ],
+  //   },
+  // ];
 
   const optionsArea2 = {
     chart: {
@@ -163,19 +172,39 @@ export function ContentDados() {
       data: [
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b1.atividades_realizadas,
+            .alunos[nameAluno].media_geral,
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b2.atividades_realizadas,
+            .alunos[nameAluno].media_geral,
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b3.atividades_realizadas,
+            .alunos[nameAluno].media_geral,
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b4.atividades_realizadas,
+            .alunos[nameAluno].media_geral,
       ],
     },
   ];
+
+  // const seriesArea2 = [
+  //   {
+  //     name: "Quantidade de atividades",
+  //     data: [
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b1.atividades_realizadas,
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b2.atividades_realizadas,
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b3.atividades_realizadas,
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b4.atividades_realizadas,
+  //     ],
+  //   },
+  // ];
 
   const optionsArea3 = {
     chart: {
@@ -199,23 +228,64 @@ export function ContentDados() {
       data: [
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b1.aulas_assistidas,
+            .alunos[nameAluno].media_geral,
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b2.aulas_assistidas,
+            .alunos[nameAluno].media_geral,
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b3.aulas_assistidas,
+            .alunos[nameAluno].media_geral,
         nameAluno > -1 &&
           dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
-            .alunos[nameAluno].b4.aulas_assistidas,
+            .alunos[nameAluno].media_geral,
       ],
     },
   ];
 
+  // const seriesArea3 = [
+  //   {
+  //     name: "Quantidade de aulas assistidas",
+  //     data: [
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b1.aulas_assistidas,
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b2.aulas_assistidas,
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b3.aulas_assistidas,
+  //       nameAluno > -1 &&
+  //         dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
+  //           .alunos[nameAluno].b4.aulas_assistidas,
+  //     ],
+  //   },
+  // ];
+
+  const componentRefCompleto = useRef();
+  const handlePrintCompleto = useReactToPrint({
+    content: () => componentRefCompleto.current,
+    documentTitle: "Dados",
+    onafterprint: () => alert("PDF completo!"),
+  });
+
+  const componentRefEvolucao = useRef();
+  const handlePrintEvolucao = useReactToPrint({
+    content: () => componentRefEvolucao.current,
+    documentTitle: "Dados - Evolução",
+    onafterprint: () => alert("PDF completo!"),
+  });
+
+  const componentRefMediaIntervalo = useRef();
+  const handlePrintMediaIntervalo = useReactToPrint({
+    content: () => componentRefMediaIntervalo.current,
+    documentTitle: "Dados - Evolução",
+    onafterprint: () => alert("PDF completo!"),
+  });
+
   return (
     <div className="flex flex-col ml-12 w-3/5">
-      <div>
+      <div ref={componentRefCompleto}>
         <div className="w-full flex flex-col p-6 pt-4 bg-white rounded-lg shadow-md shaow-[#333]">
           <div className="w-full flex flex-row pt-2 grid grid-cols-5 gap-5 pb-1 ml-10">
             <div className="flex flex-col text-[#4263EB]">
@@ -307,27 +377,28 @@ export function ContentDados() {
         </div>
 
         <div className="w-full flex flex-col p-6 pt-6 bg-white rounded-lg shadow-md shaow-[#333] mt-4">
-          <div className="flex flex-row justify-between pb-8 border-b border-[#4263EB] px-10 mt-10">
+          <div className="flex flex-row justify-between pb-8 border-b border-[#4263EB] px-10 mt-2">
             <div className="">
               <p className="text-[#02C4B2] text-[45px] font-semibold ">
-                UEB Primavera
+                UEB PRIMAVERA
               </p>
-              <p className="text-[#748FFC] text-[25px] font-semibold mt-2">
-                Física - 3 ano
+              <p className="text-[#748FFC] text-[25px] font-semibold mt-3">
+                {visivelNomeDisciplina} - {visivelNomeSerie} -{" "}
+                {visivelNomeTurma}
               </p>
             </div>
 
-            <div>
-              <div className="flex flex-row items-center text-dark-purple hover:scale-110 duration-300 cursor-pointer">
-                <PictureAsPdfIcon />
-
-                <p className="text-[16px] font-normal">Exportar PDF</p>
-              </div>
+            <div
+              className="flex flex-row items-center text-dark-purple hover:scale-110 duration-300 cursor-pointer"
+              onClick={handlePrintCompleto}
+            >
+              <PictureAsPdfIcon />
+              <p className="text-[16px] font-normal">Exportar PDF</p>
             </div>
           </div>
 
-          <div className="w-full flex flex-row justify-between mt-10 mb-12 px-16">
-            <div className="flex flex-col w-1/3 pr-10">
+          <div className="w-full flex flex-row justify-between my-5 px-16">
+            <div className="flex flex-col w-1/3 ">
               <p className="text-[#02C4B2] text-[20px] font-bold">
                 Tempo na plataforma
               </p>
@@ -365,7 +436,7 @@ export function ContentDados() {
               </div>
             </div>
 
-            <div className="flex flex-col w-1/3 px-5">
+            <div className="flex flex-col w-1/3 pl-6">
               <p className="text-[#02C4B2] text-[20px] font-bold">
                 Participação
               </p>
@@ -407,13 +478,13 @@ export function ContentDados() {
               </div>
             </div>
 
-            <div className="flex flex-col w-1/3 pl-10 items-center">
+            <div className="flex flex-col w-1/3 items-center pl-2">
               <p className="text-[#02C4B2] text-[20px] font-bold">Média</p>
 
               {nameAluno > -1 &&
               dados[nameDisc].disciplinas.series[nameSerie].turmas[nameTurma]
                 .alunos[nameAluno].media_geral > 0 ? (
-                <div>
+                <div className="flex items-center justify-center">
                   <p className="text-[#748FFC] mt-8 text-[75px] font-bold">
                     {
                       dados[nameDisc].disciplinas.series[nameSerie].turmas[
@@ -432,7 +503,10 @@ export function ContentDados() {
             </div>
           </div>
 
-          <div className="flex flex-col px-16 pb-12">
+          <div
+            className="flex flex-col px-16 mb-5 mt-2"
+            ref={componentRefEvolucao}
+          >
             <div className="flex flex-row justify-between">
               <p className="text-[#02C4B2] text-[20px] font-bold ">Evolução</p>
               <div className="flex flex-row ">
@@ -440,14 +514,17 @@ export function ContentDados() {
                   <DownloadIcon />
                   <p className="text-[16px] font-normal">Exportar XLS</p>
                 </div>
-                <div className="flex flex-row items-center text-dark-purple hover:scale-110 duration-300">
+                <div
+                  className="flex flex-row items-center text-dark-purple hover:scale-110 duration-300 cursor-pointer"
+                  onClick={handlePrintEvolucao}
+                >
                   <PictureAsPdfIcon />
                   <p className="text-[16px] font-normal">Exportar PDF</p>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-row mt-8 justify-between">
+            <div className="flex flex-row mt-5 justify-between">
               <div className="flex flex-col ">
                 <div className="flex flex-row items-center">
                   <input
@@ -458,9 +535,24 @@ export function ContentDados() {
                     value="1"
                     onClick={() => setVisivle("1")}
                   />
-                  <label className="cursor-pointer">
+                  <label className="cursor-pointer" htmlFor="radio1">
                     <span className="text-[18px] font-semibold text-dark-purple pl-4 hover:text-[#02C4B2] active:text-[#02C4B2]">
                       Médias
+                    </span>
+                  </label>
+                </div>
+                <div className="flex flex-row items-center">
+                  <input
+                    name="theradio"
+                    id="radio2"
+                    type="radio"
+                    className="h-4 w-4 cursor-pointer"
+                    value="2"
+                    onClick={() => setVisivle("2")}
+                  />
+                  <label className="cursor-pointer" htmlFor="radio2">
+                    <span className="text-[18px] font-semibold text-dark-purple pl-4 hover:text-[#02C4B2] active:text-[#02C4B2]">
+                      Quantidade de atividades
                     </span>
                   </label>
                 </div>
@@ -470,25 +562,10 @@ export function ContentDados() {
                     id="radio3"
                     type="radio"
                     className="h-4 w-4 cursor-pointer"
-                    value="2"
-                    onClick={() => setVisivle("2")}
-                  />
-                  <label className="cursor-pointer">
-                    <span className="text-[18px] font-semibold text-dark-purple pl-4 hover:text-[#02C4B2] active:text-[#02C4B2]">
-                      Quantidade de atividades
-                    </span>
-                  </label>
-                </div>
-                <div className="flex flex-row items-center">
-                  <input
-                    name="theradio"
-                    id="radio4"
-                    type="radio"
-                    className="h-4 w-4 cursor-pointer"
                     value="3"
                     onClick={() => setVisivle("3")}
                   />
-                  <label className="cursor-pointer">
+                  <label className="cursor-pointer" htmlFor="radio3">
                     <span className="text-[18px] font-semibold text-dark-purple pl-4 hover:text-[#02C4B2] active:text-[#02C4B2]">
                       Quantidades de aulas assistidas
                     </span>
@@ -530,7 +607,10 @@ export function ContentDados() {
             </div>
           </div>
 
-          <div className="flex flex-col px-16 pb-12">
+          <div
+            className="flex flex-col px-16 pb-12 mt-2"
+            ref={componentRefMediaIntervalo}
+          >
             <div className="flex flex-row justify-between">
               <p className="text-[#02C4B2] text-[20px] font-bold mr-4">
                 Média por intervalo
@@ -540,37 +620,43 @@ export function ContentDados() {
                   <DownloadIcon />
                   <p className="text-[16px] font-normal">Exportar XLS</p>
                 </div>
-                <div className="flex flex-row items-center text-dark-purple hover:scale-110 duration-300">
+                <div
+                  className="flex flex-row items-center text-dark-purple hover:scale-110 duration-300 cursor-pointer"
+                  onClick={handlePrintMediaIntervalo}
+                >
                   <PictureAsPdfIcon />
                   <p className="text-[16px] font-normal">Exportar PDF</p>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-row justify-between mt-8">
+            <div className="flex flex-row justify-between mt-4">
               <div className="flex flex-col">
                 <div className="flex bg-dark-purple rounded-lg">
-                  <div className="flex flex-col items-center border-r">
-                    <p className="font-normal px-2 text-white text-[20px]">
+                  <div className="flex flex-col border-r items-center justify-center">
+                    <p className="font-normal px-4 text-white text-[20px]">
                       Turma
                     </p>
                     {nameTurma > -1 &&
-                      dados[nameDisc].disciplinas.series[nameSerie].turmas.map(
-                        (item, index) =>
-                          nameTurma === index && (
-                            <div
-                              className="bg-[#748FFC] h-full flex items-center px-5"
-                              key={index}
-                            >
-                              <p className=" text-[18px] text-white font-normal w-full ">
-                                {item.name}
-                              </p>
-                            </div>
-                          )
-                      )}
+                      dados[nameDisc].disciplinas.series[nameSerie].turmas[
+                        nameTurma
+                      ].alunos.map((item, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className={`px-4 text-[18px] ${
+                              index % 2 !== 0
+                                ? `bg-[#748FFC] text-white`
+                                : `bg-[#EDF2FF] text-dark-purple`
+                            } font-normal w-full h-12 flex justify-center items-center`}
+                          >
+                            {visivelNomeTurma}
+                          </div>
+                        );
+                      })}
                   </div>
 
-                  <div className="flex flex-col border-r items-center">
+                  <div className="flex flex-col border-r items-center justify-center">
                     <p className="font-normal px-4 text-white text-[20px]">
                       Aluno
                     </p>
@@ -585,7 +671,7 @@ export function ContentDados() {
                               i % 2 !== 0
                                 ? `bg-[#748FFC] text-white`
                                 : `bg-[#EDF2FF] text-dark-purple`
-                            } font-normal w-full flex justify-center items-center`}
+                            } font-normal w-full h-12 flex justify-center items-center`}
                           >
                             {item.name}
                           </p>
@@ -593,7 +679,7 @@ export function ContentDados() {
                       })}
                   </div>
 
-                  <div className="flex flex-col items-center">
+                  <div className="flex flex-col items-center justify-center">
                     <p className="font-normal px-4 text-white text-[20px]">
                       Média
                     </p>
@@ -611,7 +697,7 @@ export function ContentDados() {
                                 i % 2 !== 0
                                   ? `bg-[#748FFC] text-white`
                                   : `bg-[#EDF2FF] text-dark-purple`
-                              } font-normal w-full flex justify-center items-center`}
+                              } font-normal w-full h-12 flex justify-center items-center`}
                             >
                               {item.media_geral}
                             </p>
@@ -624,7 +710,7 @@ export function ContentDados() {
                               i % 2 !== 0
                                 ? `bg-[#748FFC] text-white`
                                 : `bg-[#EDF2FF] text-dark-purple`
-                            } font-normal w-full flex justify-center items-center`}
+                            } font-normal w-full h-12 flex justify-center items-center`}
                           >
                             Sem nota cadastrada.
                           </p>

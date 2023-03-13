@@ -116,13 +116,13 @@ export function Calendario() {
             <p>SEX</p>
             <p>SAB</p>
           </div>
-          <div className="grid grid-cols-7 text-[14px]">
+          <div className="grid grid-cols-7 content-center text-[14px]">
             {days.map((day, dayIdx) => (
               <div
                 key={day.toString()}
                 className={classNames(
                   dayIdx === 0 && colStartClasses[getDay(day)],
-                  "py-1"
+                  "py-1 relative"
                 )}
               >
                 <button
@@ -156,11 +156,11 @@ export function Calendario() {
                   </time>
                 </button>
 
-                <div className="w-1 h-1">
-                  {meetings.some((meeting) =>
-                    isSameDay(parseISO(meeting.start), day)
-                  ) && <div className="w-1 h-1 rounded-full bg-sky-500"></div>}
-                </div>
+                {meetings.some((meeting) => {
+                  return isSameDay(parseISO(meeting.data_masked), day);
+                }) && (
+                  <div className="w-1 h-1 bg-sky-500 rounded-lg absolute bottom-2 left-4"></div>
+                )}
               </div>
             ))}
           </div>

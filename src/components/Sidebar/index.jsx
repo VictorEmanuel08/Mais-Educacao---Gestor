@@ -8,10 +8,8 @@ export function Sidebar() {
 
   const Menus = [
     { title: "Home" },
-    { title: "Conquistas" },
     { title: "Dados" },
     { title: "Disciplinas" },
-
   ];
 
   return (
@@ -23,6 +21,7 @@ export function Sidebar() {
       {open ? (
         <img
           src={control}
+          alt="Control"
           className={`absolute duration-300 cursor-pointer rounded-full top-9 w-7 border-2 border-dark-purple right-3 ${
             !open && "rotate-180"
           }`}

@@ -13,6 +13,7 @@ export function PerfilData() {
   const [numDisciplinas, setnumDisciplinas] = useState("");
   const [numSeries, setnumSeries] = useState("");
   const [numTurmas, setnumTurmas] = useState("");
+  const [iconProfessor, setIconProfessor] = useState("");
 
   useEffect(() => {
     const getData = async () => {
@@ -21,6 +22,7 @@ export function PerfilData() {
       setMatProf(response.data.professor.escola_user.mat);
       setEmail(response.data.professor.escola_user.email);
       setCPFProf(response.data.professor.escola_user.cpf);
+      setIconProfessor(response.data.professor.escola_user.avatar);
       setnumDisciplinas(response.data.professor.num_disciplinas);
       setnumSeries(response.data.professor.num_series);
       setnumTurmas(response.data.professor.num_turmas);
@@ -98,12 +100,23 @@ export function PerfilData() {
                 </div>
               </div>
               <div className="absolute top-[-32px] left-5">
-                <img src={professorIcon} alt="" className="w-[60px] h-[60px]" />
+                {iconProfessor.length !== 0 ? (
+                  <img
+                    src={iconProfessor}
+                    alt=""
+                    className="w-[60px] h-[60px] rounded-full"
+                  />
+                ) : (
+                  <img
+                    src={professorIcon}
+                    alt=""
+                    className="w-[60px] h-[60px] rounded-full"
+                  />
+                )}
               </div>
             </div>
           </div>
         </div>
-        {/* <MessageChat /> */}
         <ChatApp />
       </div>
     </div>

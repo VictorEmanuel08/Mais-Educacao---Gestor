@@ -7,7 +7,7 @@ export function ContentHome() {
     <div className="flex flex-row">
       <div>
         <div className="w-full px-5">
-          <img src={banner} alt="banner" />
+          <img  src={banner} alt="banner" />
         </div>
         <PerfilData />
       </div>

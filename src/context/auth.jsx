@@ -57,7 +57,6 @@ export const AuthProvider = ({ children }) => {
     app.defaults.headers.Authorization = null;
     setUser(null);
     navigate("/");
-    alert("Sessão encerrada");
   };
 
   const ConnectRoom = (id_aluno, id_professor) => {

@@ -1,28 +1,41 @@
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/auth";
 import { IoMdPerson, IoMdExit } from "react-icons/io";
-import { MdOutlineNotifications } from "react-icons/md";
 import { Sidebar } from "../../components/Sidebar";
 import { ContentHome } from "../../components/ContentHome";
 import socketServices from "../../util/socketServices";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function Home() {
   const { logout } = useContext(AuthContext);
 
+  const notify = () => {
+    toast.error("Deslogado!", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    logout();
+    notify();
+    setTimeout(() => {
+      logout();
+    }, 2500);
   };
 
   useEffect(() => {
-    socketServices.emit(
-      "teste_conquista",
-      {
-        id: 1
-      }
-    )
-  }, [])
+    socketServices.emit("teste_conquista", {
+      id: 1,
+    });
+  }, []);
 
   return (
     <div className="flex w-full min-h-screen font-sans bg-dark-theme">
@@ -35,21 +48,22 @@ export function Home() {
                 <IoMdPerson />
               </li>
               <li className="pr-2">
-                <MdOutlineNotifications />
               </li>
               <li className="pr-2">
-                <IoMdExit
-                  onClick={handleSubmit}
-                  className="cursor-pointer"
-                  alt="sair"
-                />
+                <button>
+                  <IoMdExit
+                    onClick={handleSubmit}
+                    className="cursor-pointer"
+                    alt="sair"
+                  />
+                </button>
+                <ToastContainer />
               </li>
             </ul>
           </div>
         </div>
-        <div className="flex flex-row pt-5">
+        <div className="w-full flex flex-row pt-5">
           <ContentHome />
-          {/* <Calendario /> */}
         </div>
       </main>
 

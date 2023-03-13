@@ -1,25 +1,34 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../context/auth";
 import { IoMdPerson, IoMdExit } from "react-icons/io";
-import { MdOutlineNotifications } from "react-icons/md";
 import { Sidebar } from "../../components/Sidebar";
 import { ContentOverviewDisciplinas } from "../../components/ContentOverviewDisciplinas";
-import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function OverviewDisciplinas() {
   const { logout } = useContext(AuthContext);
 
-  const navigate = useNavigate();
+  const notify = () => {
+    toast.error("Deslogado!", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    logout();
+    notify();
+    setTimeout(() => {
+      logout();
+    }, 2500);
   };
-
-  function goToPerfil() {
-    navigate("/home");
-  }
 
   return (
     <div className="flex w-full min-screen font-sans bg-dark-theme">
@@ -29,13 +38,18 @@ export function OverviewDisciplinas() {
           <div className="absolute right-5 pt-5 text-white">
             <ul className="flex">
               <li className="pr-2">
-                <IoMdPerson onClick={goToPerfil} className="cursor-pointer" />
+                <IoMdPerson />
               </li>
+              <li className="pr-2"></li>
               <li className="pr-2">
-                <MdOutlineNotifications />
-              </li>
-              <li className="pr-2">
-                <IoMdExit onClick={handleSubmit} className="cursor-pointer" />
+                <button>
+                  <IoMdExit
+                    onClick={handleSubmit}
+                    className="cursor-pointer"
+                    alt="sair"
+                  />
+                </button>
+                <ToastContainer />
               </li>
             </ul>
           </div>

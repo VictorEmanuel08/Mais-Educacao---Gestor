@@ -11,10 +11,10 @@ export function ItemContEdit({ data, index }) {
           {...provided.dragHandleProps}
           className="flex flex-col justify-center items-center w-[250px] h-[150px] "
         >
-          <a className="flex items-center active:opacity-50 ">
+          <div className="flex flex-row items-center active:opacity-50 ">
             <MenuIcon className="text-[#4263EB] active:text-[#263B4A] opacity-1 mr-1" />
-            <img src={data.thumb} className="rounded-lg" />
-          </a>
+            <img src={data.thumb} alt={data.title} className="rounded-lg" />
+          </div>
         </div>
       )}
     </Draggable>

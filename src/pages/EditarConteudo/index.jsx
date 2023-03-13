@@ -10,7 +10,9 @@ import EyesCloked from "../../assets/hidden.png";
 import EyesOpen from "../../assets/view.png";
 import { Header } from "../../components/Header";
 import { CriarAtividade } from "../../components/Modals/Atividade/CriarAtividade";
-import { ModalCancelarConteudo } from "../drag n drops/ModalCancelarConteudo";
+import { CancelarConteudo } from "../../components/Modals/Conteudo/CancelarConteudo/CancelarConteudo";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function EditarConteudo() {
   const { user } = useContext(AuthContext);
@@ -74,6 +76,19 @@ export function EditarConteudo() {
     }
   }, []);
 
+  const notify = () => {
+    toast.success("Conteudo editado!", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
   async function AttAula() {
     try {
       await app.put(`/conteudos/${idConteudo}`, {
@@ -85,11 +100,12 @@ export function EditarConteudo() {
         id_bimestre: bimestreId,
         status: true,
       });
-      alert("Conteudo editado!");
-      navigate(-1);
+      notify();
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
-      document.location.reload(true);
     }
   }
 
@@ -210,7 +226,7 @@ export function EditarConteudo() {
                                       {disc.name}
                                     </p>
                                     <div className="w-[180px] flex justify-between items-center flex-row ">
-                                      <ModalCancelarConteudo salvar={AttAula} />
+                                      <CancelarConteudo salvar={AttAula} />
                                       <button
                                         className="py-[2px] px-[15px] bg-[#3B5BDB] rounded-md text-white text-[14px]"
                                         type="submit"

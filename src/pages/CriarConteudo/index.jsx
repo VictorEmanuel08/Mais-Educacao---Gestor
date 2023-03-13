@@ -10,17 +10,19 @@ import EyesCloked from "../../assets/hidden.png";
 import EyesOpen from "../../assets/view.png";
 import { Header } from "../../components/Header";
 import { CriarAtividade } from "../../components/Modals/Atividade/CriarAtividade";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function CriarConteudo() {
   const { user } = useContext(AuthContext);
   const { idSerie, idDisc } = useParams();
   const [aula, setAula] = useState([]);
   const [bimestre, setBimestre] = useState([]);
-  const [bimestreId, setBimestreId] = useState(null);
+  const [bimestreId, setBimestreId] = useState("");
   const [ready, setReady] = useState(true);
-  const [text, setText] = useState();
-  const [clicked, setClicked] = useState(true);
-  const [clicked2, setClicked2] = useState(true);
+  const [text, setText] = useState("");
+  const [clickedEye, setClickedEye] = useState(true);
+  // const [clickedEye2, setClickedEye2] = useState(true);
 
   const [disc, setDisc] = useState();
   const [addItemArray, setAddItemArray] = useState([]);
@@ -51,12 +53,13 @@ export function CriarConteudo() {
     getData();
   }, [idDisc]);
 
-  function switchEyes() {
-    setClicked(!clicked);
-  }
+  // function switchEyes() {
+  //   setClickedEye2(!clickedEye2);
+  // }
+
   function switchEyesGlobal(e) {
     e.preventDefault();
-    setClicked2(!clicked2);
+    setClickedEye(!clickedEye);
   }
 
   useEffect(() => {
@@ -70,6 +73,18 @@ export function CriarConteudo() {
     setBimestreId(getCondensaId);
   };
 
+  const notify = () => {
+    toast.success("Conteudo criado!", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
 
   async function AddAula() {
     try {
@@ -80,11 +95,12 @@ export function CriarConteudo() {
         created_by: user,
         array_conteudos: addItemArray,
         id_bimestre: bimestreId,
-        status: true,
+        status: clickedEye,
       });
-      navigate(-1);
-      document.location.reload(true);
-      alert("Conteudo cadastrado!");
+      notify();
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
     } catch {
       alert("Ocorreu um erro. Tente novamente.");
     }
@@ -181,7 +197,9 @@ export function CriarConteudo() {
                             <div className="text-[22px] text-[#FFFFFF] font-roboto mb-4">
                               <p>
                                 {board.name === "aulas" ? `Vídeo Aulas` : ""}
-                                {board.name === "atividades" ? `Atividades` : ""}
+                                {board.name === "atividades"
+                                  ? `Atividades`
+                                  : ""}
                                 {board.name === "materiais" ? `Materiais` : ""}
                               </p>
                             </div>
@@ -198,13 +216,25 @@ export function CriarConteudo() {
                                         <button className="py-[2px] px-[15px] text-[14px] bg-[#FFFFFF] rounded-md">
                                           Cancelar
                                         </button>
-                                        <button
-                                          className="text-white text-[14px] py-[2px] px-[15px] bg-[#3B5BDB] rounded-md"
-                                          type="submit"
-                                          onClick={AddAula}
-                                        >
-                                          Salvar
-                                        </button>
+                                        {addItemArray.length === 0 ||
+                                        bimestreId.length === 0 ||
+                                        text.length === 0 ? (
+                                          <button
+                                            disabled={true}
+                                            className="text-white text-[14px] py-[2px] px-[15px] bg-[#3B5BDB] rounded-md cursor-not-allowed"
+                                          >
+                                            Salvar
+                                          </button>
+                                        ) : (
+                                          <div>
+                                            <button
+                                              className="text-white text-[14px] py-[2px] px-[15px] bg-[#3B5BDB] rounded-md"
+                                              onClick={AddAula}
+                                            >
+                                              Salvar
+                                            </button>
+                                          </div>
+                                        )}
                                       </div>
                                     </div>
                                   </div>
@@ -217,6 +247,7 @@ export function CriarConteudo() {
                                       type="texte"
                                       onChange={(e) => setText(e.target.value)}
                                     />
+
                                     <div className=" rounded-lg w-[200px] mb-5 flex justify-center text-zinc-700">
                                       <select
                                         name=""
@@ -224,7 +255,10 @@ export function CriarConteudo() {
                                         className="text-[14px] w-[200px] border-none outline-none"
                                         onClick={handleBimestre}
                                       >
-                                        <option className="text-[12px]">
+                                        <option
+                                          value=""
+                                          className="text-[12px]"
+                                        >
                                           Selecione o Bimestre
                                         </option>
                                         {bimestre.map((bim) => {
@@ -236,7 +270,8 @@ export function CriarConteudo() {
                                         })}
                                       </select>
                                     </div>
-                                    {clicked2 ? (
+
+                                    {clickedEye ? (
                                       <button
                                         className="w-[25px] h-[25px]"
                                         onClick={switchEyesGlobal}
@@ -260,7 +295,6 @@ export function CriarConteudo() {
                                       </button>
                                     )}
                                   </div>
-
                                   {board.items.length === 0 && (
                                     <div className="bg-[#EDF2FF] h-[150px] rounded-lg mb-4 p-1 pl-4 flex items-center justify-center">
                                       <p className="text-center text-[#707070] text-[18px] font-roboto">
@@ -273,7 +307,10 @@ export function CriarConteudo() {
                                     ? board.items.length > 0 &&
                                       board.items.map((item, iIndex) => {
                                         return (
-                                          <div className="bg-[#EDF2FF] rounded-lg p-4">
+                                          <div
+                                            key={iIndex}
+                                            className="bg-[#EDF2FF] rounded-lg p-4"
+                                          >
                                             <div className="flex flex-row items-center">
                                               <div className="w-1/3 flex items-center">
                                                 <ItemContEdit
@@ -287,8 +324,8 @@ export function CriarConteudo() {
                                                   {item.title}
                                                 </p>
                                               </div>
-                                              <div>
-                                                {clicked ? (
+                                              {/* <div>
+                                                {clickedEye2 ? (
                                                   <button
                                                     className="w-[25px] h-[25px] ml-4"
                                                     onClick={() => switchEyes()}
@@ -311,7 +348,7 @@ export function CriarConteudo() {
                                                     />
                                                   </button>
                                                 )}
-                                              </div>
+                                              </div> */}
                                             </div>
                                           </div>
                                         );
@@ -336,7 +373,10 @@ export function CriarConteudo() {
                             ? board.items.length > 0 &&
                               board.items.map((item, iIndex) => {
                                 return (
-                                  <div className="flex items-center justify-center">
+                                  <div
+                                    key={iIndex}
+                                    className="flex items-center justify-center"
+                                  >
                                     {/* <MenuIcon className="text-[#FFFFFF] active:text-[#263B4A] opacity-1 mb-8" /> */}
                                     <ItemAulaEdit
                                       key={item.id}
@@ -351,7 +391,10 @@ export function CriarConteudo() {
                             ? board.items.length > 0 &&
                               board.items.map((item, iIndex) => {
                                 return (
-                                  <div key={iIndex} className="flex items-center justify-center">
+                                  <div
+                                    key={iIndex}
+                                    className="flex items-center justify-center"
+                                  >
                                     <ItemAtivEdit
                                       idAtividade={item.id}
                                       data={item}

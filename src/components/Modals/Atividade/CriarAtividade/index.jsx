@@ -334,12 +334,24 @@ export function CriarAtividade() {
                 salvar={AddAtiv}
               />
             </div>
-            <button
-              onClick={AddAtiv}
-              className="bg-dark-purple rounded-lg text-white w-1/6 h-[40px] ml-4"
-            >
-              Salvar
-            </button>
+
+            {questions.length === 0 || title.length === 0 ? (
+              <button
+                type="submit"
+                disabled={true}
+                onClick={AddAtiv}
+                className="bg-dark-purple rounded-lg text-white w-1/6 h-[40px] ml-4 cursor-not-allowed"
+              >
+                Salvar
+              </button>
+            ) : (
+              <button
+                onClick={AddAtiv}
+                className="bg-dark-purple rounded-lg text-white w-1/6 h-[40px] ml-4"
+              >
+                Salvar
+              </button>
+            )}
           </div>
         </Modal>
       </div>

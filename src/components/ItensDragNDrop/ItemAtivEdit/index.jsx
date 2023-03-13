@@ -13,9 +13,11 @@ export function ItemAtivEdit({ data, index, idAtividade }) {
             className="flex flex-col w-[200px] h-[130px] rounded-lg bg-white mb-4 mr-1"
           >
             <div className="flex items-center justify-center rounded-lg bg-white w-full h-[100px]">
-              <a>
-                <img src={data.thumb} className="rounded-lg w-[120px] h-full" />
-              </a>
+              <img
+                src={data.thumb}
+                alt={data.title}
+                className="rounded-lg w-[120px] h-[80px]"
+              />
             </div>
             <div className="bg-[#EDF2FF] w-full h-[41px] rounded-b-lg">
               <p className="text-[14px] text-[#474747] leading-4 px-3 py-1">

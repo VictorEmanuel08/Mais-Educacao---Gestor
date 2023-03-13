@@ -21,7 +21,7 @@ export function Login() {
         <img
           className="w-full h-screen object-cover"
           src={backgroundImgNew}
-          alt="background image"
+          alt="background"
         />
       </div>
       <div className="w-full h-screen bg-loginBackground bg-cover bg-no-repeat flex flex-col justify-center">
@@ -29,9 +29,9 @@ export function Login() {
           className="max-w-[400px] w-full mx-auto bg-[#4263EB] rounded-md p-8"
           onSubmit={handleSubmit}
         >
-          <a className="w-full flex justify-center items-center my-2">
-            <img src={Logo} className="px-10" />
-          </a>
+          <div className="w-full flex justify-center items-center my-2">
+            <img src={Logo} alt={"Logo"} className="px-10" />
+          </div>
           <div className="flex flex-col py-1">
             <label htmlFor="mat" className="text-zinc-200">
               Matrícula
@@ -68,7 +68,7 @@ export function Login() {
           <div className="flex justify-between mb-10">
             <p></p>
             <p className="text-white text-sm">
-              <a href="#">Esqueci minha senha.</a>
+              <a href="/">Esqueci minha senha.</a>
             </p>
           </div>
         </form>
