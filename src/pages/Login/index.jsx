@@ -2,6 +2,8 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth";
 import Logo from "../../assets/logo2x.png";
 import backgroundImgNew from "../../assets/FOTO.png";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function Login() {
   const { login } = useContext(AuthContext);
@@ -9,11 +11,25 @@ export function Login() {
   const [mat, setMat] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    login(mat, password); //interação com o contexto/api
+  const notify = () => {
+    toast.info("Bem-Vindo!", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
+
+  function handleSubmit() {
+    notify();
+    setTimeout(() => {
+      login(mat, password); //interação com o contexto/api
+    }, 1000);
+  }
 
   return (
     <div className="w-full h-screen grid grid-cols-1 sm:grid-cols-2">
@@ -25,10 +41,7 @@ export function Login() {
         />
       </div>
       <div className="w-full h-screen bg-loginBackground bg-cover bg-no-repeat flex flex-col justify-center">
-        <form
-          className="max-w-[400px] w-full mx-auto bg-[#4263EB] rounded-md p-8"
-          onSubmit={handleSubmit}
-        >
+        <div className="max-w-[400px] w-full mx-auto bg-[#4263EB] rounded-md p-8">
           <div className="w-full flex justify-center items-center my-2">
             <img src={Logo} alt={"Logo"} className="px-10" />
           </div>
@@ -62,16 +75,28 @@ export function Login() {
               <input className="rounded-md" type="checkbox" /> Manter conectado
             </p>
           </div>
-          <button className="bg-[#18C4B3] w-full my-2 py-2 rounded-md text-white hover:bg-[#16b1a1] duration-300">
-            Entrar
-          </button>
+          {mat.length === 0 || password.length === 0 ? (
+            <button
+              disabled={true}
+              className="bg-[#18C4B3] w-full my-2 py-2 rounded-md text-white hover:bg-[#16b1a1] duration-300 cursor-not-allowed"
+            >
+              Entrar
+            </button>
+          ) : (
+            <button
+              onClick={handleSubmit}
+              className="bg-[#18C4B3] w-full my-2 py-2 rounded-md text-white hover:bg-[#16b1a1] duration-300"
+            >
+              Entrar
+            </button>
+          )}
           <div className="flex justify-between mb-10">
             <p></p>
             <p className="text-white text-sm">
               <a href="/">Esqueci minha senha.</a>
             </p>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
