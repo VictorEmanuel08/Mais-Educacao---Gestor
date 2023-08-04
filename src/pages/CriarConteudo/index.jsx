@@ -1,0 +1,426 @@
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../../context/auth";
+import { useParams, useNavigate } from "react-router-dom";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { app } from "../../api/app";
+import { ItemAulaEdit } from "../../components/ItensDragNDrop/ItemAulaEdit";
+import { ItemAtivEdit } from "../../components/ItensDragNDrop/ItemAtivEdit";
+import { ItemContEdit } from "../../components/ItensDragNDrop/ItemContEdit";
+import EyesCloked from "../../assets/hidden.png";
+import EyesOpen from "../../assets/view.png";
+import { Header } from "../../components/Header";
+import { CriarAtividade } from "../../components/Modals/Atividade/CriarAtividade";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+export function CriarConteudo() {
+  const { user } = useContext(AuthContext);
+  const { idSerie, idDisc } = useParams();
+  const [aula, setAula] = useState([]);
+  const [bimestre, setBimestre] = useState([]);
+  const [bimestreId, setBimestreId] = useState("");
+  const [ready, setReady] = useState(true);
+  const [text, setText] = useState("");
+  const [clickedEye, setClickedEye] = useState(true);
+  // const [clickedEye2, setClickedEye2] = useState(true);
+
+  const [disc, setDisc] = useState();
+  const [addItemArray, setAddItemArray] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await app.get(`/bimestres/`);
+      // console.log("/bimestres: ", response.data)
+      setBimestre(response.data["bimestres"]);
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await app.get(`/conteudo/${idSerie}/${idDisc}`);
+      // console.log("/conteudo/idSerie/idDisc: ", response.data)
+      setAula(response.data);
+    };
+    getData();
+  }, [idSerie, idDisc]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await app.get(`/disciplinas/${idDisc}`);
+      // console.log("/disciplinas: ", response.data)
+      setDisc(response.data.disciplina);
+    };
+    getData();
+  }, [idDisc]);
+
+  // function switchEyes() {
+  //   setClickedEye2(!clickedEye2);
+  // }
+
+  function switchEyesGlobal(e) {
+    e.preventDefault();
+    setClickedEye(!clickedEye);
+  }
+  console.log(clickedEye)
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      setReady(true);
+    }
+  }, []);
+
+  const handleBimestre = function (e) {
+    const getCondensaId = e.target.value;
+    setBimestreId(getCondensaId);
+  };
+
+  const notify = () => {
+    toast.success("Conteudo criado!", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  async function AddAula() {
+    try {
+      await app.post("/conteudos", {
+        name: text,
+        id_disciplina: idDisc,
+        id_serie: idSerie,
+        created_by: user,
+        array_conteudos: addItemArray,
+        id_bimestre: bimestreId,
+        status: clickedEye,
+      });
+      notify();
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    } catch {
+      alert("Ocorreu um erro. Tente novamente.");
+    }
+  }
+
+  const AulasToConteudo = (id, type) => {
+    const Valores = { id, type };
+    setAddItemArray([...addItemArray, Valores]);
+  };
+
+  const ConteudoToAulas = (id) => {
+    const Valores = { id };
+    setAddItemArray(addItemArray.filter((index) => index.id !== Valores.id));
+  };
+
+  const onDragEnd = (re) => {
+    if (!re.destination) return;
+    let newBoardData = aula;
+    var dragItem =
+      newBoardData[parseInt(re.source.droppableId)].items[re.source.index];
+    newBoardData[parseInt(re.source.droppableId)].items.splice(
+      re.source.index,
+      1
+    );
+    newBoardData[parseInt(re.destination.droppableId)].items.splice(
+      re.destination.index,
+      0,
+      dragItem
+    );
+
+    // Coluna 0: Aulas
+    // Coluna 1: Conteudo = junção de tudo
+    // Coluna 2: Atividades
+    // Coluna 3: Materiais
+
+    if (re.source.droppableId == 0 && re.destination.droppableId == 1) {
+      AulasToConteudo(dragItem.id, "aula");
+    } else if (re.source.droppableId == 2 && re.destination.droppableId == 1) {
+      AulasToConteudo(dragItem.id, "atividade");
+    } else if (re.source.droppableId == 3 && re.destination.droppableId == 1) {
+      AulasToConteudo(dragItem.id, "material");
+    } else if (re.source.droppableId == 1 && re.destination.droppableId == 0) {
+      ConteudoToAulas(dragItem.id, "aula");
+    } else if (re.source.droppableId == 1 && re.destination.droppableId == 2) {
+      ConteudoToAulas(dragItem.id, "atividade");
+    } else if (re.source.droppableId == 1 && re.destination.droppableId == 3) {
+      ConteudoToAulas(dragItem.id, "material");
+    } else {
+    }
+  };
+
+  return (
+    <div className="flex flex-col w-full h-full text-2xl bg-dark-theme relative">
+      <Header />
+
+      <div className="flex flex-row">
+        {ready && (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <div className="flex relative w-full">
+              {aula.map((board, bIndex) => {
+                return (
+                  <div key={board.name}>
+                    <Droppable droppableId={bIndex.toString()}>
+                      {(provided, snapshot) => (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          className={`
+                          ${
+                            board.name === "aulas"
+                              ? "bg-dark-purple w-[300px] h-screen select-none scrollbar-thin "
+                              : "0"
+                          }
+                          ${
+                            board.name === "conteudos"
+                              ? `h-[40rem] w-[60rem] mt-6 flex flex-col bg-white rounded-lg shadow-md shaow-[#333] ml-20 scrollbar-thin `
+                              : "0"
+                          }
+
+                          ${
+                            board.name === "atividades"
+                              ? `absolute top-0 right-0 w-[350px] h-1/2 bg-dark-purple select-none scrollbar-thin`
+                              : "0"
+                          }
+                          ${
+                            board.name === "materiais"
+                              ? `absolute bottom-0 right-0 w-[350px] h-1/2 bg-dark-purple select-none scrollbar-thin`
+                              : "0"
+                          }
+
+                          `}
+                        >
+                          <div className="flex justify-center">
+                            <div className="text-[22px] text-[#FFFFFF] font-roboto mb-4">
+                              <p>
+                                {board.name === "aulas" ? `Vídeo Aulas` : ""}
+                                {board.name === "atividades"
+                                  ? `Atividades`
+                                  : ""}
+                                {board.name === "materiais" ? `Materiais` : ""}
+                              </p>
+                            </div>
+
+                            {board.name === "conteudos" ? (
+                              <div className="w-full relative">
+                                <div>
+                                  <div className="w-full bg-gradient-to-r from-[#3B5BDB] to-[#BAC8FD] rounded-t-lg">
+                                    <div className="flex justify-between py-4 px-5 items-center ">
+                                      <p className="text-[#FFFFFF] text-[20px] font-rubik">
+                                        {disc.name}
+                                      </p>
+                                      <div className="w-[180px] flex justify-between items-center flex-row ">
+                                        <button className="py-[2px] px-[15px] text-[14px] bg-[#FFFFFF] rounded-md">
+                                          Cancelar
+                                        </button>
+                                        {addItemArray.length === 0 ||
+                                        bimestreId.length === 0 ||
+                                        text.length === 0 ? (
+                                          <button
+                                            disabled={true}
+                                            className="text-white text-[14px] py-[2px] px-[15px] bg-[#3B5BDB] rounded-md cursor-not-allowed"
+                                          >
+                                            Salvar
+                                          </button>
+                                        ) : (
+                                          <div>
+                                            <button
+                                              className="text-white text-[14px] py-[2px] px-[15px] bg-[#3B5BDB] rounded-md"
+                                              onClick={AddAula}
+                                            >
+                                              Salvar
+                                            </button>
+                                            <ToastContainer />
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col p-8 w-full ">
+                                  <div className="flex flex-row justify-between">
+                                    <input
+                                      placeholder="Título do conteúdo"
+                                      className="bg-[#EDF2FF] rounded-lg border-none text-[16px] text-[#131313] font-roboto mb-4 p-1 pl-4 w-1/3 outline-none placeholder:text-[14px] font-light"
+                                      type="texte"
+                                      onChange={(e) => setText(e.target.value)}
+                                    />
+
+                                    <div className=" rounded-lg w-[200px] mb-5 flex justify-center text-zinc-700">
+                                      <select
+                                        name=""
+                                        id=""
+                                        className="text-[14px] w-[200px] border-none outline-none"
+                                        onClick={handleBimestre}
+                                      >
+                                        <option
+                                          value=""
+                                          className="text-[12px]"
+                                        >
+                                          Selecione o Bimestre
+                                        </option>
+                                        {bimestre.map((bim) => {
+                                          return (
+                                            <option key={bim.id} value={bim.id}>
+                                              {bim.number}
+                                            </option>
+                                          );
+                                        })}
+                                      </select>
+                                    </div>
+
+                                    {clickedEye ? (
+                                      <button
+                                        className="w-[25px] h-[25px]"
+                                        onClick={switchEyesGlobal}
+                                      >
+                                        <img
+                                          className="w-[25px] h-[25px]"
+                                          src={EyesOpen}
+                                          alt=""
+                                        />
+                                      </button>
+                                    ) : (
+                                      <button
+                                        onClick={switchEyesGlobal}
+                                        className="w-[25px] h-[25px]"
+                                      >
+                                        <img
+                                          className="w-[25px] h-[25px]"
+                                          src={EyesCloked}
+                                          alt=""
+                                        />
+                                      </button>
+                                    )}
+                                  </div>
+                                  {board.items.length === 0 && (
+                                    <div className="bg-[#EDF2FF] h-[150px] rounded-lg mb-4 p-1 pl-4 flex items-center justify-center">
+                                      <p className="text-center text-[#707070] text-[18px] font-roboto">
+                                        Nenhuma aula cadastrada
+                                      </p>
+                                    </div>
+                                  )}
+
+                                  {board.name === "conteudos"
+                                    ? board.items.length > 0 &&
+                                      board.items.map((item, iIndex) => {
+                                        return (
+                                          <div
+                                            key={iIndex}
+                                            className="bg-[#EDF2FF] rounded-lg p-4"
+                                          >
+                                            <div className="flex flex-row items-center">
+                                              <div className="w-1/3 flex items-center">
+                                                <ItemContEdit
+                                                  key={item.id}
+                                                  data={item}
+                                                  index={iIndex}
+                                                />
+                                              </div>
+                                              <div>
+                                                <p className="text-[#343434] text-[16px] font-semibold">
+                                                  {item.title}
+                                                </p>
+                                              </div>
+                                              {/* <div>
+                                                {clickedEye2 ? (
+                                                  <button
+                                                    className="w-[25px] h-[25px] ml-4"
+                                                    onClick={() => switchEyes()}
+                                                  >
+                                                    <img
+                                                      src={EyesOpen}
+                                                      alt=""
+                                                      className="w-[25px] h-[25px]"
+                                                    />
+                                                  </button>
+                                                ) : (
+                                                  <button
+                                                    className="w-[25px] h-[25px] ml-4"
+                                                    onClick={() => switchEyes()}
+                                                  >
+                                                    <img
+                                                      className="w-[25px] h-[25px]"
+                                                      src={EyesCloked}
+                                                      alt=""
+                                                    />
+                                                  </button>
+                                                )}
+                                              </div> */}
+                                            </div>
+                                          </div>
+                                        );
+                                      })
+                                    : ""}
+                                </div>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+
+                          {board.name === "atividades" ? (
+                            <div className="flex justify-center text-dark-purple">
+                              <CriarAtividade />
+                            </div>
+                          ) : (
+                            ""
+                          )}
+
+                          {board.name === "aulas"
+                            ? board.items.length > 0 &&
+                              board.items.map((item, iIndex) => {
+                                return (
+                                  <div
+                                    key={iIndex}
+                                    className="flex items-center justify-center"
+                                  >
+                                    {/* <MenuIcon className="text-[#FFFFFF] active:text-[#263B4A] opacity-1 mb-8" /> */}
+                                    <ItemAulaEdit
+                                      key={item.id}
+                                      data={item}
+                                      index={iIndex}
+                                    />
+                                  </div>
+                                );
+                              })
+                            : ""}
+                          {board.name === "atividades"
+                            ? board.items.length > 0 &&
+                              board.items.map((item, iIndex) => {
+                                return (
+                                  <div
+                                    key={iIndex}
+                                    className="flex items-center justify-center"
+                                  >
+                                    <ItemAtivEdit
+                                      idAtividade={item.id}
+                                      data={item}
+                                      index={iIndex}
+                                    />
+                                  </div>
+                                );
+                              })
+                            : ""}
+
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+                );
+              })}
+            </div>
+          </DragDropContext>
+        )}
+      </div>
+    </div>
+  );
+}
