@@ -61,7 +61,7 @@ export function Calendario() {
   }
 
   function verificaData(dataSelecionada, dataBackend) {
-    if (dataSelecionada == dataBackend.data) {
+    if (dataSelecionada === dataBackend.data) {
       return dataBackend.data;
     }
     return false;
@@ -121,7 +121,7 @@ export function Calendario() {
               <div
                 key={day.toString()}
                 className={classNames(
-                  dayIdx == 0 && colStartClasses[getDay(day)],
+                  dayIdx === 0 && colStartClasses[getDay(day)],
                   "py-1 relative"
                 )}
               >

@@ -10,7 +10,6 @@ export function Sidebar() {
     { title: "Home" },
     { title: "Dados" },
     { title: "Disciplinas" },
-
   ];
 
   return (
@@ -20,6 +19,7 @@ export function Sidebar() {
       } min-h-screen bg-dark-purple relative duration-300 p-6 pt-8`}
     >
       {open ? (
+        // eslint-disable-next-line jsx-a11y/alt-text
         <img
           src={control}
           className={`absolute duration-300 cursor-pointer rounded-full top-9 w-7 border-2 border-dark-purple right-3 ${

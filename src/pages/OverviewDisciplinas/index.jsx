@@ -45,7 +45,7 @@ export function OverviewDisciplinas() {
           <div className="absolute right-5 pt-5 text-white">
             <ul className="flex">
               <li className="pr-2">
-                <IoMdPerson />
+                <IoMdPerson onClick={goToPerfil} />
               </li>
               <li className="pr-2"></li>
               <li className="pr-2">

@@ -2,13 +2,11 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../context/auth";
 import { IoMdPerson, IoMdExit } from "react-icons/io";
 import { Sidebar } from "../../components/Sidebar";
-import { useNavigate } from "react-router-dom";
 import { ContentDados } from "../../components/ContentDados";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export function Dados() {
-  const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
   const notify = () => {

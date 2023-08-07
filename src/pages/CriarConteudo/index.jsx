@@ -140,17 +140,17 @@ export function CriarConteudo() {
     // Coluna 2: Atividades
     // Coluna 3: Materiais
 
-    if (re.source.droppableId == 0 && re.destination.droppableId == 1) {
+    if (re.source.droppableId === 0 && re.destination.droppableId === 1) {
       AulasToConteudo(dragItem.id, "aula");
-    } else if (re.source.droppableId == 2 && re.destination.droppableId == 1) {
+    } else if (re.source.droppableId === 2 && re.destination.droppableId === 1) {
       AulasToConteudo(dragItem.id, "atividade");
-    } else if (re.source.droppableId == 3 && re.destination.droppableId == 1) {
+    } else if (re.source.droppableId === 3 && re.destination.droppableId === 1) {
       AulasToConteudo(dragItem.id, "material");
-    } else if (re.source.droppableId == 1 && re.destination.droppableId == 0) {
+    } else if (re.source.droppableId === 1 && re.destination.droppableId === 0) {
       ConteudoToAulas(dragItem.id, "aula");
-    } else if (re.source.droppableId == 1 && re.destination.droppableId == 2) {
+    } else if (re.source.droppableId === 1 && re.destination.droppableId === 2) {
       ConteudoToAulas(dragItem.id, "atividade");
-    } else if (re.source.droppableId == 1 && re.destination.droppableId == 3) {
+    } else if (re.source.droppableId === 1 && re.destination.droppableId === 3) {
       ConteudoToAulas(dragItem.id, "material");
     } else {
     }

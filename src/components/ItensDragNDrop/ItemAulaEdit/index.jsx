@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Draggable } from "react-beautiful-dnd";
 
 export function ItemAulaEdit({ data, index }) {

@@ -11,15 +11,15 @@ import spinnerLoading from "../../assets/spinnerLoading.gif";
 export function ContentDados() {
   const { user } = useContext(AuthContext);
   const [dados, setDados] = useState("Loading");
-  const [newDados, setNewDados] = useState([]);
+  // const [newDados, setNewDados] = useState([]);
   const [visivle, setVisivle] = useState("");
 
   const [visivelNomeDisciplina, setVisivelNomeDisciplina] = useState("");
   const [visivelNomeSerie, setVisivelNomeSerie] = useState("");
   const [visivelNomeTurma, setVisivelNomeTurma] = useState("");
 
-  const [tempoEmAula, setTempoEmAula] = useState("");
-  const [tempoEmAtividade, setTempoEmAtividade] = useState("");
+  // const [tempoEmAula, setTempoEmAula] = useState("");
+  // const [tempoEmAtividade, setTempoEmAtividade] = useState("");
 
   let count1 = 0; //8-10
   let count2 = 0; //6-8
@@ -36,23 +36,23 @@ export function ContentDados() {
     getData();
   }, [user]);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await app.get(`/dadosBI/atividades/${user}`);
-        if (response.status(200)) {
-          setNewDados(response.data);
-        } else if (response.status(400)) {
-          alert("Sem dados cadastrados!");
-        } else {
-        }
-      } catch (erro) {
-        // console.log(erro.message);
-        // alert("Nenhum dado cadastrado!");
-      }
-    };
-    getData();
-  }, [user]);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await app.get(`/dadosBI/atividades/${user}`);
+  //       if (response.status(200)) {
+  //         setNewDados(response.data);
+  //       } else if (response.status(400)) {
+  //         alert("Sem dados cadastrados!");
+  //       } else {
+  //       }
+  //     } catch (erro) {
+  //       // console.log(erro.message);
+  //       // alert("Nenhum dado cadastrado!");
+  //     }
+  //   };
+  //   getData();
+  // }, [user]);
 
   const [nameDisc, setNameDisc] = useState(-1);
   const [nameSerie, setNameSerie] = useState(-1);

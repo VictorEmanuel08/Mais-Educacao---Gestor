@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { app } from "../../api/app";
 import { AuthContext } from "../../context/auth";
-import professorIcon from "../../assets/professor.png";
 import { ChatApp } from "../ChatApp";
 
 export function PerfilData() {
